@@ -1,0 +1,17 @@
+{
+  "name": "Super Ideal Sweets & Bakers",
+  "short_name": "Super Ideal",
+  "description": "Traditional taste, perfected with care. Super Ideal Sweets & Bakers, Faisalabad.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF2E1",
+  "theme_color": "#E45700",
+  "icons": [
+    {
+      "src": "/assets/images/logo-icon.png",
+      "sizes": "616x763",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
