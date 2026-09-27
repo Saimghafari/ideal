@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { WEBSITE_ABOUT, WEBSITE_CONTACT, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
+import { WEBSITE_ABOUT, WEBSITE_CONTACT, WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 
 const categories = [
   { name: "Sweets", image: "/assets/home/si-cat-sweets.png" },
@@ -14,21 +14,21 @@ const categories = [
 ];
 
 const featured = [
-  { name: "Namak Pare", category: "Sweets", price: "Rs. 450", was: "Rs. 560", off: "-20%", image: "/assets/home/si-namak-pare.png" },
-  { name: "Butter Biscuits", category: "Biscuits", price: "Rs. 380", was: "Rs. 480", off: "-20%", image: "/assets/home/si-butter-biscuits.png" },
-  { name: "Dry Fruit Basket", category: "Gift Boxes", price: "Rs. 2,450", was: "Rs. 2,890", off: "-15%", image: "/assets/home/si-dry-fruit.png" },
-  { name: "Soan Halwa", category: "Sweets", price: "Rs. 650", was: "Rs. 780", off: "-15%", image: "/assets/home/si-soan-halwa.png" },
-  { name: "Atta Biscuits", category: "Bakery", price: "Rs. 320", was: "Rs. 400", off: "-20%", image: "/assets/home/si-atta-biscuits.png" },
-  { name: "Coconut Biscuits", category: "Biscuits", price: "Rs. 290", was: "Rs. 360", off: "-20%", image: "/assets/home/si-coconut-biscuits.png" },
+  { name: "Namak Pare", slug: "namak-pare", category: "Sweets", price: "Rs. 450", was: "Rs. 560", off: "-20%", image: "/assets/home/si-namak-pare.png" },
+  { name: "Butter Biscuits", slug: "butter-biscuits", category: "Biscuits", price: "Rs. 380", was: "Rs. 480", off: "-20%", image: "/assets/home/si-butter-biscuits.png" },
+  { name: "Dry Fruit Basket", slug: "dry-fruit-basket", category: "Gift Boxes", price: "Rs. 2,450", was: "Rs. 2,890", off: "-15%", image: "/assets/home/si-dry-fruit.png" },
+  { name: "Soan Halwa", slug: "soan-halwa", category: "Sweets", price: "Rs. 650", was: "Rs. 780", off: "-15%", image: "/assets/home/si-soan-halwa.png" },
+  { name: "Atta Biscuits", slug: "atta-biscuits", category: "Bakery", price: "Rs. 320", was: "Rs. 400", off: "-20%", image: "/assets/home/si-atta-biscuits.png" },
+  { name: "Coconut Biscuits", slug: "coconut-biscuits", category: "Biscuits", price: "Rs. 290", was: "Rs. 360", off: "-20%", image: "/assets/home/si-coconut-biscuits.png" },
 ];
 
 const fresh = [
-  { name: "Kunafa", category: "Sweets & Ramadan", price: "Rs. 1,200", image: "/assets/home/si-kunafa.png", today: true },
-  { name: "Chocolate Fudge Cake", category: "Cakes", price: "Rs. 2,800", image: "/assets/home/si-fudge-cake.png" },
-  { name: "Butter Croissants", category: "Bakery", price: "Rs. 180", image: "/assets/home/si-croissants.png" },
-  { name: "Special Pizza", category: "Pizza", price: "Rs. 1,450", image: "/assets/home/si-pizza.png", today: true },
-  { name: "Assorted Pastries", category: "Bakery", price: "Rs. 950", image: "/assets/home/si-pastries.png" },
-  { name: "Fruit Cream Cake", category: "Cakes", price: "Rs. 2,200", image: "/assets/home/si-fruit-cake.png", today: true },
+  { name: "Kunafa", slug: "kunafa", category: "Sweets & Ramadan", price: "Rs. 1,200", image: "/assets/home/si-kunafa.png", today: true },
+  { name: "Chocolate Fudge Cake", slug: "chocolate-fudge-cake", category: "Cakes", price: "Rs. 2,800", image: "/assets/home/si-fudge-cake.png" },
+  { name: "Butter Croissants", slug: "butter-croissants", category: "Bakery", price: "Rs. 180", image: "/assets/home/si-croissants.png" },
+  { name: "Special Pizza", slug: "special-pizza", category: "Pizza", price: "Rs. 1,450", image: "/assets/home/si-pizza.png", today: true },
+  { name: "Assorted Pastries", slug: "assorted-pastries", category: "Bakery", price: "Rs. 950", image: "/assets/home/si-pastries.png" },
+  { name: "Fruit Cream Cake", slug: "fruit-cream-cake", category: "Cakes", price: "Rs. 2,200", image: "/assets/home/si-fruit-cake.png", today: true },
 ];
 
 const reasons = [
@@ -102,9 +102,10 @@ function ReasonIcon({ name }) {
 }
 
 function ProductCard({ item, online }) {
+  const href = WEBSITE_PRODUCT_DETAILS(item.slug);
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[#f1e3d4] bg-white shadow-[0_6px_18px_rgba(75,46,30,0.05)]">
-      <div className="relative aspect-square bg-[#f7efe6]">
+      <Link href={href} className="relative block aspect-square bg-[#f7efe6]">
         <Image src={item.image} alt={item.name} fill sizes="(max-width: 640px) 50vw, 16vw" className="object-cover" />
         {item.off ? (
           <span className="absolute left-2 top-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#E45700] text-[11px] font-extrabold text-white">
@@ -116,12 +117,14 @@ function ProductCard({ item, online }) {
             Only Today
           </span>
         ) : null}
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-2.5 sm:px-3">
         <p className="text-[11px] text-[#9a8170]">{item.category}</p>
-        <h3 className="mt-0.5 line-clamp-2 text-[13.5px] font-bold leading-snug text-[#3a2416] sm:text-[14.5px]">
-          {item.name}
-        </h3>
+        <Link href={href}>
+          <h3 className="mt-0.5 line-clamp-2 text-[13.5px] font-bold leading-snug text-[#3a2416] sm:text-[14.5px]">
+            {item.name}
+          </h3>
+        </Link>
         <p className="mt-1 flex flex-wrap items-baseline gap-x-1.5">
           <span className="text-[13.5px] font-extrabold text-[#E45700]">{item.price}</span>
           {item.was ? <span className="text-[11.5px] text-[#b7a498] line-through">{item.was}</span> : null}
