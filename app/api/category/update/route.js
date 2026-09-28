@@ -30,6 +30,28 @@ export async function PUT(request) {
     const shortDescription = String(payload.shortDescription ?? "")
       .trim()
       .slice(0, 200);
+    const parentId = String(payload.parent || "").trim();
+    let parent = null;
+    if (parentId) {
+      if (parentId === String(_id)) {
+        return response(false, 400, "A category cannot be its own parent.");
+      }
+      parent = await CategoryModel.findOne({
+        _id: parentId,
+        deletedAt: null,
+        parent: null,
+      }).lean();
+      if (!parent) {
+        return response(false, 400, "Choose a main category as the parent.");
+      }
+      const childCount = await CategoryModel.countDocuments({
+        deletedAt: null,
+        parent: _id,
+      });
+      if (childCount > 0) {
+        return response(false, 400, "Move its subcategories before making this a subcategory.");
+      }
+    }
 
     const updated = await CategoryModel.findOneAndUpdate(
       { deletedAt: null, _id },
@@ -39,6 +61,7 @@ export async function PUT(request) {
           slug,
           shortDescription,
           media: categoryMedia || null,
+          parent: parent ? parent._id : null,
         },
       },
       { new: true, runValidators: true }

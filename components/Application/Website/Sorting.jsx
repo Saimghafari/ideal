@@ -13,20 +13,19 @@ const Sorting = ({
   setLimit,
   sorting,
   setSorting,
-  mobileFilterOpen,
   setMobileFilterOpen,
   resultLabel,
 }) => {
   return (
-    <div className="flex flex-wrap items-center justify-end gap-x-6 gap-y-3">
+    <div className="flex flex-wrap items-center gap-3">
       {resultLabel ? (
-        <p className="mr-auto text-sm font-light text-[var(--si-muted)] lg:mr-0">
-          {resultLabel}
-        </p>
-      ) : null}
+        <p className="mr-auto text-[13.5px] font-semibold text-[#8a6754]">{resultLabel}</p>
+      ) : (
+        <span className="mr-auto" />
+      )}
 
       <ul className="hidden items-center gap-1 sm:flex">
-        {[9, 12, 18, 24].map((limitNumber) => {
+        {[12, 18, 24].map((limitNumber) => {
           const active = limitNumber === limit;
           return (
             <li key={limitNumber}>
@@ -34,10 +33,8 @@ const Sorting = ({
                 type="button"
                 onClick={() => setLimit(limitNumber)}
                 aria-pressed={active}
-                className={`px-1.5 text-[0.68rem] tracking-[0.08em] ${
-                  active
-                    ? "text-[var(--si-deep-brown)]"
-                    : "text-[var(--si-muted)] hover:text-[var(--si-deep-brown)]"
+                className={`h-8 min-w-8 rounded-full px-2 text-[12px] font-bold ${
+                  active ? "bg-[#3a2416] text-white" : "text-[#8a6754] hover:bg-[#fff1e6]"
                 }`}
               >
                 {limitNumber}
@@ -48,15 +45,15 @@ const Sorting = ({
       </ul>
 
       <Select value={sorting} onValueChange={(value) => setSorting(value)}>
-        <SelectTrigger className="h-9 w-[11rem] rounded-none border-0 bg-transparent px-0 text-xs font-light tracking-wide text-[var(--si-deep-brown)] shadow-none focus:ring-0">
+        <SelectTrigger className="h-10 w-[11.5rem] rounded-full border border-[#f0dcc4] bg-white px-4 text-[13px] font-semibold text-[#3a2416] shadow-none focus:ring-[#E45700]">
           <SelectValue placeholder="Sort" />
         </SelectTrigger>
-        <SelectContent className="rounded-none border-[var(--si-mist)] bg-[var(--si-cream)]">
+        <SelectContent className="rounded-2xl border-[#f1e3d4] bg-white">
           {sortings.map((option) => (
             <SelectItem
               key={option.value}
               value={option.value}
-              className="rounded-none text-sm font-light focus:bg-[var(--si-cream)]"
+              className="rounded-xl text-sm font-medium focus:bg-[#fff4ea]"
             >
               {option.label}
             </SelectItem>
@@ -66,10 +63,10 @@ const Sorting = ({
 
       <button
         type="button"
-        className="text-[0.62rem] tracking-[0.18em] uppercase text-[var(--si-deep-brown)] hover:text-[var(--si-burnt-orange)]"
-        onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
+        className="inline-flex h-10 items-center rounded-full border border-[#E45700] bg-white px-4 text-[13px] font-bold text-[#E45700] hover:bg-[#E45700] hover:text-white lg:hidden"
+        onClick={() => setMobileFilterOpen(true)}
       >
-        Size & price
+        Filters
       </button>
     </div>
   );

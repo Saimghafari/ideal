@@ -1,6 +1,9 @@
 import { response } from "@/lib/helperFunction";
-import { getStaticCategories } from "@/lib/staticCatalog";
+import { getShopCategories } from "@/lib/liveCatalog";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return response(true, 200, "Category found.", getStaticCategories());
+  const categories = await getShopCategories();
+  return response(true, 200, "Category found.", categories);
 }

@@ -65,6 +65,7 @@ export async function GET(request) {
                     _id: 1,
                     name: 1,
                     slug: 1,
+                    parent: 1,
                     createdAt: 1,
                     updatedAt: 1,
                     deletedAt: 1

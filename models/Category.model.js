@@ -24,6 +24,12 @@ const categorySchema = new mongoose.Schema(
       ref: "Media",
       default: null,
     },
+    parent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      default: null,
+      index: true,
+    },
     deletedAt: {
       type: Date,
       default: null,
@@ -42,6 +48,11 @@ categorySchema.index(
   { slug: 1 },
   { unique: true, partialFilterExpression: { deletedAt: null } }
 );
+
+if (mongoose.models.Category && !mongoose.models.Category.schema.path("parent")) {
+  delete mongoose.models.Category;
+  delete mongoose.connection.models.Category;
+}
 
 const CategoryModel =
   mongoose.models.Category ||

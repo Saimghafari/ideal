@@ -7,6 +7,8 @@ import {
   WEBSITE_HOME,
   WEBSITE_LOGIN,
   WEBSITE_SHOP,
+  WEBSITE_CAKES,
+  WEBSITE_CATERING,
 } from "../../../routes/WebsiteRoute";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -26,8 +28,8 @@ const navItems = [
   { label: "Home", href: WEBSITE_HOME },
   { label: "About Us", href: WEBSITE_ABOUT },
   { label: "Products", href: WEBSITE_SHOP },
-  { label: "Cakes", href: `${WEBSITE_SHOP}?category=cakes` },
-  { label: "Catering", href: `${WEBSITE_SHOP}?category=catering` },
+  { label: "Cakes", href: WEBSITE_CAKES },
+  { label: "Catering", href: WEBSITE_CATERING },
   { label: "Locations", href: "/#locations" },
   { label: "Contact", href: WEBSITE_CONTACT },
 ];

@@ -50,6 +50,7 @@ export async function GET(request, { params }) {
             _id: String(getCategory.media._id),
           }
         : null,
+      parent: getCategory.parent ? String(getCategory.parent) : "",
     });
   } catch (error) {
     return catchError(error);

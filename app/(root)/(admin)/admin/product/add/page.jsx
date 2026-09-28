@@ -35,7 +35,11 @@ const AddProduct = () => {
   useEffect(() => {
     if (getCategory && getCategory.success) {
       const data = getCategory.data
-      const options = data.map((cat) => ({ label: cat.name, value: cat._id }))
+      const byId = Object.fromEntries(data.map((cat) => [String(cat._id), cat]))
+      const options = data.map((cat) => {
+        const parent = cat.parent ? byId[String(cat.parent)] : null
+        return { label: parent ? `${parent.name} / ${cat.name}` : cat.name, value: cat._id }
+      })
       setCategoryOption(options)
     }
   }, [getCategory])
@@ -51,6 +55,8 @@ const AddProduct = () => {
     discountPercentage: true,
     discountPercentagePkr: true,
     description: true,
+    deliverable: true,
+    todayOnly: true,
   })
 
   const form = useForm({
@@ -66,6 +72,8 @@ const AddProduct = () => {
       discountPercentage: 0,
       discountPercentagePkr: 0,
       description: "",
+      deliverable: true,
+      todayOnly: false,
     },
   })
 
@@ -212,6 +220,36 @@ const AddProduct = () => {
                         </FormControl>
                         <FormMessage />
                       </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 sm:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="deliverable"
+                    render={({ field }) => (
+                      <label className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={field.value !== false}
+                          onChange={(event) => field.onChange(event.target.checked)}
+                        />
+                        Available for online delivery
+                      </label>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="todayOnly"
+                    render={({ field }) => (
+                      <label className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(field.value)}
+                          onChange={(event) => field.onChange(event.target.checked)}
+                        />
+                        Only today (in store)
+                      </label>
                     )}
                   />
                 </div>

@@ -4,6 +4,8 @@ export const WEBSITE_REGISTER = "/auth/register"
 export const WEBSITE_RESETPASSWORD = "/auth/reset-password"
 
 export const WEBSITE_SHOP = "/shop"
+export const WEBSITE_CAKES = "/cakes"
+export const WEBSITE_CATERING = "/catering"
 
 export const WEBSITE_PRODUCT_DETAILS = (slug) => slug ? `/product/${slug}` : '/product'
 

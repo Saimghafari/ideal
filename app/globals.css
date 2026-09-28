@@ -137,6 +137,7 @@
     background-color: var(--si-cream);
     --pd-header: calc(68px + env(safe-area-inset-top, 0px));
   }
+
   @media (min-width: 640px) {
     body.pd-page {
       --pd-header: calc(76px + env(safe-area-inset-top, 0px));
@@ -146,6 +147,45 @@
 
 html:has(body.pd-page) {
   scroll-snap-type: none;
+}
+
+html:not(.is-scrolling),
+html:not(.is-scrolling) * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html.is-scrolling,
+html.is-scrolling * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--si-burnt-orange) transparent;
+  -ms-overflow-style: auto;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+
+html.is-scrolling::-webkit-scrollbar,
+html.is-scrolling *::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+
+html.is-scrolling::-webkit-scrollbar-thumb,
+html.is-scrolling *::-webkit-scrollbar-thumb {
+  background: var(--si-burnt-orange);
 }
 
 .slick-dots {
@@ -598,26 +638,6 @@ html:has(body.pd-page) {
   height: 0;
 }
 
-/* ── Shared scrollbar (Men's / Women's collections) ─ */
-:is(.nn-scrollbar, [data-slot="sheet-content"], [data-slot="sheet-content"] *, .menu-glass, .menu-glass *) {
-  scrollbar-width: thin;
-  scrollbar-color: #282928 rgba(225, 227, 225, 0.2);
-}
-
-:is(.nn-scrollbar, [data-slot="sheet-content"], [data-slot="sheet-content"] *, .menu-glass, .menu-glass *)::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-}
-
-:is(.nn-scrollbar, [data-slot="sheet-content"], [data-slot="sheet-content"] *, .menu-glass, .menu-glass *)::-webkit-scrollbar-track {
-  background: rgba(225, 227, 225, 0.2);
-  border-radius: 6px;
-}
-
-:is(.nn-scrollbar, [data-slot="sheet-content"], [data-slot="sheet-content"] *, .menu-glass, .menu-glass *)::-webkit-scrollbar-thumb {
-  background: #282928;
-  border-radius: 6px;
-}
 
 /* ── Product detail copy ──────────────────────── */
 .nn-product-copy {

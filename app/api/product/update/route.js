@@ -51,6 +51,8 @@ export async function PUT(request) {
                     discountPercentagePkr: Number(validatedData.discountPercentagePkr ?? 0),
                     description: encode(validatedData.description),
                     media: validatedData.media,
+                    deliverable: payload.deliverable !== false,
+                    todayOnly: payload.todayOnly === true,
                 },
             },
             { new: true, runValidators: true }

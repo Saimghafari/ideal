@@ -62,6 +62,14 @@ const productSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
+    deliverable: {
+      type: Boolean,
+      default: true,
+    },
+    todayOnly: {
+      type: Boolean,
+      default: false,
+    },
     deletedAt: {
       type: Date,
       default: null,
@@ -88,7 +96,8 @@ productSchema.index(
 // Re-register when schema gains new paths (Next.js HMR keeps stale models)
 if (
   mongoose.models.Product &&
-  !mongoose.models.Product.schema.path("mrpPkr")
+  (!mongoose.models.Product.schema.path("mrpPkr") ||
+    !mongoose.models.Product.schema.path("deliverable"))
 ) {
   delete mongoose.models.Product;
   delete mongoose.connection.models.Product;

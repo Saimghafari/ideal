@@ -1,282 +1,237 @@
 "use client";
-import useFetch from "@/hooks/useFetch";
 import React, { useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import ButtonLoading from "../ButtonLoading";
 import { useRouter, useSearchParams } from "next/navigation";
 import { WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 import Link from "next/link";
-import { sizes as clothingSizes } from "@/lib/utils";
 import { useCurrency } from "@/components/Application/Website/CurrencyProvider";
+import {
+  SHOP_PRICE_MAX,
+  SHOP_PRICE_MIN,
+  SHOP_PRICE_STEP,
+} from "@/lib/staticCatalog";
 
-const PRICE_MAX = 100000;
+const PRICE_PRESETS = [
+  { label: "Under Rs 500", min: 0, max: 500 },
+  { label: "Rs 500 – 1,500", min: 500, max: 1500 },
+  { label: "Rs 1,500 – 3,000", min: 1500, max: 3000 },
+];
 
-const Filter = ({ showHeading = true, tone = "default" }) => {
+const AVAILABILITY = [
+  { value: "online", label: "Online delivery" },
+  { value: "store", label: "In store only" },
+];
+
+const Filter = ({ tone = "sidebar", categories = [] }) => {
   const isDrawer = tone === "drawer";
   const searchParams = useSearchParams();
   const { formatPrice } = useCurrency();
-
-  const [priceFilter, setPriceFilter] = useState({
-    minPrice: 0,
-    maxPrice: PRICE_MAX,
-  });
-  const [selectedCategory, setSelectedCategory] = useState([]);
-  const [selectedSizes, setSelectedSizes] = useState([]);
-
-  const { data: categoryData } = useFetch("/api/category/get-category");
-
-  const urlSearchParams = new URLSearchParams(searchParams.toString());
   const router = useRouter();
 
-  useEffect(() => {
-    searchParams.get("category")
-      ? setSelectedCategory(searchParams.get("category").split(","))
-      : setSelectedCategory([]);
-    searchParams.get("size")
-      ? setSelectedSizes(searchParams.get("size").split(","))
-      : setSelectedSizes([]);
+  const [priceFilter, setPriceFilter] = useState({
+    minPrice: SHOP_PRICE_MIN,
+    maxPrice: SHOP_PRICE_MAX,
+  });
 
+  const selectedCategory = (searchParams.get("category") || "")
+    .split(",")
+    .map((item) => item.trim().toLowerCase().replace(/\s+/g, "-"))
+    .filter(Boolean);
+  const availability = searchParams.get("availability") || "";
+
+  useEffect(() => {
     const min = searchParams.get("minPrice");
     const max = searchParams.get("maxPrice");
-    if (min || max) {
-      setPriceFilter({
-        minPrice: min ? parseInt(min, 10) : 0,
-        maxPrice: max ? parseInt(max, 10) : PRICE_MAX,
-      });
-    }
+    setPriceFilter({
+      minPrice: min ? parseInt(min, 10) : SHOP_PRICE_MIN,
+      maxPrice: max ? Math.min(parseInt(max, 10), SHOP_PRICE_MAX) : SHOP_PRICE_MAX,
+    });
   }, [searchParams]);
 
-  const handlePriceChange = (value) => {
-    setPriceFilter({ minPrice: value[0], maxPrice: value[1] });
+  const pushParams = (mutate) => {
+    const next = new URLSearchParams(searchParams.toString());
+    mutate(next);
+    const query = next.toString();
+    router.push(query ? `${WEBSITE_SHOP}?${query}` : WEBSITE_SHOP);
   };
 
   const handleCategoryFilter = (categorySlug) => {
-    let next = [...selectedCategory];
-    if (next.includes(categorySlug)) {
-      next = next.filter((cat) => cat !== categorySlug);
-    } else {
-      next.push(categorySlug);
-    }
-
-    setSelectedCategory(next);
-
-    next.length > 0
-      ? urlSearchParams.set("category", next.join(","))
-      : urlSearchParams.delete("category");
-    urlSearchParams.delete("color");
-
-    router.push(`${WEBSITE_SHOP}?${urlSearchParams}`);
+    pushParams((params) => {
+      const current = (params.get("category") || "").split(",").filter(Boolean);
+      if (current.length === 1 && current[0] === categorySlug) params.delete("category");
+      else params.set("category", categorySlug);
+    });
   };
 
-  const handleSizeFilter = (sizeValue) => {
-    let next = [...selectedSizes];
-    if (next.includes(sizeValue)) {
-      next = next.filter((item) => item !== sizeValue);
-    } else {
-      next.push(sizeValue);
-    }
-    setSelectedSizes(next);
-    next.length > 0
-      ? urlSearchParams.set("size", next.join(","))
-      : urlSearchParams.delete("size");
-    router.push(`${WEBSITE_SHOP}?${urlSearchParams}`);
+  const handleSubcategoryFilter = (parentSlug, childSlug) => {
+    pushParams((params) => {
+      if (params.get("category") === childSlug) params.set("category", parentSlug);
+      else params.set("category", childSlug);
+    });
   };
 
-  const handlePriceFilter = () => {
-    urlSearchParams.set("minPrice", String(priceFilter.minPrice));
-    urlSearchParams.set("maxPrice", String(priceFilter.maxPrice));
-    urlSearchParams.delete("color");
-    router.push(`${WEBSITE_SHOP}?${urlSearchParams}`);
+  const handleAvailability = (value) => {
+    pushParams((params) => {
+      if (params.get("availability") === value) params.delete("availability");
+      else params.set("availability", value);
+    });
   };
 
-  const categories = categoryData?.success ? categoryData.data : [];
+  const applyPrice = (minPrice, maxPrice) => {
+    setPriceFilter({ minPrice, maxPrice });
+    pushParams((params) => {
+      if (minPrice <= SHOP_PRICE_MIN && maxPrice >= SHOP_PRICE_MAX) {
+        params.delete("minPrice");
+        params.delete("maxPrice");
+        return;
+      }
+      params.set("minPrice", String(minPrice));
+      params.set("maxPrice", String(maxPrice));
+    });
+  };
 
-  if (tone === "bar") {
-    return (
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-        {categories.map((category) => {
-          const active = selectedCategory.includes(category.slug);
-          return (
-            <button
-              key={category._id}
-              type="button"
-              onClick={() => handleCategoryFilter(category.slug)}
-              className={`text-[0.62rem] tracking-[0.2em] uppercase transition-colors ${
-                active
-                  ? "text-[var(--si-deep-brown)]"
-                  : "text-[var(--si-muted)] hover:text-[var(--si-deep-brown)]"
-              }`}
-            >
-              {category.name}
-              {active && (
-                <span className="mt-1 block h-px w-full bg-[var(--si-burnt-orange)]" />
-              )}
-            </button>
-          );
-        })}
-        {searchParams.toString().length > 0 && (
-          <Link
-            href={WEBSITE_SHOP}
-            className="text-[0.58rem] tracking-[0.16em] uppercase text-[var(--si-muted)] hover:text-[var(--si-burnt-orange)]"
-          >
-            Clear
-          </Link>
-        )}
-      </div>
-    );
-  }
+  const hasFilters = searchParams.toString().length > 0;
 
   return (
-    <div>
-      {showHeading && (
-        <div className="mb-8">
-          <p className="nn-label mb-3 text-[0.5rem] text-[var(--si-burnt-orange)]">
-            Filter
-          </p>
-          <h2 className="nn-display text-[1.85rem] font-light leading-[1.1] text-[var(--si-deep-brown)]">
-            Clothes that{" "}
-            <span className="nn-display-italic text-[var(--si-burnt-orange)]">
-              last
-            </span>
-          </h2>
-        </div>
-      )}
+    <div className={isDrawer ? "" : "rounded-[22px] border border-[#f1e3d4] bg-white p-5 shadow-[0_8px_24px_rgba(75,46,30,0.04)]"}>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 className="font-display text-[1.35rem] font-semibold text-[#3a2416]">Filters</h2>
+        {hasFilters ? (
+          <Link href={WEBSITE_SHOP} className="text-[12.5px] font-bold text-[#E45700] hover:text-[#c2410c]">
+            Clear all
+          </Link>
+        ) : null}
+      </div>
 
-      {searchParams.toString().length > 0 && !isDrawer && (
-        <Link
-          href={WEBSITE_SHOP}
-          className="nn-link-quiet mb-7 inline-block !text-[0.58rem]"
-        >
-          Clear selection
-        </Link>
-      )}
+      <div className="border-t border-[#f3e6da] pt-4">
+        <p className="text-[12px] font-extrabold uppercase tracking-[0.16em] text-[#E45700]">Category</p>
+        <ul className="mt-3 space-y-2">
+          {categories.map((category) => {
+            const active =
+              selectedCategory.includes(category.slug) ||
+              category.children?.some((child) => selectedCategory.includes(child.slug));
+            return (
+              <li key={category.slug}>
+                <button
+                  type="button"
+                  onClick={() => handleCategoryFilter(category.slug)}
+                  aria-pressed={active}
+                  className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-[14px] transition-colors ${
+                    active
+                      ? "bg-[#fff1e6] font-bold text-[#E45700]"
+                      : "font-medium text-[#5c4032] hover:bg-[#fff8f2]"
+                  }`}
+                >
+                  <span>{category.name}</span>
+                  <span
+                    className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+                      active ? "border-[#E45700] bg-[#E45700]" : "border-[#e4cfc0]"
+                    }`}
+                  >
+                    {active ? <span className="h-1.5 w-1.5 rounded-full bg-white" /> : null}
+                  </span>
+                </button>
+                {!isDrawer && active && category.children?.length ? (
+                  <ul className="mt-1 space-y-1 border-l border-[#f3e6da] pl-3">
+                    {category.children.map((child) => {
+                      const childActive = selectedCategory.includes(child.slug);
+                      return (
+                        <li key={child.slug}>
+                          <button
+                            type="button"
+                            onClick={() => handleSubcategoryFilter(category.slug, child.slug)}
+                            aria-pressed={childActive}
+                            className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-[13px] transition-colors ${
+                              childActive
+                                ? "bg-[#fff1e6] font-bold text-[#E45700]"
+                                : "font-medium text-[#5c4032] hover:bg-[#fff8f2]"
+                            }`}
+                          >
+                            <span>{child.name}</span>
+                            <span
+                              className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+                                childActive ? "border-[#E45700] bg-[#E45700]" : "border-[#e4cfc0]"
+                              }`}
+                            >
+                              {childActive ? <span className="h-1.5 w-1.5 rounded-full bg-white" /> : null}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
 
-      <Accordion
-        type="multiple"
-        defaultValue={["1", "2", "4"]}
-        className="border-t border-[var(--si-mist)]"
-      >
-        <AccordionItem value="1" className="border-[var(--si-mist)]">
-          <AccordionTrigger
-            className={`nn-label text-[var(--si-deep-brown)] hover:no-underline hover:text-[var(--si-deep-brown)] [&[data-state=open]]:text-[var(--si-deep-brown)] ${
-              isDrawer
-                ? "py-4 text-[0.52rem] tracking-[0.26em]"
-                : "py-5 text-[0.55rem] tracking-[0.28em]"
-            }`}
-          >
-            Category
-          </AccordionTrigger>
-          <AccordionContent>
-            <ul className="space-y-3.5 pb-2">
-              {categoryData?.success &&
-                categoryData.data.map((category) => {
-                  const active = selectedCategory.includes(category.slug);
-                  return (
-                    <li key={category._id}>
-                      <label className="group/item flex cursor-pointer items-center gap-3">
-                        <Checkbox
-                          onCheckedChange={() =>
-                            handleCategoryFilter(category.slug)
-                          }
-                          checked={active}
-                          className="rounded-none border-[var(--si-fog)] data-[state=checked]:border-[var(--si-deep-brown)] data-[state=checked]:bg-[var(--si-deep-brown)]"
-                        />
-                        <span
-                          className={`text-sm font-light transition-colors ${
-                            active
-                              ? "text-[var(--si-deep-brown)]"
-                              : "text-[var(--si-muted)] group-hover/item:text-[var(--si-deep-brown)]"
-                          }`}
-                        >
-                          {category.name}
-                        </span>
-                      </label>
-                    </li>
-                  );
-                })}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="2" className="border-[var(--si-mist)]">
-          <AccordionTrigger
-            className={`nn-label text-[var(--si-deep-brown)] hover:no-underline hover:text-[var(--si-deep-brown)] [&[data-state=open]]:text-[var(--si-deep-brown)] ${
-              isDrawer
-                ? "py-4 text-[0.52rem] tracking-[0.26em]"
-                : "py-5 text-[0.55rem] tracking-[0.28em]"
-            }`}
-          >
-            Size
-          </AccordionTrigger>
-          <AccordionContent>
-            <ul className="flex flex-wrap gap-2 pb-2">
-              {clothingSizes.map((size) => {
-                const active = selectedSizes.includes(size.value);
-                return (
-                  <li key={size.value}>
-                    <button
-                      type="button"
-                      onClick={() => handleSizeFilter(size.value)}
-                      className={`min-w-10 px-2.5 py-1.5 text-[0.7rem] tracking-[0.12em] uppercase border ${
-                        active
-                          ? "border-[var(--si-deep-brown)] bg-[var(--si-deep-brown)] text-[var(--si-cream)]"
-                          : "border-[var(--si-mist)] text-[var(--si-deep-brown)]"
-                      }`}
-                    >
-                      {size.label}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="4" className="border-b-0 border-[var(--si-mist)]">
-          <AccordionTrigger
-            className={`nn-label text-[var(--si-deep-brown)] hover:no-underline hover:text-[var(--si-deep-brown)] [&[data-state=open]]:text-[var(--si-deep-brown)] ${
-              isDrawer
-                ? "py-4 text-[0.52rem] tracking-[0.26em]"
-                : "py-5 text-[0.55rem] tracking-[0.28em]"
-            }`}
-          >
-            Price (Rs)
-          </AccordionTrigger>
-          <AccordionContent className="overflow-visible pb-2">
-            <div className="px-2.5 py-4">
-              <Slider
-                value={[priceFilter.minPrice, priceFilter.maxPrice]}
-                min={0}
-                max={PRICE_MAX}
-                step={500}
-                onValueChange={handlePriceChange}
-                className="w-full py-2 [&_[data-slot=slider-thumb]]:size-4 [&_[data-slot=slider-thumb]]:hover:ring-2 [&_[data-slot=slider-thumb]]:focus-visible:ring-2"
-              />
-            </div>
-            <div className="flex items-center justify-between px-1 pt-1 text-[0.7rem] font-light tracking-[0.08em] text-[var(--si-muted)]">
-              <span>{formatPrice(priceFilter.minPrice)}</span>
-              <span className="text-[var(--si-fog)]">to</span>
-              <span>{formatPrice(priceFilter.maxPrice)}</span>
-            </div>
-
-            <div className="mt-6 px-1">
-              <ButtonLoading
-                onClick={handlePriceFilter}
+      <div className="mt-5 border-t border-[#f3e6da] pt-4">
+        <p className="text-[12px] font-extrabold uppercase tracking-[0.16em] text-[#E45700]">Availability</p>
+        <div className="mt-3 grid gap-2">
+          {AVAILABILITY.map((option) => {
+            const active = availability === option.value;
+            return (
+              <button
+                key={option.value}
                 type="button"
-                text="Apply Range"
-                className="nn-btn-outline w-full !rounded-none !bg-transparent !py-3.5 text-[var(--si-deep-brown)] hover:!bg-[var(--si-deep-brown)] hover:!text-[var(--si-cream)]"
-              />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+                onClick={() => handleAvailability(option.value)}
+                aria-pressed={active}
+                className={`rounded-full border px-3 py-2 text-[13px] font-semibold ${
+                  active
+                    ? "border-[#E45700] bg-[#E45700] text-white"
+                    : "border-[#f0dcc4] bg-[#fffaf6] text-[#5c4032] hover:border-[#E45700]"
+                }`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-5 border-t border-[#f3e6da] pt-4">
+        <p className="text-[12px] font-extrabold uppercase tracking-[0.16em] text-[#E45700]">Price range</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {PRICE_PRESETS.map((preset) => {
+            const active =
+              priceFilter.minPrice === preset.min && priceFilter.maxPrice === preset.max;
+            return (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => applyPrice(preset.min, preset.max)}
+                className={`rounded-full px-3 py-1.5 text-[12px] font-semibold ${
+                  active
+                    ? "bg-[#3a2416] text-white"
+                    : "bg-[#fff1e6] text-[#6b5142] hover:bg-[#ffe4d2]"
+                }`}
+              >
+                {preset.label}
+              </button>
+            );
+          })}
+        </div>
+        <div className="px-1 pb-1 pt-5">
+          <Slider
+            value={[priceFilter.minPrice, priceFilter.maxPrice]}
+            min={SHOP_PRICE_MIN}
+            max={SHOP_PRICE_MAX}
+            step={SHOP_PRICE_STEP}
+            onValueChange={(value) =>
+              setPriceFilter({ minPrice: value[0], maxPrice: value[1] })
+            }
+            onValueCommit={(value) => applyPrice(value[0], value[1])}
+            className="w-full py-2 [&_[data-slot=slider-range]]:bg-[#E45700] [&_[data-slot=slider-thumb]]:size-4 [&_[data-slot=slider-thumb]]:border-[#E45700] [&_[data-slot=slider-thumb]]:bg-white"
+          />
+        </div>
+        <div className="mt-2 flex items-center justify-between text-[13px] font-bold text-[#3a2416]">
+          <span>{formatPrice(priceFilter.minPrice)}</span>
+          <span className="text-[12px] font-medium text-[#b08974]">to</span>
+          <span>{formatPrice(priceFilter.maxPrice)}</span>
+        </div>
+      </div>
     </div>
   );
 };

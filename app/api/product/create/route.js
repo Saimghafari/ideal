@@ -85,6 +85,8 @@ export async function POST(request) {
             discountPercentagePkr: Number(productData.discountPercentagePkr ?? 0),
             description: encode(productData.description),
             media: productData.media,
+            deliverable: payload.deliverable !== false,
+            todayOnly: payload.todayOnly === true,
         })
 
         await newProduct.save()

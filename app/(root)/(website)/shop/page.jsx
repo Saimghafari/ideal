@@ -1,12 +1,10 @@
 import { Suspense } from "react";
 import ShopClient from "./ShopClient";
-import ShopMasthead from "@/components/Application/Website/ShopMasthead";
 import SeoJsonLd from "@/components/Application/Website/SeoJsonLd";
 import { buildPageMeta } from "@/lib/buildPageMeta";
 import { generateBaseMetadata } from "@/lib/metadata";
 import {
   SHOP_SEO,
-  SEO_COLLECTIONS,
   isUtilityQuery,
   absoluteSeoUrl,
 } from "@/lib/seoPages";
@@ -15,7 +13,6 @@ import {
   buildCollectionJsonLd,
 } from "@/lib/jsonLdBuilders";
 import { getPublishedProducts } from "@/lib/getPublishedProducts";
-import Link from "next/link";
 
 export async function generateMetadata({ searchParams }) {
   const resolved = await searchParams;
@@ -25,7 +22,7 @@ export async function generateMetadata({ searchParams }) {
     return {
       ...generateBaseMetadata({
         title: `Search Results for "${term}"`,
-        description: `Find clothing matching “${term}” at Velora.`,
+        description: `Find sweets and bakery matching “${term}” at Super Ideal.`,
         url: SHOP_SEO.path,
       }),
       robots: { index: false, follow: true },
@@ -35,7 +32,7 @@ export async function generateMetadata({ searchParams }) {
   if (isUtilityQuery(resolved) || resolved?.category) {
     return {
       ...buildPageMeta({
-        title: "Shop Clothing",
+        title: "Sweets & Bakery",
         description: SHOP_SEO.description,
         path: SHOP_SEO.path,
       }),
@@ -44,10 +41,10 @@ export async function generateMetadata({ searchParams }) {
   }
 
   return buildPageMeta({
-    title: "Shop Clothing",
+    title: "Sweets & Bakery",
     description: SHOP_SEO.description,
     path: SHOP_SEO.path,
-    keywords: "Velora clothing, silk dress, wool coat, merino knit",
+    keywords: "Super Ideal sweets, bakery, biscuits, cakes, gift boxes, Faisalabad",
   });
 }
 
@@ -61,36 +58,16 @@ export default async function ShopPage() {
   });
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", url: "/" },
-    { name: SHOP_SEO.h1, url: SHOP_SEO.path },
+    { name: "Products", url: SHOP_SEO.path },
   ]);
 
   return (
-    <div className="nn-cream-bg min-h-[70vh]">
+    <div className="min-h-[70vh] bg-[#FFF8F2]">
       <SeoJsonLd data={collectionJsonLd} />
       <SeoJsonLd data={breadcrumbJsonLd} />
-      <ShopMasthead
-        h1={SHOP_SEO.h1}
-        intro="Ready-to-wear pieces in silk, wool, and leather."
-      />
-
       <Suspense fallback={null}>
-        <ShopClient hideHeader />
+        <ShopClient />
       </Suspense>
-
-      <section className="border-t border-[var(--si-mist)] px-6 py-12 sm:px-10 lg:px-14 xl:px-20">
-        <h2 className="nn-label mb-5 text-[var(--si-burnt-orange)]">Shop by category</h2>
-        <ul className="flex flex-wrap gap-x-8 gap-y-3">
-          {SEO_COLLECTIONS.filter((item) =>
-            ["women", "men", "accessories"].includes(item.id)
-          ).map((item) => (
-            <li key={item.id}>
-              <Link href={item.path} className="nn-link-quiet">
-                {item.h1}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
     </div>
   );
 }

@@ -15,6 +15,7 @@ import { showToast } from '@/lib/showToast'
 import axios from 'axios'
 import MediaModal from '@/components/Application/Admin/MediaModal'
 import Image from 'next/image'
+import useFetch from '@/hooks/useFetch'
 
 const breadcrumbData = [
   { href: ADMIN_DASHBOARD, label: 'Home' },
@@ -26,9 +27,11 @@ const AddCategory = () => {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [selectedMedia, setSelectedMedia] = useState([])
+  const { data: categoryList } = useFetch('/api/category?deleteType=SD&&size=10000')
+  const parentOptions = (categoryList?.success ? categoryList.data : []).filter((item) => !item.parent)
 
   const formSchema = zSchema.pick({
-    name: true, slug: true, shortDescription: true
+    name: true, slug: true, shortDescription: true, parent: true
   })
 
   const form = useForm({
@@ -37,6 +40,7 @@ const AddCategory = () => {
       name: "",
       slug: "",
       shortDescription: "",
+      parent: "",
     },
   })
 
@@ -149,6 +153,34 @@ const AddCategory = () => {
                       </FormControl>
                       <p className="text-xs text-muted-foreground">
                         {(field.value?.length || 0)}/200 — shown under the category on the home page
+                      </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className='mb-5'>
+                <FormField
+                  control={form.control}
+                  name="parent"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Parent category</FormLabel>
+                      <FormControl>
+                        <select
+                          className="border-input flex h-9 w-full rounded-md border bg-transparent px-3 text-sm"
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                        >
+                          <option value="">None — main category</option>
+                          {parentOptions.map((item) => (
+                            <option key={item._id} value={item._id}>{item.name}</option>
+                          ))}
+                        </select>
+                      </FormControl>
+                      <p className="text-xs text-muted-foreground">
+                        Leave empty to show this on the shop category cards. Choose a parent to make a subcategory for the side filters.
                       </p>
                       <FormMessage />
                     </FormItem>

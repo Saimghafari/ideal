@@ -56,6 +56,18 @@ export async function POST(request) {
     const shortDescription = String(payload.shortDescription ?? "")
       .trim()
       .slice(0, 200);
+    const parentId = String(payload.parent || "").trim();
+    let parent = null;
+    if (parentId) {
+      parent = await CategoryModel.findOne({
+        _id: parentId,
+        deletedAt: null,
+        parent: null,
+      }).lean();
+      if (!parent) {
+        return response(false, 400, "Choose a main category as the parent.");
+      }
+    }
 
     const activeDuplicate = await CategoryModel.findOne({
       deletedAt: null,
@@ -79,6 +91,7 @@ export async function POST(request) {
       slug,
       shortDescription,
       media: categoryMedia || null,
+      parent: parent ? parent._id : null,
     });
 
     await newCategory.save();

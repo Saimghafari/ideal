@@ -4,6 +4,8 @@ import {
   WEBSITE_CONTACT,
   WEBSITE_HOME,
   WEBSITE_SHOP,
+  WEBSITE_CAKES,
+  WEBSITE_CATERING,
 } from "@/routes/WebsiteRoute";
 import Image from "next/image";
 
@@ -11,8 +13,8 @@ const quickLinks = [
   { label: "Home", href: WEBSITE_HOME },
   { label: "About Us", href: WEBSITE_ABOUT },
   { label: "Products", href: WEBSITE_SHOP },
-  { label: "Cakes", href: `${WEBSITE_SHOP}?category=cakes` },
-  { label: "Catering", href: `${WEBSITE_SHOP}?category=catering` },
+  { label: "Cakes", href: WEBSITE_CAKES },
+  { label: "Catering", href: WEBSITE_CATERING },
   { label: "Locations", href: "/#locations" },
   { label: "Contact", href: WEBSITE_CONTACT },
 ];
@@ -20,7 +22,7 @@ const quickLinks = [
 const products = [
   { label: "Sweets", href: `${WEBSITE_SHOP}?category=sweets` },
   { label: "Bakery", href: `${WEBSITE_SHOP}?category=bakery` },
-  { label: "Cakes", href: `${WEBSITE_SHOP}?category=cakes` },
+  { label: "Cakes", href: WEBSITE_CAKES },
   { label: "Snacks", href: `${WEBSITE_SHOP}?category=snacks` },
   { label: "Gift Boxes", href: `${WEBSITE_SHOP}?category=gift%20boxes` },
   { label: "Pizzas", href: `${WEBSITE_SHOP}?category=pizzas` },

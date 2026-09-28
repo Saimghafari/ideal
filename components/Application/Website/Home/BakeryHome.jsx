@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { WEBSITE_ABOUT, WEBSITE_CONTACT, WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
+import { WEBSITE_ABOUT, WEBSITE_CAKES, WEBSITE_CATERING, WEBSITE_CONTACT, WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 
 const categories = [
   { name: "Sweets", image: "/assets/home/si-cat-sweets.png" },
@@ -202,7 +202,7 @@ export default function BakeryHome() {
         <SectionHead title="Our Categories" />
         <div className="-mx-3 flex gap-2.5 overflow-x-auto px-3 pb-1 sm:mx-0 sm:grid sm:grid-cols-8 sm:gap-x-5 sm:overflow-visible sm:px-0">
           {categories.map((item) => (
-            <Link key={item.name} href={`${WEBSITE_SHOP}?category=${encodeURIComponent(item.name.toLowerCase())}`} className="w-[78px] shrink-0 text-center sm:w-auto">
+            <Link key={item.name} href={item.name === "Cakes" ? WEBSITE_CAKES : item.name === "Catering" ? WEBSITE_CATERING : `${WEBSITE_SHOP}?category=${item.name === "Gift Boxes" ? "gift-boxes" : item.name === "Pizzas" ? "pizzas" : item.name.toLowerCase()}`} className="w-[78px] shrink-0 text-center sm:w-auto">
               <span className="relative mx-auto block aspect-square w-[78px] overflow-hidden rounded-full border-[3px] border-white shadow-[0_6px_16px_rgba(75,46,30,0.12)] sm:w-full sm:max-w-[118px]">
                 <Image src={item.image} alt={item.name} fill sizes="96px" className="object-cover" />
               </span>
