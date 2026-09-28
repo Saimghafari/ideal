@@ -149,7 +149,12 @@ html:has(body.pd-page) {
   scroll-snap-type: none;
 }
 
-html:not(.is-scrolling),
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--si-burnt-orange) transparent;
+  -ms-overflow-style: auto;
+}
+
 html:not(.is-scrolling) * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -174,6 +179,15 @@ html.is-scrolling * {
 *::-webkit-scrollbar-thumb {
   background: transparent;
   border-radius: 999px;
+}
+
+html::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: var(--si-burnt-orange);
 }
 
 html.is-scrolling::-webkit-scrollbar,

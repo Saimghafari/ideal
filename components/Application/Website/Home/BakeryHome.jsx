@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { WEBSITE_ABOUT, WEBSITE_CAKES, WEBSITE_CATERING, WEBSITE_CONTACT, WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
+import { branches } from "@/lib/locations";
+import { WEBSITE_ABOUT, WEBSITE_CAKES, WEBSITE_CATERING, WEBSITE_CONTACT, WEBSITE_LOCATIONS, WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 
 const categories = [
   { name: "Sweets", image: "/assets/home/si-cat-sweets.png" },
@@ -42,12 +43,6 @@ const offers = [
   { title: "Family Combo Pack", text: "A sharing box of sweets, biscuits, and namkeen.", price: "Rs. 1,850", was: "Rs. 2,400", image: "/assets/home/si-gift-box.png" },
   { title: "Gift Hampers", text: "Ready boxes for Eid, weddings, and thank-you visits.", price: "From Rs. 1,200", image: "/assets/home/si-hamper.png" },
   { title: "Celebration Cakes", text: "Custom cakes finished in store for birthdays and mehndi.", price: "Made to order", image: "/assets/home/si-fruit-cake.png" },
-];
-
-const branches = [
-  { name: "Saddar Road Branch", address: "Saddar Road, Faisalabad", hours: "9:00 AM – 10:00 PM", image: "/assets/home/si-branch-saddar.png" },
-  { name: "D Ground Branch", address: "D Ground, Faisalabad", hours: "9:00 AM – 11:00 PM", image: "/assets/home/si-branch-dground.png" },
-  { name: "Clock Tower Branch", address: "Clock Tower, Faisalabad", hours: "8:00 AM – 10:00 PM", image: "/assets/home/si-branch-clock.png" },
 ];
 
 const trust = ["Freshly baked daily", "Premium ingredients", "Made with care", "Trusted since 1985"];
@@ -371,7 +366,7 @@ export default function BakeryHome() {
       </section>
 
       <section id="locations" className="scroll-mt-24 mx-auto w-full max-w-[1680px] px-4 pb-14 sm:px-6 xl:px-10">
-        <SectionHead title="Our Locations" href="#locations" action="View all branches" />
+        <SectionHead title="Our Locations" href={WEBSITE_LOCATIONS} action="View all branches" />
         <div className="grid gap-4 md:grid-cols-3">
           {branches.map((branch) => (
             <article key={branch.name} className="overflow-hidden rounded-[22px] border border-[#f1e3d4] bg-white shadow-[0_10px_24px_rgba(75,46,30,0.06)]">

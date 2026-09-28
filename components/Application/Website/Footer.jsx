@@ -6,6 +6,7 @@ import {
   WEBSITE_SHOP,
   WEBSITE_CAKES,
   WEBSITE_CATERING,
+  WEBSITE_LOCATIONS,
 } from "@/routes/WebsiteRoute";
 import Image from "next/image";
 
@@ -15,7 +16,7 @@ const quickLinks = [
   { label: "Products", href: WEBSITE_SHOP },
   { label: "Cakes", href: WEBSITE_CAKES },
   { label: "Catering", href: WEBSITE_CATERING },
-  { label: "Locations", href: "/#locations" },
+  { label: "Locations", href: WEBSITE_LOCATIONS },
   { label: "Contact", href: WEBSITE_CONTACT },
 ];
 

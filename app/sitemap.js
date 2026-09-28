@@ -69,6 +69,7 @@ const STATIC_PAGES = [
     priority: 0.85,
   },
   { path: "/about-us", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/locations", changeFrequency: "monthly", priority: 0.8 },
   { path: "/commissions", changeFrequency: "monthly", priority: 0.8 },
   {
     path: "/what-is-embroidered-wall-art",
