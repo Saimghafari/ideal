@@ -1,15 +1,28 @@
 import React from "react";
 import ContactPage from "./ContactPage";
+import SeoJsonLd from "@/components/Application/Website/SeoJsonLd";
 import { buildPageMeta } from "@/lib/buildPageMeta";
+import { buildBreadcrumbJsonLd } from "@/lib/jsonLdBuilders";
+import { WEBSITE_CONTACT } from "@/routes/WebsiteRoute";
 
 export const metadata = buildPageMeta({
   title: "Contact Us",
   description:
-    "Contact Velora about clothing sizes, orders, shipping, and returns. We reply within one to two business days.",
+    "Contact Super Ideal Sweets & Bakers in Faisalabad about orders, cakes, catering, and shop visits. We reply within one to two business days.",
   path: "/contact-us",
-  keywords: "velora contact, clothing sizes, order help, shipping, customer support",
+  keywords: "Super Ideal contact, Faisalabad bakery, cake order, catering enquiry",
 });
 
-const ContactUsPage = () => <ContactPage />;
+const ContactUsPage = () => (
+  <>
+    <SeoJsonLd
+      data={buildBreadcrumbJsonLd([
+        { name: "Home", url: "/" },
+        { name: "Contact", url: WEBSITE_CONTACT },
+      ])}
+    />
+    <ContactPage />
+  </>
+);
 
 export default ContactUsPage;

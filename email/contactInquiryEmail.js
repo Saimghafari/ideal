@@ -3,8 +3,8 @@ import { brandEmailShell } from "@/email/brandEmailShell";
 const INQUIRY_LABELS = {
   general: "General enquiry",
   order: "Order support",
-  commission: "Size and fit",
-  visit: "Shipping",
+  commission: "Cakes and catering",
+  visit: "Shop visit",
 };
 
 const row = (label, value) => `
@@ -79,16 +79,16 @@ export const contactConfirmationEmail = ({ name, inquiryType }) => {
     </h1>
     <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:300;line-height:1.75;color:#5C5348;">
       We have received your note about <strong style="color:#1C1610;font-weight:500;">${about}</strong>.
-      Our studio will respond within 1–2 business days.
+      Our team will respond within 1–2 business days.
     </p>
     <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:300;line-height:1.75;color:#5C5348;">
-      In the meantime, you may explore our embroidery wall décor collection online.
+      In the meantime, you can browse sweets, cakes, and bakery from Super Ideal.
     </p>
   `;
 
   return brandEmailShell({
-    title: "We received your message — Velora",
-    preview: "Thank you for writing to Velora.",
+    title: "We received your message — Super Ideal",
+    preview: "Thank you for writing to Super Ideal.",
     bodyHtml,
   });
 };
