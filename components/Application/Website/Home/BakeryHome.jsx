@@ -298,8 +298,8 @@ export default function BakeryHome() {
             </p>
           </div>
           <div>
-            <p className="text-[12px] font-extrabold uppercase tracking-[0.18em] text-[#E45700]">Our story</p>
-            <h2 className="mt-2 font-display text-[2rem] font-semibold sm:text-[2.45rem]">About Super Ideal</h2>
+            <p className="text-[12px] font-extrabold uppercase tracking-[0.18em] text-[#E45700]">The house</p>
+            <h2 className="mt-2 font-display text-[2rem] font-semibold sm:text-[2.45rem]">Our Story</h2>
             <p className="mt-4 text-[15px] leading-7 text-[#6b5142]">
               Since 1985, Super Ideal Sweets & Bakers has been part of Faisalabad family celebrations. We still bake, fry, and pack the way the first shop did — with ghee, dry fruit, and patience — and we now send selected boxes to your door.
             </p>
