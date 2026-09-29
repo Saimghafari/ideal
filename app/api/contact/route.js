@@ -7,6 +7,7 @@ import {
   INQUIRY_LABELS,
 } from "@/email/contactInquiryEmail";
 import ContactModel from "@/models/Contact.model";
+import { CONTACT_EMAIL } from "@/lib/siteMeta";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -54,7 +55,7 @@ export async function POST(request) {
     // Contact-form notifications and visitor confirmations.
     const studioEmail =
       process.env.ADMIN_NOTIFICATION_EMAIL ||
-      "dectorreofficial@gmail.com";
+      CONTACT_EMAIL;
     const about = INQUIRY_LABELS[inquiryType] || inquiryType;
 
     const studioMail = await sendMail(
@@ -80,7 +81,7 @@ export async function POST(request) {
 
     // Best-effort confirmation to visitor (do not fail the request if this fails)
     await sendMail(
-      "We received your message — Velora",
+      "We received your message — Super Ideal",
       email,
       contactConfirmationEmail({ name, inquiryType }),
       { replyTo: studioEmail }

@@ -88,7 +88,10 @@ const Cart = ({ tone = "dark", variant = "icon" }) => {
         )}
       </SheetTrigger>
 
-      <SheetContent className="flex h-dvh max-h-dvh w-full flex-col gap-0 overflow-hidden border-l border-[var(--si-mist)] bg-[var(--si-cream)] p-0 sm:max-w-[440px] [&>button]:right-4 [&>button]:top-4 [&>button]:text-[var(--si-deep-brown)]/50 [&>button]:hover:text-[var(--si-deep-brown)] [&>button]:opacity-100 [&>button]:ring-0 [&>button]:focus:ring-0">
+      <SheetContent
+        overlayClassName="z-[100]"
+        className="z-[100] flex h-dvh max-h-dvh w-full flex-col gap-0 overflow-hidden border-l border-[var(--si-mist)] bg-[var(--si-cream)] p-0 sm:max-w-[440px] [&>button]:right-4 [&>button]:top-4 [&>button]:text-[var(--si-deep-brown)]/50 [&>button]:hover:text-[var(--si-deep-brown)] [&>button]:opacity-100 [&>button]:ring-0 [&>button]:focus:ring-0"
+      >
         <SheetHeader className="shrink-0 space-y-0 border-b border-[var(--si-mist)] px-6 pb-4 pt-5 text-left sm:px-7">
           <div className="nn-hairline-gold mb-3 w-10" />
           <p className="nn-label mb-1.5 text-[0.52rem] text-[var(--si-deep-brown)]">
@@ -103,7 +106,7 @@ const Cart = ({ tone = "dark", variant = "icon" }) => {
           </SheetDescription>
           {cart.count > 0 && (
             <p className="mt-2 text-[0.7rem] font-light uppercase tracking-[0.18em] text-[var(--si-muted)]">
-              {cart.count} {cart.count === 1 ? "piece" : "pieces"}
+              {cart.count} {cart.count === 1 ? "item" : "items"}
             </p>
           )}
         </SheetHeader>

@@ -39,7 +39,7 @@ const Loading = ({ variant = "page", label = "Preparing" }) => {
         </p>
         <BrandLogo size="loading" link={false} />
         <p className="mt-3 text-[0.52rem] font-medium tracking-[0.22em] uppercase text-[var(--si-burnt-orange)] leading-none">
-          Elevate Your Space
+          Sweets &amp; Bakers
         </p>
       </div>
     </div>

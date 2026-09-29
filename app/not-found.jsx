@@ -2,7 +2,7 @@ import Link from "next/link";
 import { WEBSITE_HOME, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 
 export const metadata = {
-  title: "Page not found | Velora",
+  title: "Page not found | Super Ideal Sweets & Bakers",
   robots: { index: false, follow: true },
 };
 
@@ -18,11 +18,11 @@ export default function NotFound() {
         <span className="nn-display-italic text-[var(--si-burnt-orange)]">available</span>
       </h1>
       <p className="mt-5 max-w-sm text-sm font-light text-[var(--si-cream)]/50">
-        The link may be outdated, or this piece is no longer in the collection.
+        The link may be outdated, or this item is no longer on the counter.
       </p>
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
         <Link href={WEBSITE_SHOP} className="nn-btn-ghost">
-          Shop clothing
+          Shop sweets
         </Link>
         <Link
           href={WEBSITE_HOME}

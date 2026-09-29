@@ -15,7 +15,7 @@ const reelSchema = z.object({
 });
 
 const schema = z.object({
-  placement: z.enum(["after_men", "after_women"]),
+  placement: z.enum(["after_sweets", "after_bakery"]),
   reels: z.array(reelSchema).min(1, "Add at least one video."),
 });
 

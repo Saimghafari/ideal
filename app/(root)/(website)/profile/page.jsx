@@ -29,7 +29,7 @@ import { login } from "@/store/reducer/authReducer";
 
 const breadCrumbData = {
   title: "My Profile",
-  eyebrow: "Velora",
+  eyebrow: "Super Ideal",
   subtitle: "Update your name, contact details, and delivery address.",
   links: [{ label: "Profile" }],
 };

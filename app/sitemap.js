@@ -2,7 +2,7 @@ import { connectDB } from "@/lib/databaseConnection";
 import { absoluteUrl, getCanonicalSiteUrl } from "@/lib/siteMeta";
 import ProductModel from "@/models/Product.model";
 import MediaModel from "@/models/Media.model";
-import { SEO_COLLECTIONS, SEO_CONTENT_UPDATED, getProductKeyword } from "@/lib/seoPages";
+import { SEO_CONTENT_UPDATED, getProductKeyword } from "@/lib/seoPages";
 import { BRAND_NAME } from "@/lib/siteMeta";
 
 void MediaModel;
@@ -52,31 +52,12 @@ async function fetchProducts() {
 
 const STATIC_PAGES = [
   { path: "/", changeFrequency: "daily", priority: 1.0 },
-  { path: "/embroidered-wall-art", changeFrequency: "daily", priority: 0.9 },
-  {
-    path: "/botanical-embroidery-wall-art",
-    changeFrequency: "weekly",
-    priority: 0.85,
-  },
-  {
-    path: "/wildlife-embroidery-wall-art",
-    changeFrequency: "weekly",
-    priority: 0.85,
-  },
-  {
-    path: "/modern-embroidery-wall-art",
-    changeFrequency: "weekly",
-    priority: 0.85,
-  },
+  { path: "/shop", changeFrequency: "daily", priority: 0.9 },
+  { path: "/cakes", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/catering", changeFrequency: "weekly", priority: 0.85 },
   { path: "/about-us", changeFrequency: "monthly", priority: 0.8 },
   { path: "/locations", changeFrequency: "monthly", priority: 0.8 },
   { path: "/commissions", changeFrequency: "monthly", priority: 0.8 },
-  {
-    path: "/what-is-embroidered-wall-art",
-    changeFrequency: "monthly",
-    priority: 0.7,
-  },
-  { path: "/wall-art-size-guide", changeFrequency: "monthly", priority: 0.7 },
   { path: "/contact-us", changeFrequency: "monthly", priority: 0.6 },
   { path: "/faq", changeFrequency: "monthly", priority: 0.6 },
   { path: "/care-guide", changeFrequency: "monthly", priority: 0.5 },
@@ -85,8 +66,6 @@ const STATIC_PAGES = [
   { path: "/privacy-policy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms-and-conditions", changeFrequency: "yearly", priority: 0.3 },
 ];
-
-void SEO_COLLECTIONS;
 
 export default async function sitemap() {
   const contentUpdated = new Date(SEO_CONTENT_UPDATED);

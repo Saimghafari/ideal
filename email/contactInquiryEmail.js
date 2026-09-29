@@ -40,7 +40,7 @@ export const contactInquiryEmail = ({
       Contact form message
     </h1>
     <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:300;line-height:1.7;color:#5C5348;">
-      A visitor sent a message from the Velora contact page.
+      A visitor sent a message from the Super Ideal contact page.
     </p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
       ${row("Writing about", about)}

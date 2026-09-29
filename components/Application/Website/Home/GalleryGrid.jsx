@@ -46,17 +46,17 @@ const GalleryGrid = ({ images = [] }) => {
             <div className="nn-hairline-gold w-20 mb-8" />
             <p className="nn-label text-[var(--si-burnt-orange)] mb-5">The Gallery</p>
             <h2 className="nn-display text-5xl sm:text-6xl lg:text-[4rem] font-light text-[var(--si-cream)] leading-[0.95]">
-              Art for
+              Sweets for
               <br />
               <span className="nn-display-italic text-[var(--si-burnt-orange)]">
-                every wall
+                every table
               </span>
             </h2>
           </div>
           <div className="max-w-xs lg:text-right">
             <p className="text-sm font-light leading-relaxed text-[var(--si-cream)]/50">
-              A living archive of stitch, colour, and composition — embroidery
-              artwork made to settle into the rooms it enters.
+              Mithai, biscuits, cakes, and gift boxes from the Super Ideal
+              counter in Faisalabad.
             </p>
             <Link
               href={WEBSITE_SHOP}

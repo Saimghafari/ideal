@@ -75,24 +75,24 @@ const Header = () => {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-[90] border-b border-[#f0e2d2] bg-[#FFF9F3] pt-[env(safe-area-inset-top,0px)] font-ui text-[#3d2415]">
-        <div className="relative mx-auto flex h-[68px] w-full max-w-[1680px] items-center justify-between gap-2 px-4 sm:h-[76px] xl:px-10">
+        <div className="relative mx-auto flex h-[68px] w-full max-w-[1680px] items-center justify-between gap-1.5 px-2.5 sm:h-[76px] sm:gap-2 sm:px-4 xl:px-10">
           <button
             type="button"
             aria-label={isMobileMenu ? "Close menu" : "Open menu"}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#ead9c6] xl:hidden"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#ead9c6] min-[400px]:h-10 min-[400px]:w-10 xl:hidden"
             onClick={() => setIsMobileMenu((v) => !v)}
           >
             {isMobileMenu ? <IoMdClose size={18} /> : <HiMiniBars3 size={18} />}
           </button>
 
-          <Link href={WEBSITE_HOME} aria-label="Super Ideal Sweets & Bakers home" className="shrink-0">
+          <Link href={WEBSITE_HOME} aria-label="Super Ideal Sweets & Bakers home" className="min-w-0 shrink">
             <Image
               src="/assets/images/logo.png"
               alt="Super Ideal Sweets & Bakers"
               width={1036}
               height={351}
               priority
-              className="h-10 w-auto sm:h-12"
+              className="h-8 w-auto max-w-full object-contain object-left min-[400px]:h-10 sm:h-12"
             />
           </Link>
 
@@ -113,7 +113,7 @@ const Header = () => {
             })}
           </nav>
 
-          <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
+          <div className="flex shrink-0 items-center gap-2 sm:gap-1.5">
             <button
               type="button"
               data-search-toggle
@@ -146,7 +146,7 @@ const Header = () => {
 
             <Link
               href={WEBSITE_SHOP}
-              className="inline-flex h-10 items-center rounded-full bg-[#E45700] px-3.5 text-[13px] font-bold text-white shadow-[0_6px_14px_rgba(228,87,0,0.25)] hover:bg-[#cf4c00] sm:px-5 sm:text-[14px]"
+              className="inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-full bg-[#E45700] px-2.5 text-[12px] font-bold text-white shadow-[0_6px_14px_rgba(228,87,0,0.25)] hover:bg-[#cf4c00] min-[400px]:h-10 min-[400px]:px-3.5 min-[400px]:text-[13px] sm:px-5 sm:text-[14px]"
             >
               Order Now
             </Link>

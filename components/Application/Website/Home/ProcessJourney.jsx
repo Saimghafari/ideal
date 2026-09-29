@@ -3,23 +3,23 @@ import React from "react";
 const steps = [
   {
     num: "01",
-    title: "The Thread",
-    desc: "We select premium silk and cotton threads — warm, rich, and made to hold colour for years.",
+    title: "The Ingredients",
+    desc: "Butter, flour, nuts, and spices chosen for the day’s bake.",
   },
   {
     num: "02",
-    title: "The Design",
-    desc: "Every embroidery design begins as a sketch. Motifs are refined until balance and beauty align.",
+    title: "The Bake",
+    desc: "Biscuits, pastry, and cakes go into the oven in small batches.",
   },
   {
     num: "03",
-    title: "The Stitch",
-    desc: "Layered stitchwork builds texture and depth — creating distinctive thread art for the wall.",
+    title: "The Counter",
+    desc: "Mithai, bakery, and cakes are finished and set out fresh.",
   },
   {
     num: "04",
-    title: "The Frame",
-    desc: "Finished panels are mounted as framed embroidery — gallery-ready decorative wall art.",
+    title: "The Box",
+    desc: "Gift boxes and delivery packs are sealed for the people you are taking them to.",
   },
 ];
 
@@ -33,9 +33,9 @@ const ProcessJourney = () => {
         <div className="nn-hairline-light w-20 mb-8" />
         <p className="nn-label text-[var(--si-burnt-orange)] mb-5">The Craft</p>
         <h2 className="nn-display text-5xl sm:text-6xl lg:text-[4.5rem] font-light text-[var(--si-cream)] leading-[0.95]">
-          From thread
+          From oven
           <br />
-          <span className="nn-display-italic text-[var(--si-burnt-orange)]">to wall</span>
+          <span className="nn-display-italic text-[var(--si-burnt-orange)]">to box</span>
         </h2>
       </div>
 

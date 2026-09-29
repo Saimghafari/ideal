@@ -18,7 +18,7 @@ const homeReelSectionSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      enum: ["after_men", "after_women"],
+      enum: ["after_sweets", "after_bakery"],
       index: true,
     },
     reels: { type: [reelSchema], default: [] },

@@ -10,7 +10,7 @@ export const otpEmail = (otp) => {
         Email Verification
       </h1>
       <p style="margin:0 auto 28px;max-width:420px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:300;line-height:1.75;color:#5C5348;">
-        Thank you for joining <strong style="color:#1C1610;font-weight:500;">Velora</strong>.
+        Thank you for joining <strong style="color:#1C1610;font-weight:500;">Super Ideal</strong>.
         Use the one-time password below to verify your email address.
       </p>
 
@@ -33,7 +33,7 @@ export const otpEmail = (otp) => {
   `;
 
   return brandEmailShell({
-    title: "Email Verification — Velora",
+    title: "Email Verification — Super Ideal",
     preview: `Your verification code is ${otp}`,
     bodyHtml,
   });

@@ -7,20 +7,20 @@ import { WEBSITE_ABOUT, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 
 const SLIDES = [
   {
-    src: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1600&q=80",
-    alt: "Look from the Velora wardrobe",
+    src: "/assets/home/si-cat-sweets.png",
+    alt: "Super Ideal sweets",
   },
   {
-    src: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80",
-    alt: "Quiet luxury street look",
+    src: "/assets/home/si-cat-bakery.png",
+    alt: "Super Ideal bakery",
   },
   {
-    src: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80",
-    alt: "Tailored ready to wear",
+    src: "/assets/home/si-fudge-cake.png",
+    alt: "Chocolate fudge cake",
   },
   {
-    src: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1600&q=80",
-    alt: "Considered everyday dressing",
+    src: "/assets/home/si-gift-box.png",
+    alt: "Super Ideal gift box",
   },
 ];
 
@@ -44,16 +44,16 @@ const ClosingCta = () => {
       <div className="mx-auto grid w-full max-w-[92rem] items-center gap-10 px-5 py-12 sm:gap-12 sm:px-8 sm:py-16 md:px-10 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-20 xl:gap-24 xl:px-16">
         <div className="order-2 mx-auto max-w-xl text-center lg:order-1 lg:mx-0 lg:text-left">
           <p className="text-[0.68rem] font-medium tracking-[0.28em] uppercase text-[#8a8a8a]">
-            The wardrobe
+            The counter
           </p>
           <h2
             id="closing-cta-heading"
             className="mt-4 text-[1.85rem] font-medium leading-[0.95] tracking-[-0.04em] text-black sm:text-[2.35rem] lg:text-[2.55rem] xl:text-[3.15rem]"
           >
-            Dress with less noise.
+            Sweets for the table.
           </h2>
           <p className="mx-auto mt-4 max-w-md text-[0.95rem] font-normal leading-7 text-[#6b6b6b] sm:mt-5 sm:text-[1rem] lg:mx-0">
-            A small collection of clothes that last — cut simply, worn often.
+            Mithai, biscuits, cakes, and gift boxes from the Faisalabad counter.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center sm:gap-4 lg:justify-start">
             <Link

@@ -8,63 +8,57 @@ import { BsChatQuote } from "react-icons/bs";
 
 const testimonials = [
   {
-    name: "Sophia Patel",
+    name: "Ayesha Khan",
     review:
-      "Our framed embroidery panel became the quiet centrepiece of the lounge. Exceptional texture and a truly refined finish.",
+      "The soan halwa tasted just like the counter in Faisalabad. Packed fresh and still warm in the tin.",
     rating: 5,
   },
   {
-    name: "James Thompson",
+    name: "Hassan Ali",
     review:
-      "The detail in this thread art is remarkable. Packaging was careful, and the piece feels like luxury wall decor.",
-    rating: 4,
-  },
-  {
-    name: "Emily Chen",
-    review:
-      "A distinctive statement wall art piece. Modern, elegant, and perfectly scaled for our dining space.",
+      "Butter biscuits with evening chai — crisp, rich, and gone the same day.",
     rating: 5,
   },
   {
-    name: "Liam Rodriguez",
+    name: "Fatima Noor",
     review:
-      "We commissioned a custom panel — the embroidery design exceeded expectations. Timeless and beautifully composed.",
-    rating: 4,
-  },
-  {
-    name: "Ava Johnson",
-    review:
-      "From unboxing to hanging, everything felt premium. This is artistic wall decor we will keep for years.",
+      "We ordered a fruit cream cake for a birthday. Light, fresh, and exactly as shown.",
     rating: 5,
   },
   {
-    name: "Noah Davis",
+    name: "Usman Raza",
     review:
-      "Subtle colour and rich stitchwork. Exactly the modern wall decor our hallway needed.",
+      "The catering tray arrived on time for the mehndi. Guests kept asking which shop it was.",
     rating: 4,
   },
   {
-    name: "Isabella Martinez",
+    name: "Sana Malik",
     review:
-      "Elegant embroidery wall art with presence. Guests always ask where we found it.",
+      "Dry fruit gift box was beautiful. Perfect for a visit and packed with care.",
     rating: 5,
   },
   {
-    name: "William Lee",
+    name: "Bilal Ahmed",
     review:
-      "Quality finish, thoughtful framing, and a calm luxury feel. Highly recommended.",
+      "Namak pare had the Super Ideal crunch. We picked up a second box the next day.",
+    rating: 5,
+  },
+  {
+    name: "Hira Shah",
+    review:
+      "Croissants from the morning bake were flaky and buttery. Worth the trip to Saddar.",
     rating: 4,
   },
   {
-    name: "Mia Anderson",
+    name: "Omar Farooq",
     review:
-      "The panel arrived ready to hang. Soft texture, strong design — premium interior decor.",
-    rating: 4,
+      "Kunafa was warm and sweet, finished in store. Best eaten the same day, as they say.",
+    rating: 5,
   },
   {
-    name: "Ethan Clark",
+    name: "Zara Iqbal",
     review:
-      "One of the most considered pieces we own. True embroidery artwork for a modern home.",
+      "Gift boxes for Eid were ready on time. The family loved the mithai selection.",
     rating: 5,
   },
 ];

@@ -27,12 +27,12 @@ const FaqContent = ({ hideHeader = false }) => {
     <div className="min-h-screen bg-[var(--si-cream)] text-[var(--si-deep-brown)]">
       {!hideHeader && (
         <header className="bg-[var(--si-deep-brown)] px-6 pb-14 pt-20 text-center sm:px-10 sm:pt-24">
-          <p className="nn-label mb-5 text-[var(--si-cream)]">Velora</p>
+          <p className="nn-label mb-5 text-[var(--si-cream)]">Super Ideal</p>
           <h1 className="nn-display text-4xl font-light text-[var(--si-cream)] sm:text-5xl lg:text-6xl">
-            Clothing FAQ
+            Sweets FAQ
           </h1>
           <p className="mx-auto mt-6 max-w-md text-sm font-light leading-[1.9] text-white/55">
-            Sizes, orders, shipping, and care for Velora clothing.
+            Packs, orders, shipping, and freshness for Super Ideal sweets and bakery.
           </p>
         </header>
       )}
@@ -86,19 +86,19 @@ const FaqContent = ({ hideHeader = false }) => {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-5 text-sm">
           <Link href="/contact-us" className="nn-btn-outline">
-            Contact Velora
+            Contact Super Ideal
           </Link>
           <Link href={WEBSITE_SHIPPING} className="nn-link-quiet">
             Shipping
           </Link>
           <Link href={WEBSITE_CARE_GUIDE} className="nn-link-quiet">
-            Care
+            Freshness
           </Link>
           <Link href={WEBSITE_RETURNS} className="nn-link-quiet">
             Returns
           </Link>
           <Link href="/wall-art-size-guide" className="nn-link-quiet">
-            Size guide
+            Pack guide
           </Link>
         </div>
       </section>

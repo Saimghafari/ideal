@@ -15,8 +15,8 @@ export const featuredPieces = STATIC_PRODUCTS.filter((item) => item.featured)
   }));
 
 export const promises = [
-  "Free returns",
-  "Thoughtful fabrics",
-  "Secure delivery",
-  "Made to last",
+  "Baked fresh",
+  "Packed with care",
+  "Faisalabad delivery",
+  "Made for sharing",
 ];

@@ -25,7 +25,7 @@ const orderSchema = new mongoose.Schema(
     },
     state: {
       type: String,
-      required: true,
+      required: false,
     },
 
     city: {
@@ -34,11 +34,11 @@ const orderSchema = new mongoose.Schema(
     },
     pincode: {
       type: String,
-      required: true,
+      required: false,
     },
     landmark: {
       type: String,
-      required: true,
+      required: false,
     },
     ordernote: {
       type: String,

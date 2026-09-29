@@ -49,17 +49,22 @@ const nextConfig = {
       },
       {
         source: "/botanical-embroidery-wall-art",
-        destination: "/shop?category=women",
+        destination: "/shop?category=sweets",
         permanent: false,
       },
       {
         source: "/wildlife-embroidery-wall-art",
-        destination: "/shop?category=men",
+        destination: "/shop?category=bakery",
         permanent: false,
       },
       {
         source: "/modern-embroidery-wall-art",
-        destination: "/shop?category=accessories",
+        destination: "/shop?category=gift-boxes",
+        permanent: false,
+      },
+      {
+        source: "/what-is-embroidered-wall-art",
+        destination: "/about-us",
         permanent: false,
       },
     ];
@@ -76,7 +81,7 @@ const nextConfig = {
         ],
       },
       {
-        // Apply to all routes on dectorre.com / www.dectorre.com
+        // Apply to all routes on superideal.com / www.superideal.com
         source: "/:path*",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },

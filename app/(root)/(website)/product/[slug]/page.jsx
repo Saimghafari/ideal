@@ -19,7 +19,7 @@ export const fetchCache = "force-no-store";
 const FALLBACK_IMAGE = OG_IMAGE;
 
 const missingMeta = {
-  title: { absolute: "Piece not found | Velora" },
+  title: { absolute: "Item not found | Super Ideal" },
   robots: { index: false, follow: true },
 };
 
@@ -38,7 +38,7 @@ export async function generateMetadata({ params, searchParams }) {
         name: product?.name,
         description:
           product?.description ||
-          `${product?.name} — clothing by Velora.`,
+          `${product?.name} — sweets by Super Ideal.`,
         price: variant?.sellingPrice || product?.sellingPrice || 0,
         image:
           variant?.media?.[0]?.secure_url ||
@@ -46,7 +46,7 @@ export async function generateMetadata({ params, searchParams }) {
           FALLBACK_IMAGE,
         slug: product?.slug,
         category: product?.category?.name || "Clothing",
-        brand: product?.brand || "Velora",
+        brand: product?.brand || "Super Ideal",
         inStock: true,
       });
     }
@@ -60,7 +60,7 @@ export async function generateMetadata({ params, searchParams }) {
 
   return {
     ...missingMeta,
-    title: { absolute: "Product unavailable | Velora" },
+    title: { absolute: "Product unavailable | Super Ideal" },
   };
 }
 
@@ -74,10 +74,10 @@ function ProductLoadError({ slug }) {
       </p>
       <h1 className="nn-display text-3xl font-light text-[var(--si-cream)] sm:text-4xl">
         Loading this{" "}
-        <span className="nn-display-italic text-[var(--si-burnt-orange)]">piece</span>
+        <span className="nn-display-italic text-[var(--si-burnt-orange)]">item</span>
       </h1>
       <p className="mt-5 max-w-sm text-sm font-light text-[var(--si-cream)]/50">
-        Connecting to the atelier. This page will refresh automatically once.
+        Connecting to the shop. This page will refresh automatically once.
       </p>
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
         <Link
@@ -90,7 +90,7 @@ function ProductLoadError({ slug }) {
           href={WEBSITE_SHOP}
           className="text-[0.6rem] tracking-[0.24em] uppercase text-[var(--si-cream)]/45 hover:text-[var(--si-burnt-orange)]"
         >
-          Shop clothing
+          Shop sweets
         </Link>
       </div>
     </div>
@@ -134,7 +134,7 @@ const ProductPage = async ({ params, searchParams }) => {
     slug: product.slug,
     image: images.length ? images : OG_IMAGE,
     price: variant?.sellingPrice || product?.sellingPrice || 0,
-    brand: product.brand || "Velora",
+    brand: product.brand || "Super Ideal",
     sku: variant?.sku || product.slug,
     category: product?.category?.name || "Embroidered Wall Art",
     inStock: true,

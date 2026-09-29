@@ -16,7 +16,7 @@ export async function GET(request, { params }) {
     await seedHomeContentIfNeeded(getStaticProducts());
 
     const { key } = await params;
-    if (!["men", "women"].includes(key)) {
+    if (!["sweets", "bakery"].includes(key)) {
       return response(false, 400, "Invalid collection key.");
     }
 

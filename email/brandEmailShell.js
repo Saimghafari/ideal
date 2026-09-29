@@ -21,7 +21,7 @@ export const brandEmailShell = ({ title, preview, bodyHtml }) => `
           <tr>
             <td style="padding:28px 32px 18px;text-align:center;">
               <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#E45700;">
-                Modern Clothing
+                Sweets & Bakers
               </p>
               <p style="margin:0;font-size:26px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:#4B2E1E;">
                 ${BRAND_NAME}

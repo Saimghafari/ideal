@@ -1,13 +1,15 @@
+import { SITE_URL } from "@/lib/siteMeta";
+
 export const metadata = {
-  title: "My Profile – Manage Your Account | Velora",
+  title: "My Profile – Manage Your Account | Super Ideal",
   description:
-    "Update your Velora profile and account details.",
+    "Update your Super Ideal profile and account details.",
   keywords:
-    "velora, profile management, account settings, user profile, personal information, account update, contact details, address management, Velora profile, embroidery wall decor",
+    "super ideal, profile, account settings, sweets orders, bakery orders",
   viewport: "width=device-width, initial-scale=1.0",
   robots: "noindex, follow",
   alternates: {
-    canonical: "https://www.dectorre.com/profile",
+    canonical: `${SITE_URL}/profile`,
   },
 };
 

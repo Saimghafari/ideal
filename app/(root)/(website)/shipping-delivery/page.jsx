@@ -7,12 +7,12 @@ import { buildBreadcrumbJsonLd } from "@/lib/jsonLdBuilders";
 import { WEBSITE_HOME } from "@/routes/WebsiteRoute";
 
 export const metadata = buildPageMeta({
-  title: "Shipping & Delivery – Secure Art Dispatch",
+  title: "Shipping & Delivery",
   description:
-    "How Velora packs and delivers clothing across Pakistan.",
+    "How Super Ideal packs and delivers sweets and bakery across Pakistan.",
   path: "/shipping-delivery",
   keywords:
-    "wall art shipping, embroidery delivery, secure art packaging, Velora dispatch, framed panel delivery, nationwide shipping",
+    "sweets delivery, bakery shipping, Super Ideal dispatch, gift box delivery, Faisalabad bakery",
 });
 
 const timeline = [
@@ -29,7 +29,7 @@ const timeline = [
   {
     step: "Studio Preparation",
     detail:
-      "Panel inspected, loose fibres removed, and wrapped for transit.",
+      "Sweets and biscuits are sealed, and cakes are packed for a cool journey.",
   },
   {
     step: "Dispatch",
@@ -44,10 +44,10 @@ const timeline = [
 ];
 
 const packaging = [
-  "Acid-free tissue over embroidery",
-  "Rigid corner protectors",
-  "Foam frame cushioning",
-  "Reinforced outer carton",
+  "Food-safe inner wrap",
+  "Sealed tins and boxes",
+  "Cushioned outer carton",
+  "Chilled packing for cream cakes",
 ];
 
 const deliveryZones = [
@@ -82,16 +82,16 @@ const ShippingDeliveryPage = () => {
           <span className="text-[var(--si-cream)]/70">Shipping</span>
         </nav>
         <h1 className="nn-display text-3xl sm:text-4xl lg:text-5xl font-light text-[var(--si-cream)]">
-          From studio to your wall
+          From the shop to your door
         </h1>
       </div>
 
       {/* Intro strip */}
       <div className="px-6 sm:px-10 lg:px-20 xl:px-28 py-12 border-b border-[var(--si-mist)]">
         <p className="mx-auto max-w-2xl text-center text-sm font-light leading-[2] text-[var(--si-muted)]">
-          Embroidery wall panels demand careful transit. Every parcel is prepared
-          after your email invoice is paid — we do not ship cash-on-delivery
-          orders — with protective materials designed for textured, framed art.
+          Sweets, biscuits, and gift boxes are packed after your email invoice is
+          paid. We do not ship cash-on-delivery orders. Fresh cakes and some
+          bakery items stay in store.
         </p>
       </div>
 
@@ -174,8 +174,8 @@ const ShippingDeliveryPage = () => {
       </section>
 
       <DirectAnswer
-        question="Does Velora ship internationally?"
-        answer="International shipping is available on request. After invoice payment, Velora prepares the panel in 2–4 business days and transit typically takes 3–14 days depending on destination. Contact the studio with your location for a quote — there is no cash-on-delivery shipping."
+        question="Does Super Ideal ship internationally?"
+        answer="International shipping for dry sweets and biscuits is available on request. After invoice payment, Super Ideal packs the order in 1–2 business days. Contact the shop with your city for a quote — there is no cash-on-delivery shipping."
         href="/contact-us"
         linkLabel="Request an international shipping quote"
       />

@@ -3,39 +3,39 @@ import { WEBSITE_SHOP } from "@/routes/WebsiteRoute";
 import { buildPageMeta } from "@/lib/buildPageMeta";
 
 export const metadata = buildPageMeta({
-  title: "Care Guide",
+  title: "Freshness Guide",
   description:
-    "How to care for Velora clothing — silk, wool, cashmere, and leather.",
+    "How to store Super Ideal sweets, biscuits, cakes, and fresh bakery.",
   path: "/care-guide",
 });
 
 const notes = [
   {
-    title: "Silk",
-    text: "Cool hand wash or dry clean. Hang to dry. Keep away from sharp jewellery.",
+    title: "Dry sweets",
+    text: "Keep mithai and halwa in a sealed box, away from heat and moisture. Finish within a few days.",
   },
   {
-    title: "Wool & cashmere",
-    text: "Fold knits. Dry clean or wash cool and flat. Never tumble dry.",
+    title: "Biscuits",
+    text: "Store in an airtight tin. They stay crisp longest when the lid is closed after each serving.",
   },
   {
-    title: "Cotton & linen",
-    text: "Warm wash, low iron. Linen looks better with a little crease.",
+    title: "Fresh bakery",
+    text: "Croissants and pastries are best the day they are baked. Do not refrigerate flaky pastry.",
   },
   {
-    title: "Leather",
-    text: "Keep dry. Wipe with a soft cloth. Condition once or twice a year.",
+    title: "Cakes & kunafa",
+    text: "Keep cream cakes and kunafa chilled. Eat the same day they leave the counter.",
   },
 ];
 
 export default function CareGuidePage() {
   return (
     <div className="nn-cream-bg min-h-[70vh] px-6 py-16 sm:px-10 lg:px-28">
-      <p className="nn-label mb-4 text-[var(--si-burnt-orange)]">Looking after it</p>
-      <h1 className="nn-display text-4xl font-light sm:text-5xl">Care guide</h1>
+      <p className="nn-label mb-4 text-[var(--si-burnt-orange)]">Keeping it fresh</p>
+      <h1 className="nn-display text-4xl font-light sm:text-5xl">Freshness guide</h1>
       <p className="mt-5 max-w-lg text-sm font-light leading-relaxed text-[var(--si-muted)]">
-        Follow the label in each garment. These notes cover the fabrics we use
-        most.
+        Super Ideal sweets and bakery are made to be eaten fresh. These notes
+        cover how to store what you take home.
       </p>
       <div className="mt-14 grid gap-10 sm:grid-cols-2">
         {notes.map((item) => (
@@ -48,7 +48,7 @@ export default function CareGuidePage() {
         ))}
       </div>
       <Link href={WEBSITE_SHOP} className="nn-btn-primary mt-14 inline-flex">
-        Shop clothing
+        Shop sweets
       </Link>
     </div>
   );

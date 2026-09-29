@@ -128,7 +128,7 @@ const productRows = (products = [], currency = "PKR") =>
     .map((p) => {
       const img =
         p.image ||
-        "https://www.dectorre.com/assets/images/img-placeholder.webp";
+        `${SITE_URL}/logo.png`;
       const size = p.size ? `<br/><span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8A8174;">${p.size}</span>` : "";
       return `
       <tr>
@@ -212,7 +212,7 @@ export const orderNotification = (data) => {
     </h1>
     <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:300;line-height:1.75;color:#5C5348;">
       We received your order. Please complete payment by bank transfer using the details below.
-      Once payment is confirmed, we will begin preparing your pieces.
+      Once payment is confirmed, we will begin packing your order.
     </p>
 
     <div style="margin-bottom:24px;padding:16px 18px;background:#F3EEE4;border-left:3px solid #B8933D;">
@@ -254,7 +254,7 @@ export const orderNotification = (data) => {
   `;
 
   return brandEmailShell({
-    title: `Your Velora order ${order_id}`,
+    title: `Your Super Ideal order ${order_id}`,
     preview: `Thank you for your order ${order_id}. Payment details are inside.`,
     bodyHtml,
   });
@@ -342,7 +342,7 @@ const STATUS_THEMES = {
     icon: "◎",
     eyebrow: "Order update",
     title: "Your order is awaiting payment",
-    preview: "Your Velora order is awaiting payment.",
+    preview: "Your Super Ideal order is awaiting payment.",
     message: (name, orderId) =>
       `Hello ${name}, order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> is awaiting payment. Please use the bank transfer details from your order confirmation email and include the Order ID as the payment reference.`,
     note: "Once payment is verified, we will mark your order as Paid and begin processing.",
@@ -358,7 +358,7 @@ const STATUS_THEMES = {
     preview: "Your payment was verified. Your order is now paid.",
     message: (name, orderId) =>
       `Hello ${name}, we have verified payment for order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong>. Your order is marked as Paid.`,
-    note: "Next, our atelier will move your pieces into Processing and prepare them with care.",
+    note: "Next, the shop will move your order into Processing and pack it with care.",
   },
   processing: {
     label: "Processing",
@@ -366,11 +366,11 @@ const STATUS_THEMES = {
     badgeBg: "#F7F0D8",
     badgeBorder: "#C4A035",
     icon: "◆",
-    eyebrow: "In the atelier",
+    eyebrow: "In the kitchen",
     title: "Your order is being prepared",
-    preview: "We’re preparing your embroidery wall décor with care.",
+    preview: "We’re packing your sweets and bakery with care.",
     message: (name, orderId) =>
-      `Hello ${name}, good news — order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> is now in preparation. Our studio is carefully finishing your pieces.`,
+      `Hello ${name}, good news — order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> is now in preparation. The shop is packing your sweets and bakery.`,
     note: "You’ll receive another update as soon as your order ships.",
   },
   shipped: {
@@ -381,10 +381,10 @@ const STATUS_THEMES = {
     icon: "✈",
     eyebrow: "On the way",
     title: "Your order has shipped",
-    preview: "Your Velora pieces are on their way.",
+    preview: "Your Super Ideal order is on its way.",
     message: (name, orderId) =>
-      `Hello ${name}, your order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> has left the atelier and is on its journey to you.`,
-    note: "Please keep an eye on your doorstep. Handle the package gently — it contains finely finished wall art.",
+      `Hello ${name}, your order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> has left the shop and is on its journey to you.`,
+    note: "Please keep an eye on your doorstep. Keep cream cakes and fresh bakery cool.",
   },
   delivered: {
     label: "Delivered",
@@ -394,9 +394,9 @@ const STATUS_THEMES = {
     icon: "✓",
     eyebrow: "Arrived",
     title: "Your order has been delivered",
-    preview: "Your embroidery wall décor has arrived.",
+    preview: "Your Super Ideal order has arrived.",
     message: (name, orderId) =>
-      `Hello ${name}, order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> has been marked as delivered. We hope your new pieces bring quiet beauty to your walls.`,
+      `Hello ${name}, order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> has been marked as delivered. We hope the sweets and bakery arrived fresh.`,
     note: "If anything arrives damaged, contact us within 48 hours with photographs and we will assist you.",
   },
   cancelled: {
@@ -410,7 +410,7 @@ const STATUS_THEMES = {
     preview: "Your order was cancelled. We’re here if you need help.",
     message: (name, orderId) =>
       `Hello ${name}, order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> has been cancelled. If this was unexpected, or you need help placing a new order, please reach out.`,
-    note: "Contact Velora through the website contact form if you need help.",
+    note: "Contact Super Ideal through the website contact form if you need help.",
   },
   pending: {
     label: "Pending",
@@ -420,7 +420,7 @@ const STATUS_THEMES = {
     icon: "◌",
     eyebrow: "Order update",
     title: "Your order is pending",
-    preview: "Your Velora order status is pending.",
+    preview: "Your Super Ideal order status is pending.",
     message: (name, orderId) =>
       `Hello ${name}, order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> is currently pending confirmation.`,
     note: "We’ll update you as soon as it moves to the next stage.",
@@ -436,7 +436,7 @@ const STATUS_THEMES = {
     preview: "Your order requires verification.",
     message: (name, orderId) =>
       `Hello ${name}, order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> is marked as unverified. Our team may contact you shortly.`,
-    note: "You can also write to us through the Velora contact form.",
+    note: "You can also write to us through the Super Ideal contact form.",
   },
 };
 
@@ -460,7 +460,7 @@ export const orderStatusEmail = ({
     preview: `Your order is now ${status}.`,
     message: (name, orderId) =>
       `Hello ${name}, your order <strong style="color:#1C1610;font-weight:500;">${orderId}</strong> status is now <strong>${status}</strong>.`,
-    note: "Thank you for choosing Velora.",
+    note: "Thank you for choosing Super Ideal.",
   };
 
   const contactBlock =
@@ -471,11 +471,11 @@ export const orderStatusEmail = ({
         Need help?
       </p>
       <p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:300;line-height:1.7;color:#5C5348;">
-        Velora can help with a replacement order or any questions.
+        Super Ideal can help with a replacement order or any questions.
       </p>
       <a href="${SITE_URL}/contact-us"
          style="display:inline-block;padding:12px 28px;background:${theme.accent};color:#FBF7F0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;">
-        Contact Velora
+        Contact Super Ideal
       </a>
     </div>`
       : "";
@@ -532,7 +532,7 @@ export const orderStatusEmail = ({
     ${
       products.length
         ? `<p style="margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#8A8174;">
-      Your pieces
+      Your order
     </p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px;">
       ${productRows(products, orderCurrency)}

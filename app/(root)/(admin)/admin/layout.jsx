@@ -21,7 +21,7 @@ const layout = ({ children }) => {
           </div>
 
           <div className="border-t h-[40px] flex justify-center items-center bg-gray-50 dark:bg-background text-sm">
-            © {new Date().getFullYear()} Velora™. All Rights Reserved.
+            © {new Date().getFullYear()} Super Ideal. All Rights Reserved.
           </div>
         </main>
       </SidebarProvider>

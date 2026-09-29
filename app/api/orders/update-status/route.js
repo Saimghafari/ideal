@@ -36,7 +36,7 @@ export async function PUT(request) {
           orderData.products || []
         );
         const subjectByStatus = {
-          unpaid: `Your Velora order ${orderData.order_id}`,
+          unpaid: `Your Super Ideal order ${orderData.order_id}`,
           paid: `Payment received — order ${orderData.order_id}`,
           processing: `Your order is being prepared — ${orderData.order_id}`,
           shipped: `Your order has shipped — ${orderData.order_id}`,

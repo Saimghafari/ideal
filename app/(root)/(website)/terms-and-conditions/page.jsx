@@ -6,10 +6,10 @@ import { WEBSITE_HOME } from "@/routes/WebsiteRoute";
 export const metadata = buildPageMeta({
   title: "Terms & Conditions – Shop Policies",
   description:
-    "Terms for shopping Velora clothing. Prices are in Pakistani rupees.",
+    "Terms for shopping Super Ideal sweets and bakery. Prices are in Pakistani rupees.",
   path: "/terms-and-conditions",
   keywords:
-    "velora terms, wall art shop policies, embroidery purchase terms, returns policy, intellectual property, online wall decor shop",
+    "super ideal terms, sweets shop policies, bakery purchase terms, returns policy",
 });
 
 const clauses = [
@@ -25,7 +25,7 @@ const clauses = [
     num: "II",
     title: "Product Information",
     points: [
-      "We aim to display accurate product details, sizes, and prices in Pakistani rupees. Fabric shade can vary slightly between pieces.",
+      "We aim to display accurate product details, pack sizes, and prices in Pakistani rupees. Fresh bakery can vary slightly from day to day.",
       "We reserve the right to correct inaccuracies and update information at any time without prior notice.",
     ],
   },
@@ -37,7 +37,7 @@ const clauses = [
       "After you place an order, you receive an email invoice with your OI- order ID and payment instructions. Pay using the method shown on the invoice.",
       "Studio preparation and dispatch begin after payment is confirmed against your invoice.",
       "If an item cannot be fulfilled, we will notify you and arrange a refund or cancellation as applicable.",
-      "Bespoke commissions require a written deposit agreement before production begins. Deposits are confirmed by invoice and are non-refundable once production has started, except for studio error or transit damage as set out in our Returns & Refunds policy.",
+      "Custom cakes and catering trays need a written agreement before baking begins. Deposits are confirmed by invoice and are non-refundable once baking has started, except for a shop error or transit damage as set out in our Returns & Refunds policy.",
     ],
   },
   {
@@ -53,7 +53,7 @@ const clauses = [
     title: "Returns & Refunds",
     points: [
       "Eligibility, timelines, and refund methods are governed exclusively by our Returns & Refunds policy.",
-      "Change-of-mind returns follow the window on the returns page. Worn or washed pieces cannot be returned.",
+      "Change-of-mind returns follow the window on the returns page. Opened sweets, biscuits, and fresh bakery cannot be returned.",
       "Approved refunds are issued using the same channel you used to pay the email invoice, unless otherwise agreed in writing.",
     ],
   },
@@ -61,7 +61,7 @@ const clauses = [
     num: "VI",
     title: "Intellectual Property",
     points: [
-      "All content on Velora — including logos, images, embroidery compositions, and text — is our property and protected by copyright laws.",
+      "All content on Super Ideal — including logos, images, and text — is our property and protected by copyright laws.",
       "You may not copy, reproduce, or use our content or designs without prior written consent.",
     ],
   },
@@ -140,7 +140,7 @@ const TermsAndConditionsPage = () => {
         <p className="max-w-2xl mx-auto text-xs font-light text-[var(--si-fog)] text-center">
           Questions?{" "}
           <Link href="/contact-us" className="text-[var(--si-deep-brown)] underline underline-offset-2">
-            Contact the studio
+            Contact the shop
           </Link>
         </p>
       </footer>

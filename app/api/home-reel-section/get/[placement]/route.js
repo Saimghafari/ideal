@@ -16,7 +16,7 @@ export async function GET(request, { params }) {
     await seedHomeContentIfNeeded(getStaticProducts());
 
     const { placement } = await params;
-    if (!["after_men", "after_women"].includes(placement)) {
+    if (!["after_sweets", "after_bakery"].includes(placement)) {
       return response(false, 400, "Invalid reel section.");
     }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { sizes as clothingSizes } from "@/lib/utils";
+import { sizes as packSizes } from "@/lib/utils";
 
 const SizeGuide = ({
   activeSize,
@@ -13,7 +13,7 @@ const SizeGuide = ({
     ? new Set(availableSizes)
     : null;
 
-  const list = clothingSizes.filter(
+  const list = packSizes.filter(
     (size) => !availableSet || availableSet.has(size.value)
   );
 
@@ -26,7 +26,7 @@ const SizeGuide = ({
     <div>
       {!multi && (
         <p className="nn-label mb-4 text-[0.48rem] text-[var(--si-muted)]">
-          Size
+          Pack
         </p>
       )}
       <div className="flex flex-wrap gap-2">

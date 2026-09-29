@@ -14,7 +14,7 @@ const itemSchema = z.object({
 });
 
 const schema = z.object({
-  key: z.enum(["men", "women"]),
+  key: z.enum(["sweets", "bakery"]),
   title: z.string().min(2, "Title is required."),
   href: z.string().min(1, "Link is required."),
   featuredMedia: z.string().optional().nullable(),

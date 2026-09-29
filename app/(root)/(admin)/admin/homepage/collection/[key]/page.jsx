@@ -18,8 +18,8 @@ import {
 } from "@/routes/AdminPanelRoute";
 
 const labels = {
-  men: "Men's Collection",
-  women: "Women's Collection",
+  sweets: "Sweets",
+  bakery: "Bakery",
 };
 
 const toMedia = (media) =>
@@ -108,7 +108,7 @@ const EditHomeCollection = ({ params }) => {
     }
   };
 
-  if (!["men", "women"].includes(key)) {
+  if (!["sweets", "bakery"].includes(key)) {
     return <p className="pt-6">This homepage section does not exist.</p>;
   }
 

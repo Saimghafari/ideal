@@ -25,7 +25,7 @@ export default function CollectionLanding({
   });
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", url: "/" },
-    { name: "Embroidered Wall Art", url: SHOP_PATH },
+    { name: "Shop", url: SHOP_PATH },
     { name: collection.h1, url: collection.path },
   ]);
 
@@ -44,11 +44,11 @@ export default function CollectionLanding({
         <p className="mx-auto max-w-2xl text-sm font-light leading-[1.95] text-[var(--si-muted)]">
           {collection.description}{" "}
           <Link href={SHOP_PATH} className="underline underline-offset-4">
-            Browse all embroidered wall art
+            Browse the shop
           </Link>{" "}
           or{" "}
           <Link href={WEBSITE_COMMISSIONS} className="underline underline-offset-4">
-            enquire about a custom embroidered wall art commission
+            ask about a custom cake or catering tray
           </Link>
           .
         </p>
@@ -64,14 +64,14 @@ export default function CollectionLanding({
         ) : (
           <div className="py-16 text-center">
             <h2 className="nn-display text-2xl font-light text-[var(--si-deep-brown)]">
-              Pieces are being prepared
+              The counter is being set
             </h2>
             <p className="mx-auto mt-4 max-w-md text-sm font-light text-[var(--si-muted)]">
-              This collection will list matching works from the atelier as they
+              This collection will list matching sweets and bakery as they
               are published.
             </p>
             <Link href={SHOP_PATH} className="nn-btn-outline mt-8 inline-flex">
-              Shop embroidered wall art
+              Shop sweets
             </Link>
           </div>
         )}
@@ -82,7 +82,7 @@ export default function CollectionLanding({
           question={question}
           answer={answer}
           href={WEBSITE_COMMISSIONS}
-          linkLabel="Ask about a custom panel"
+          linkLabel="Ask about a custom cake"
         />
       ) : null}
     </div>

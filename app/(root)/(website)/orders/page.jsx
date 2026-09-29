@@ -13,8 +13,8 @@ import { HiOutlineEye } from "react-icons/hi2";
 
 const breadCrumbData = {
   title: "My Orders",
-  eyebrow: "Velora",
-  subtitle: "A record of every clothing order you have placed.",
+  eyebrow: "Super Ideal",
+  subtitle: "A record of every sweets and bakery order you have placed.",
   links: [{ label: "Orders" }],
 };
 

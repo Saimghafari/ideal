@@ -5,7 +5,7 @@ const LuxuryClosing = ({
   quote,
   quoteSub,
   ctaLabel = "Questions?",
-  emailLabel = "Contact Velora",
+  emailLabel = "Contact Super Ideal",
   phone = "",
   email = "/contact-us",
   children,

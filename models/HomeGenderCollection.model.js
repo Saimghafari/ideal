@@ -18,7 +18,7 @@ const homeGenderCollectionSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      enum: ["men", "women"],
+      enum: ["sweets", "bakery"],
       index: true,
     },
     title: { type: String, required: true, trim: true },

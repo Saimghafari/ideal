@@ -43,7 +43,7 @@ const Manifesto = () => {
         <div className="nn-animate-fade-up mb-10 flex items-center gap-4">
           <span className="h-px w-8 bg-[var(--si-burnt-orange)]/55 nn-draw-line" />
           <p className="nn-label text-[var(--si-deep-brown)]">
-            The Velora Belief
+            The Super Ideal Belief
           </p>
           <span className="h-px w-8 bg-[var(--si-burnt-orange)]/55 nn-draw-line [transform-origin:right_center]" />
         </div>
@@ -57,10 +57,10 @@ const Manifesto = () => {
           </span>
 
           <p className="nn-display-italic nn-animate-fade-up-delay-1 relative text-[2rem] font-light leading-[1.25] tracking-wide text-[var(--si-deep-brown)] sm:text-4xl lg:text-5xl xl:text-[3.35rem]">
-            &ldquo;Good cloth, a quiet cut.
-            <br className="hidden sm:block" /> A wardrobe that feels
+            &ldquo;More than sweets.
+            <br className="hidden sm:block" /> A counter that feels
             <br className="hidden sm:block" />{" "}
-            <span className="nn-gold-text">considered.&rdquo;</span>
+            <span className="nn-gold-text">like home.&rdquo;</span>
           </p>
         </blockquote>
 

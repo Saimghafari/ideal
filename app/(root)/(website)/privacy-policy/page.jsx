@@ -6,10 +6,10 @@ import { WEBSITE_HOME } from "@/routes/WebsiteRoute";
 export const metadata = buildPageMeta({
   title: "Privacy Policy – Data Protection & Privacy",
   description:
-    "Read our privacy policy at Velora. Learn how we protect your personal information and ensure your privacy while shopping for embroidery wall décor.",
+    "Read our privacy policy at Super Ideal. Learn how we protect your personal information while you shop for sweets and bakery.",
   path: "/privacy-policy",
   keywords:
-    "velora privacy policy, data protection, wall art shop privacy, personal information, secure shopping, embroidery wall decor",
+    "super ideal privacy policy, data protection, sweets shop privacy, personal information, secure shopping",
 });
 
 const dataTypes = [
@@ -34,7 +34,7 @@ const dataTypes = [
 const uses = [
   "Process orders and send email invoices and order updates",
   "Provide customer support and shipping notifications",
-  "Send studio news you opt into (unsubscribe anytime)",
+  "Send shop news you opt into (unsubscribe anytime)",
   "Personalise recommendations and browsing",
   "Maintain website security and performance",
 ];
@@ -59,7 +59,7 @@ const PrivacyPolicy = () => {
             </h1>
           </div>
           <p className="text-sm font-light leading-[1.95] text-[var(--si-muted)] lg:pb-2">
-            We handle your information with the same care we bring to every panel
+            We handle your information with the same care we bring to every order
             — securely, transparently, and never sold to third parties.
           </p>
         </div>
@@ -110,7 +110,7 @@ const PrivacyPolicy = () => {
               when required to fulfil orders or comply with law.
             </p>
             <p className="mt-6 text-sm font-light leading-[1.95] text-[var(--si-cream)]/60">
-              By using Velora, you consent to these practices. Policy
+              By using Super Ideal, you consent to these practices. Policy
               updates will be posted on this page.
             </p>
           </div>
@@ -122,7 +122,7 @@ const PrivacyPolicy = () => {
           Questions about your data?
         </p>
         <Link href="/contact-us" className="nn-link-quiet">
-          Contact Velora
+          Contact Super Ideal
         </Link>
       </section>
     </div>

@@ -18,24 +18,24 @@ const breadcrumbData = [
 
 const sections = [
   {
-    title: "Men's Collection",
-    text: "Left image, heading, and category cards on the homepage.",
-    href: ADMIN_HOMEPAGE_COLLECTION("men"),
+    title: "Sweets",
+    text: "Featured sweets image, heading, and category cards.",
+    href: ADMIN_HOMEPAGE_COLLECTION("sweets"),
   },
   {
-    title: "Videos after Men",
-    text: "Product video row shown under Men's Collections.",
-    href: ADMIN_HOMEPAGE_REELS("after_men"),
+    title: "Videos after Sweets",
+    text: "Product video row shown under sweets.",
+    href: ADMIN_HOMEPAGE_REELS("after_sweets"),
   },
   {
-    title: "Women's Collection",
-    text: "Left image, heading, and category cards on the homepage.",
-    href: ADMIN_HOMEPAGE_COLLECTION("women"),
+    title: "Bakery",
+    text: "Featured bakery image, heading, and category cards.",
+    href: ADMIN_HOMEPAGE_COLLECTION("bakery"),
   },
   {
-    title: "Videos after Women",
-    text: "Product video row shown under Women's Collections.",
-    href: ADMIN_HOMEPAGE_REELS("after_women"),
+    title: "Videos after Bakery",
+    text: "Product video row shown under bakery.",
+    href: ADMIN_HOMEPAGE_REELS("after_bakery"),
   },
 ];
 

@@ -10,8 +10,8 @@ export const emailVerificationLink = (link) => {
         Verify your email
       </h1>
       <p style="margin:0 auto 28px;max-width:420px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:300;line-height:1.75;color:#5C5348;">
-        Thank you for joining <strong style="color:#1C1610;font-weight:500;">Velora</strong> —
-        premium embroidery wall décor and thread art for modern interiors.
+        Thank you for joining <strong style="color:#1C1610;font-weight:500;">Super Ideal</strong> —
+        sweets, bakery, and gift boxes from Faisalabad.
         Please confirm your email to complete registration.
       </p>
 
@@ -34,8 +34,8 @@ export const emailVerificationLink = (link) => {
   `;
 
   return brandEmailShell({
-    title: "Verify your email — Velora",
-    preview: "Confirm your email to complete your Velora account.",
+    title: "Verify your email — Super Ideal",
+    preview: "Confirm your email to complete your Super Ideal account.",
     bodyHtml,
   });
 };

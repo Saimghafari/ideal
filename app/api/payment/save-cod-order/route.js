@@ -8,6 +8,7 @@ import { buildBankPaymentQrAttachments } from "@/lib/emailAttachments";
 import { getPaymentDetails } from "@/lib/paymentDetails";
 import { catchError, response } from "@/lib/helperFunction";
 import { sendMail } from "@/lib/sendMail";
+import { CONTACT_EMAIL } from "@/lib/siteMeta";
 import { zSchema } from "@/lib/zodSchema";
 import OrderModel from "@/models/Order.model";
 import { z } from "zod";
@@ -42,14 +43,12 @@ export async function POST(request) {
         email: true,
         phone: true,
         country: true,
-        state: true,
         city: true,
-        pincode: true,
-        landmark: true,
         ordernote: true,
       })
       .extend({
         userId: z.string().optional(),
+        landmark: z.string().optional(),
         subtotal: z.number().nonnegative(),
         discount: z.number().nonnegative(),
         couponDiscountAmount: z.number().nonnegative(),
@@ -85,10 +84,8 @@ export async function POST(request) {
       email: validatedData.email,
       phone: validatedData.phone,
       country: validatedData.country,
-      state: validatedData.state,
       city: validatedData.city,
-      pincode: validatedData.pincode,
-      landmark: validatedData.landmark,
+      landmark: validatedData.landmark || "",
       ordernote: validatedData.ordernote,
       products: productsForDb,
       discount: validatedData.discount,
@@ -115,7 +112,9 @@ export async function POST(request) {
       totalAmount: validatedData.totalAmount,
       currency,
       products: emailProducts,
-      address: `${validatedData.landmark}, ${validatedData.city}, ${validatedData.state}, ${validatedData.country}, ${validatedData.pincode}`,
+      address: [validatedData.landmark, validatedData.city, validatedData.country]
+        .filter((part) => part && part.trim())
+        .join(", "),
       phone: validatedData.phone,
       email: validatedData.email,
       order_date: new Date().toLocaleDateString("en-US", {
@@ -134,7 +133,7 @@ export async function POST(request) {
       const plainText = [
         `Hello ${validatedData.name},`,
         ``,
-        `Thank you for your Velora order ${orderId}.`,
+        `Thank you for your Super Ideal order ${orderId}.`,
         `Total: ${totalLabel}`,
         `Please complete payment by bank transfer. Include Order ID ${orderId} as the payment reference.`,
         ``,
@@ -146,13 +145,13 @@ export async function POST(request) {
           a.qrImagePath ? `  QR: available (scan Ahtisham payment QR in email)` : "",
           ``,
         ]),
-        `— Velora`,
+        `— Super Ideal`,
       ]
         .filter((line) => line !== "")
         .join("\n");
 
       const result = await sendMail(
-        `Your Velora order ${orderId}`,
+        `Your Super Ideal order ${orderId}`,
         validatedData.email,
         orderNotification(mailData),
         {
@@ -162,7 +161,7 @@ export async function POST(request) {
           // Replies go to studio Gmail (not no-reply@)
           replyTo:
             process.env.ADMIN_NOTIFICATION_EMAIL ||
-            "dectorreofficial@gmail.com",
+            CONTACT_EMAIL,
         }
       );
 
@@ -181,9 +180,9 @@ export async function POST(request) {
     try {
       const studioEmail =
         process.env.ADMIN_NOTIFICATION_EMAIL ||
-        "dectorreofficial@gmail.com";
+        CONTACT_EMAIL;
       const result = await sendMail(
-        `New Velora order ${orderId}`,
+        `New Super Ideal order ${orderId}`,
         studioEmail,
         orderAdminNotification(mailData),
         { replyTo: validatedData.email, refId: orderId }

@@ -20,17 +20,19 @@ import axios from "axios";
 import { showToast } from "@/lib/showToast";
 import { useRouter } from "next/navigation";
 import { WEBSITE_LOGIN } from "@/routes/WebsiteRoute";
-
-const inputClass =
-  "h-11 rounded-none border border-[var(--si-mist)] bg-[var(--si-cream)] px-4 text-sm font-light text-[var(--si-deep-brown)] shadow-none placeholder:text-[var(--si-fog)] focus-visible:ring-0 focus-visible:border-[var(--si-burnt-orange)] transition-colors duration-300";
-
-const labelClass =
-  "text-[0.62rem] tracking-[0.2em] uppercase font-medium text-[var(--si-muted)]";
+import {
+  AuthHeading,
+  authButtonClass,
+  authInputClass,
+  authLabelClass,
+  authMessageClass,
+} from "@/components/Application/authUi";
 
 const UpdatePassword = ({ email }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [isTypePassword, setIsTypePassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const formSchema = zSchema
     .pick({
@@ -77,47 +79,40 @@ const UpdatePassword = ({ email }) => {
 
   return (
     <>
-      <div className="text-center mb-10">
-        <p className="nn-label text-[var(--si-deep-brown)] mb-4">Security</p>
-        <h1 className="nn-display text-3xl sm:text-4xl font-light text-[var(--si-deep-brown)]">
-          New Password
-        </h1>
-        <div className="nn-hairline-gold w-12 mx-auto mt-6 mb-5" />
-        <p className="text-sm font-light leading-[1.9] text-[var(--si-muted)]">
-          Choose a strong password for your Velora account.
-        </p>
-      </div>
+      <AuthHeading
+        eyebrow="Security"
+        title="New password"
+        text="Choose a password you will remember for your Super Ideal account."
+      />
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handlePasswordUpdate)}
-          className="space-y-6"
-        >
+        <form onSubmit={form.handleSubmit(handlePasswordUpdate)} className="space-y-5">
           <FormField
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem className="relative">
-                <FormLabel className={labelClass}>Password</FormLabel>
+              <FormItem>
+                <FormLabel className={authLabelClass}>Password</FormLabel>
                 <FormControl>
-                  <Input
-                    type={isTypePassword ? "password" : "text"}
-                    placeholder="***********"
-                    className={`${inputClass} pr-11`}
-                    {...field}
-                  />
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="New password"
+                      className={`${authInputClass} pr-12`}
+                      autoComplete="new-password"
+                      {...field}
+                    />
+                    <button
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-[#b7a498] hover:text-[#3a2416]"
+                      type="button"
+                      onClick={() => setShowPassword((value) => !value)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                    </button>
+                  </div>
                 </FormControl>
-                <button
-                  className="absolute right-3 top-[2.15rem] cursor-pointer text-[var(--si-fog)] hover:text-[var(--si-deep-brown)] transition-colors"
-                  type="button"
-                  onClick={() => setIsTypePassword(!isTypePassword)}
-                  aria-label={
-                    isTypePassword ? "Show password" : "Hide password"
-                  }
-                >
-                  {isTypePassword ? <FaRegEyeSlash /> : <FaRegEye />}
-                </button>
-                <FormMessage className="text-xs text-[var(--si-deep-brown)]" />
+                <FormMessage className={authMessageClass} />
               </FormItem>
             )}
           />
@@ -127,16 +122,27 @@ const UpdatePassword = ({ email }) => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className={labelClass}>Confirm Password</FormLabel>
+                <FormLabel className={authLabelClass}>Confirm password</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="***********"
-                    className={inputClass}
-                    {...field}
-                  />
+                  <div className="relative">
+                    <Input
+                      type={showConfirm ? "text" : "password"}
+                      placeholder="Repeat your password"
+                      className={`${authInputClass} pr-12`}
+                      autoComplete="new-password"
+                      {...field}
+                    />
+                    <button
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-[#b7a498] hover:text-[#3a2416]"
+                      type="button"
+                      onClick={() => setShowConfirm((value) => !value)}
+                      aria-label={showConfirm ? "Hide password" : "Show password"}
+                    >
+                      {showConfirm ? <FaRegEye /> : <FaRegEyeSlash />}
+                    </button>
+                  </div>
                 </FormControl>
-                <FormMessage className="text-xs text-[var(--si-deep-brown)]" />
+                <FormMessage className={authMessageClass} />
               </FormItem>
             )}
           />
@@ -144,8 +150,8 @@ const UpdatePassword = ({ email }) => {
           <ButtonLoading
             loading={loading}
             type="submit"
-            text="Update Password"
-            className="w-full nn-btn-primary h-auto rounded-none cursor-pointer disabled:opacity-60"
+            text="Update password"
+            className={authButtonClass}
           />
         </form>
       </Form>

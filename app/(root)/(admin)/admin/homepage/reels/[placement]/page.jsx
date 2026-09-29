@@ -18,8 +18,8 @@ import {
 } from "@/routes/AdminPanelRoute";
 
 const labels = {
-  after_men: "Videos after Men",
-  after_women: "Videos after Women",
+  after_sweets: "Videos after Sweets",
+  after_bakery: "Videos after Bakery",
 };
 
 const toMedia = (media) =>
@@ -102,7 +102,7 @@ const EditHomeReels = ({ params }) => {
     }
   };
 
-  if (!["after_men", "after_women"].includes(placement)) {
+  if (!["after_sweets", "after_bakery"].includes(placement)) {
     return <p className="pt-6">This homepage section does not exist.</p>;
   }
 

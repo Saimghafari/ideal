@@ -7,17 +7,17 @@ const StudioInvite = () => {
     <section className="border-y border-[var(--si-fog)]/50 bg-[var(--si-cream)] px-6 py-20 sm:px-10 sm:py-24 lg:px-28 xl:px-36">
       <div className="mx-auto grid max-w-5xl items-center gap-12 lg:grid-cols-2">
         <div>
-          <p className="nn-label mb-4 text-[var(--si-deep-brown)]">Velora</p>
+          <p className="nn-label mb-4 text-[var(--si-deep-brown)]">Super Ideal</p>
           <h2 className="nn-display text-3xl font-light text-[var(--si-deep-brown)] sm:text-4xl">
-            A piece for your wardrobe.
+            A box for the visit.
             <br />
             <span className="nn-display-italic text-[var(--si-burnt-orange)]">
-              Or a question about fit.
+              Or a cake for the day.
             </span>
           </h2>
           <p className="mt-5 max-w-sm text-sm font-light leading-relaxed text-[var(--si-muted)]">
-            Write to us about size, fabric, or an order. We reply through the
-            contact form — not a mailing list.
+            Write to us about a cake, a tray, or an order. We reply through the
+            contact form.
           </p>
         </div>
 
@@ -26,7 +26,7 @@ const StudioInvite = () => {
             href={WEBSITE_CONTACT}
             className="nn-btn-primary inline-flex w-full justify-center sm:w-auto"
           >
-            Contact Velora
+            Contact Super Ideal
           </Link>
         </div>
       </div>

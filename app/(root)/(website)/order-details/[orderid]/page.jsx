@@ -21,7 +21,7 @@ const OrderDetails = async ({ params }) => {
   const order = orderResult?.data;
   const breadcrumb = {
     title: "Order Details",
-    eyebrow: "Velora",
+    eyebrow: "Super Ideal",
     subtitle: order?.order_id
       ? `Reference ${order.order_id}`
       : "A record of this order.",

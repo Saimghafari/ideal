@@ -70,11 +70,10 @@ export const metadata = {
   creator: BRAND_NAME,
   publisher: BRAND_NAME,
   category: "shopping",
-  classification: "Apparel & Fashion > Clothing",
+  classification: "Food & Drink > Bakery",
 
   icons: {
     icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -184,7 +183,7 @@ function buildJsonLd() {
         "@type": "Organization",
         "@id": orgId,
         name: BRAND_NAME,
-        alternateName: [BRAND_TAGLINE, "Velora Clothing"],
+        alternateName: [BRAND_TAGLINE, "Super Ideal Sweets & Bakers"],
         url: `${SITE_URL}/`,
         email: CONTACT_EMAIL,
         logo: {
@@ -199,14 +198,14 @@ function buildJsonLd() {
         image: OG_IMAGE,
         description: DEFAULT_DESCRIPTION,
         slogan: BRAND_TAGLINE,
-        foundingDate: "2024",
+        foundingDate: "1985",
         contactPoint: [
           {
             "@type": "ContactPoint",
             email: CONTACT_EMAIL,
             contactType: "customer service",
             availableLanguage: ["English"],
-            areaServed: "Worldwide",
+            areaServed: "PK",
           },
         ],
         sameAs: [],
@@ -227,7 +226,7 @@ function buildJsonLd() {
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
-            urlTemplate: `${SITE_URL}/embroidered-wall-art?search={search_term_string}`,
+            urlTemplate: `${SITE_URL}/shop?q={search_term_string}`,
           },
           "query-input": "required name=search_term_string",
         },
@@ -261,14 +260,14 @@ function buildJsonLd() {
         email: CONTACT_EMAIL,
         areaServed: {
           "@type": "Place",
-          name: "Worldwide",
+          name: "Pakistan",
         },
         hasMerchantReturnPolicy: buildMerchantReturnPolicy(),
         shippingDetails: {
           "@type": "OfferShippingDetails",
           shippingDestination: {
             "@type": "DefinedRegion",
-            name: MERCHANT.shippingRegion || "Worldwide",
+            name: MERCHANT.shippingRegion || "Pakistan",
           },
           deliveryTime: {
             "@type": "ShippingDeliveryTime",

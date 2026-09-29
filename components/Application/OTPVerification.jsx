@@ -14,6 +14,12 @@ import {
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { getErrorMessage, showToast } from "@/lib/showToast";
 import axios from "axios";
+import {
+  AuthHeading,
+  authButtonClass,
+  authLabelClass,
+  authMessageClass,
+} from "./authUi";
 
 const OTPVerification = ({ email, onSubmit, loading }) => {
   const [isResendingOtp, setIsResendingOtp] = useState(false);
@@ -54,78 +60,67 @@ const OTPVerification = ({ email, onSubmit, loading }) => {
   };
 
   return (
-    <div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleOtpVerification)}>
-          <div className="text-center mb-8">
-            <p className="nn-label text-[var(--si-deep-brown)] mb-4">Verification</p>
-            <h1 className="nn-display text-2xl sm:text-3xl font-light text-[var(--si-deep-brown)] mb-4">
-              Enter your OTP
-            </h1>
-            <div className="nn-hairline-gold w-12 mx-auto mb-5" />
-            <p className="text-sm font-light leading-[1.9] text-[var(--si-muted)]">
-              We have sent a one-time password to your email. It is valid for 10
-              minutes only.
-            </p>
-            <p className="mt-4 text-xs font-light leading-[1.75] text-[var(--si-fog)]">
-              If you do not see it shortly, please check your spam or junk folder.
-            </p>
-          </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleOtpVerification)}>
+        <AuthHeading
+          eyebrow="Verification"
+          title="Enter your code"
+          text={`A six-digit code is on its way to ${email}. It stays valid for 10 minutes.`}
+        />
+        <p className="-mt-4 mb-6 text-center text-[13px] leading-relaxed text-[#9a8170] sm:text-left">
+          If it is not in your inbox, check spam or junk.
+        </p>
 
-          <div className="mb-6 flex justify-center">
-            <FormField
-              control={form.control}
-              name="otp"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel className="text-[0.62rem] tracking-[0.2em] uppercase font-medium text-[var(--si-muted)] text-center block w-full">
-                    One-time Password
-                  </FormLabel>
-                  <FormControl>
-                    <InputOTP maxLength={6} {...field}>
-                      <InputOTPGroup className="gap-2">
-                        {[0, 1, 2, 3, 4, 5].map((index) => (
-                          <InputOTPSlot
-                            key={index}
-                            className="text-lg size-11 rounded-none border border-[var(--si-mist)] bg-[var(--si-cream)] shadow-none data-[active=true]:border-[var(--si-burnt-orange)] data-[active=true]:ring-0"
-                            index={index}
-                          />
-                        ))}
-                      </InputOTPGroup>
-                    </InputOTP>
-                  </FormControl>
-                  <FormMessage className="text-xs text-[var(--si-deep-brown)] text-center" />
-                </FormItem>
-              )}
-            />
-          </div>
+        <div className="mb-6">
+          <FormField
+            control={form.control}
+            name="otp"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className={`${authLabelClass} block text-center sm:text-left`}>
+                  One-time code
+                </FormLabel>
+                <FormControl>
+                  <InputOTP maxLength={6} {...field} containerClassName="justify-center sm:justify-start">
+                    <InputOTPGroup className="gap-1 sm:gap-2">
+                      {[0, 1, 2, 3, 4, 5].map((index) => (
+                        <InputOTPSlot
+                          key={index}
+                          index={index}
+                          className="h-11 w-9 rounded-xl border border-[#f1e3d4] bg-[#FFF8F2] text-[16px] font-bold text-[#3a2416] shadow-none first:rounded-xl first:border last:rounded-xl sm:h-[3.15rem] sm:w-11 sm:rounded-2xl sm:first:rounded-2xl sm:last:rounded-2xl data-[active=true]:z-10 data-[active=true]:border-[#E45700] data-[active=true]:ring-0"
+                        />
+                      ))}
+                    </InputOTPGroup>
+                  </InputOTP>
+                </FormControl>
+                <FormMessage className={`${authMessageClass} text-center sm:text-left`} />
+              </FormItem>
+            )}
+          />
+        </div>
 
-          <div className="mb-3">
-            <ButtonLoading
-              loading={loading}
-              type="submit"
-              text="Verify"
-              className="w-full nn-btn-primary h-auto rounded-none cursor-pointer disabled:opacity-60"
-            />
-            <div className="text-center mt-6">
-              {!isResendingOtp ? (
-                <button
-                  onClick={resendOTP}
-                  type="button"
-                  className="text-[0.65rem] tracking-[0.16em] uppercase font-light text-[var(--si-muted)] hover:text-[var(--si-deep-brown)] cursor-pointer transition-colors"
-                >
-                  Resend OTP
-                </button>
-              ) : (
-                <span className="text-sm font-light text-[var(--si-muted)]">
-                  Resending….
-                </span>
-              )}
-            </div>
-          </div>
-        </form>
-      </Form>
-    </div>
+        <ButtonLoading
+          loading={loading}
+          type="submit"
+          text="Verify code"
+          className={authButtonClass}
+        />
+
+        <div className="mt-5 text-center">
+          {isResendingOtp ? (
+            <span className="text-[14px] font-semibold text-[#8a6754]">Sending a new code…</span>
+          ) : (
+            <button
+              onClick={resendOTP}
+              type="button"
+              className="cursor-pointer text-[14px] font-bold text-[#E45700] hover:text-[#c2410c]"
+            >
+              Resend code
+            </button>
+          )}
+        </div>
+      </form>
+    </Form>
   );
 };
 

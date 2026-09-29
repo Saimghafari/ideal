@@ -3,25 +3,25 @@ import React from "react";
 import { buildPageMeta } from "@/lib/buildPageMeta";
 
 export const metadata = buildPageMeta({
-  title: "Returns & Refunds – Client Assurance",
+  title: "Returns & Refunds",
   description:
-    "Returns and refunds for Velora clothing. Unused pieces with tags can be returned.",
+    "Returns and refunds for Super Ideal sweets and bakery. Damaged or incorrect packs can be reported.",
   path: "/returns-refunds",
   keywords:
-    "wall art returns, embroidery refund policy, damaged art delivery, Velora returns, exchange policy, client assurance",
+    "sweets returns, bakery refund policy, damaged delivery, Super Ideal returns",
 });
 
 const eligible = [
-  "Damage to frame, panel surface, or embroidery during transit",
-  "Piece materially differs from its product listing",
-  "Manufacturing defect not consistent with the character of thread art",
+  "Damage to the pack or product during transit",
+  "Item materially differs from its product listing",
+  "A sealed pack that arrived spoiled",
 ];
 
 const notEligible = [
   "Change of mind after delivery or after placing an order",
-  "Minor tonal variations inherent to thread embroidery",
-  "Damage from improper handling or installation after delivery",
-  "Orders cancelled after production has started on bespoke commissions (except studio error)",
+  "Opened biscuits, sweets, or bakery",
+  "Fresh cakes, kunafa, or pizza after they leave the counter",
+  "Custom cakes cancelled after baking has started",
 ];
 
 const processSteps = [
@@ -38,11 +38,11 @@ const resolutions = [
   },
   {
     title: "Exchange",
-    text: "Alternative panel of equal value, where available — no cash on delivery exchanges",
+    text: "A replacement pack of equal value, where available — no cash on delivery exchanges",
   },
   {
-    title: "Repair",
-    text: "Minor framing issues resolved at our discretion",
+    title: "Replacement",
+    text: "A fresh pack sent when the original cannot be enjoyed",
   },
 ];
 
@@ -56,7 +56,7 @@ const ReturnsRefundsPage = () => {
           Returns & Refunds
         </h1>
         <blockquote className="nn-display-italic mt-6 text-2xl sm:text-3xl lg:text-4xl font-light leading-[1.35] text-[var(--si-deep-brown)] max-w-3xl mx-auto">
-          We stand behind every panel that leaves our studio.
+          We stand behind every box that leaves the shop.
         </blockquote>
         <p className="mt-8 mx-auto max-w-lg text-sm font-light leading-[1.95] text-[var(--si-muted)]">
           Orders are placed by form and paid via email invoice — not cash on
@@ -139,7 +139,7 @@ const ReturnsRefundsPage = () => {
 
       <section className="px-6 sm:px-10 py-14 border-t border-[var(--si-mist)] text-center">
         <Link href="/contact-us" className="nn-btn-primary">
-          Contact Velora
+          Contact Super Ideal
         </Link>
       </section>
     </div>

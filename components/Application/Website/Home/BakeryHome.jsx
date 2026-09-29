@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { branches } from "@/lib/locations";
 import { WEBSITE_ABOUT, WEBSITE_CAKES, WEBSITE_CATERING, WEBSITE_CONTACT, WEBSITE_LOCATIONS, WEBSITE_PRODUCT_DETAILS, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
+import Hero from "./Hero";
 
 const categories = [
   { name: "Sweets", image: "/assets/home/si-cat-sweets.png" },
@@ -148,14 +149,7 @@ export default function BakeryHome() {
   return (
     <div className="bg-[#FFF8F2] font-ui text-[#3a2416]">
       <section className="relative min-h-[540px] overflow-hidden lg:min-h-[600px]">
-        <Image
-          src="/assets/home/si-hero.png"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[62%_center]"
-        />
+        <Hero />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#f6e6d2_0%,rgba(246,230,210,0.88)_18%,rgba(246,230,210,0.2)_36%,rgba(246,230,210,0)_48%)]" />
         <div className="relative mx-auto flex min-h-[520px] w-full max-w-[1680px] items-center px-4 py-12 sm:px-6 xl:px-10 lg:min-h-[560px]">
           <div className="max-w-[520px]">
@@ -188,9 +182,6 @@ export default function BakeryHome() {
             </ul>
           </div>
         </div>
-        <p className="font-script pointer-events-none absolute right-[6%] top-[14%] hidden text-[2.4rem] text-[#f6e2b0] drop-shadow-[0_2px_8px_rgba(50,24,8,0.45)] lg:block xl:text-[2.8rem]">
-          Happiness tastes better
-        </p>
       </section>
 
       <section id="categories" className="scroll-mt-24 mx-auto w-full max-w-[1680px] px-4 py-9 sm:px-6 sm:py-11 xl:px-10">

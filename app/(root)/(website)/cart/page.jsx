@@ -32,15 +32,17 @@ const withLivePrices = (product) => {
     sellingPrice: live.sellingPrice,
     mrp: live.mrp,
     media: product.media || live.media?.[0]?.secure_url,
+    categoryName: live.category?.name || "",
   };
 };
 
 const QtyControl = ({ product, dispatch }) => (
-  <div className="inline-flex h-10 items-stretch border border-[var(--si-mist)] bg-white">
+  <div className="inline-flex h-10 items-center rounded-full border border-[#f1e3d4] bg-[#FFF8F2] p-1">
     <button
       type="button"
       aria-label="Decrease quantity"
-      className="flex w-10 items-center justify-center hover:bg-[var(--si-cream)]"
+      disabled={product.qty <= 1}
+      className="flex h-8 w-8 items-center justify-center rounded-full text-[#3a2416] transition-colors hover:bg-white disabled:cursor-not-allowed disabled:text-[#cbb8aa]"
       onClick={() =>
         dispatch(
           decreaseQuantity({
@@ -58,12 +60,12 @@ const QtyControl = ({ product, dispatch }) => (
       value={product.qty}
       readOnly
       aria-label="Quantity"
-      className="w-10 border-x border-[var(--si-mist)] bg-transparent text-center text-sm outline-none"
+      className="w-8 bg-transparent text-center text-[14px] font-bold text-[#3a2416] outline-none"
     />
     <button
       type="button"
       aria-label="Increase quantity"
-      className="flex w-10 items-center justify-center hover:bg-[var(--si-cream)]"
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E45700] text-white transition-colors hover:bg-[#cf4c00]"
       onClick={() =>
         dispatch(
           increaseQuantity({
@@ -79,46 +81,48 @@ const QtyControl = ({ product, dispatch }) => (
   </div>
 );
 
-const SummaryBlock = ({
-  itemCount,
-  subtotal,
-  discount,
-  formatPrice,
-  tone = "light",
-}) => {
-  const muted = tone === "dark" ? "text-white/50" : "text-[var(--si-muted)]";
-  const label = tone === "dark" ? "text-[var(--si-cream)]" : "text-[var(--si-burnt-orange)]";
-  const total = tone === "dark" ? "text-[var(--si-cream)]" : "text-[var(--si-deep-brown)]";
-  const rule = tone === "dark" ? "border-white/15" : "border-[var(--si-mist)]";
-
-  return (
-    <dl className="space-y-4 text-sm font-light">
+const SummaryBlock = ({ itemCount, subtotal, discount, formatPrice }) => (
+  <dl className="space-y-3.5 text-[14.5px]">
+    <div className="flex justify-between gap-4">
+      <dt className="text-[#8a6754]">
+        {itemCount} {itemCount === 1 ? "item" : "items"}
+      </dt>
+      <dd className="font-semibold text-[#3a2416]">{formatPrice(subtotal)}</dd>
+    </div>
+    {discount > 0 && (
       <div className="flex justify-between gap-4">
-        <dt className={muted}>
-          {itemCount} {itemCount === 1 ? "item" : "items"}
+        <dt className="text-[#8a6754]">You save</dt>
+        <dd className="font-semibold text-[#E45700]">−{formatPrice(discount)}</dd>
+      </div>
+    )}
+    <div className="border-t border-[#f1e3d4] pt-4">
+      <div className="flex items-baseline justify-between gap-4">
+        <dt className="text-[13px] font-bold uppercase tracking-[0.14em] text-[#8a6754]">
+          Total
         </dt>
-        <dd className={total}>{formatPrice(subtotal)}</dd>
+          <dd className="font-display text-right text-[1.55rem] font-semibold leading-none tracking-[-0.03em] text-[#3a2416] min-[400px]:text-[1.85rem] sm:text-[2.1rem]">
+          {formatPrice(subtotal)}
+        </dd>
       </div>
-      {discount > 0 && (
-        <div className="flex justify-between gap-4">
-          <dt className={muted}>Discount</dt>
-          <dd className={label}>−{formatPrice(discount)}</dd>
-        </div>
-      )}
-      <div className={`border-t pt-4 ${rule}`}>
-        <div className="flex items-baseline justify-between gap-4">
-          <dt className={`nn-label text-[0.58rem] ${label}`}>Total</dt>
-          <dd className={`nn-display text-3xl ${total}`}>
-            {formatPrice(subtotal)}
-          </dd>
-        </div>
-        <p className={`mt-2 text-xs font-light ${muted}`}>
-          Pakistani rupees. Shipping is confirmed after you order.
-        </p>
-      </div>
-    </dl>
-  );
-};
+      <p className="mt-2 text-[12.5px] leading-relaxed text-[#9a8170]">
+        Pakistani rupees. Shipping is confirmed after you place the order.
+      </p>
+    </div>
+  </dl>
+);
+
+const Crumb = () => (
+  <nav
+    aria-label="Breadcrumb"
+    className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-[#8a6754]"
+  >
+    <Link href={WEBSITE_HOME} className="hover:text-[#E45700]">
+      Home
+    </Link>
+    <span aria-hidden="true">›</span>
+    <span className="font-medium text-[#3a2416]">Cart</span>
+  </nav>
+);
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -141,198 +145,182 @@ const CartPage = () => {
 
   if (cart.count === 0) {
     return (
-      <div className="min-h-[70vh] bg-[var(--si-cream)] text-[var(--si-deep-brown)] lg:grid lg:min-h-[calc(100vh-5.5rem)] lg:grid-cols-2">
-        <header className="flex flex-col justify-end bg-[var(--si-deep-brown)] px-6 py-16 sm:px-10 sm:py-20 lg:px-14 xl:px-20">
-          <nav className="mb-8 flex items-center gap-2 text-[0.58rem] tracking-[0.22em] uppercase text-white/45">
-            <Link href={WEBSITE_HOME} className="hover:text-white">
-              Home
-            </Link>
-            <span className="text-[var(--si-cream)]/50">/</span>
-            <span className="text-white">Bag</span>
-          </nav>
-          <p className="nn-label mb-4 text-[var(--si-cream)]">Velora</p>
-          <h1 className="nn-display text-5xl font-light leading-[0.95] text-[var(--si-cream)] sm:text-6xl">
-            Your bag
-          </h1>
-          <p className="mt-6 max-w-xs text-sm font-light leading-relaxed text-white/50">
-            Add clothing to continue to checkout.
-          </p>
-        </header>
-        <section className="flex flex-col justify-center px-6 py-16 sm:px-10 lg:px-14 xl:px-20">
-          <p className="nn-label mb-4 text-[var(--si-burnt-orange)]">Empty bag</p>
-          <h2 className="nn-display mb-4 text-4xl font-light">
-            Nothing here yet
-          </h2>
-          <p className="mb-10 max-w-sm text-sm font-light leading-relaxed text-[var(--si-muted)]">
-            Browse the collection and add a size before you check out.
-          </p>
-          <div>
-            <Link href={WEBSITE_SHOP} className="nn-btn-primary">
-              Shop clothing
+      <div className="bg-[#FFF8F2] font-ui text-[#3a2416]">
+        <div className="mx-auto grid w-full max-w-[1680px] items-center gap-8 px-4 py-8 sm:px-6 sm:py-12 lg:grid-cols-2 lg:gap-14 lg:py-16 xl:px-10">
+          <div className="relative order-2 aspect-[5/4] overflow-hidden rounded-[24px] bg-[#f7efe6] shadow-[0_12px_32px_rgba(75,46,30,0.08)] sm:aspect-[4/3] lg:order-1">
+            <Image
+              src="/assets/home/si-gift-box.png"
+              alt="Packed sweets gift box from Super Ideal"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 46vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="order-1 max-w-xl lg:order-2">
+            <Crumb />
+            <p className="mb-2 text-[12.5px] font-bold uppercase tracking-[0.16em] text-[#E45700]">
+              Super Ideal
+            </p>
+            <h1 className="font-display text-[2.15rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-[3rem] lg:text-[3.4rem]">
+              Your cart is empty
+            </h1>
+            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-[#6b5142] sm:text-[16px]">
+              Add sweets, bakery, biscuits, or a gift box. Fresh trays and packed
+              boxes are ready when you are.
+            </p>
+            <Link
+              href={WEBSITE_SHOP}
+              className="mt-7 inline-flex h-12 items-center justify-center rounded-full bg-[#E45700] px-7 text-[14.5px] font-bold text-white shadow-[0_8px_16px_rgba(228,87,0,0.28)] transition-colors hover:bg-[#cf4c00]"
+            >
+              Shop sweets & bakery
             </Link>
           </div>
-        </section>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-[var(--si-cream)] text-[var(--si-deep-brown)] lg:grid lg:min-h-[calc(100vh-5.5rem)] lg:grid-cols-[minmax(0,1fr)_22.5rem] xl:grid-cols-[minmax(0,1fr)_26rem]">
-      <section className="px-6 pb-28 pt-10 sm:px-10 sm:pt-12 lg:px-14 lg:pb-16 xl:px-20">
-        <nav className="mb-8 flex items-center gap-2 text-[0.58rem] tracking-[0.22em] uppercase text-[var(--si-muted)] lg:hidden">
-          <Link href={WEBSITE_HOME} className="hover:text-[var(--si-deep-brown)]">
-            Home
-          </Link>
-          <span>/</span>
-          <span className="text-[var(--si-deep-brown)]">Bag</span>
-        </nav>
-        <header className="mb-10 lg:hidden">
-          <p className="nn-label mb-2 text-[var(--si-burnt-orange)]">Velora</p>
-          <h1 className="nn-display text-4xl font-light">Your bag</h1>
-          <p className="mt-3 text-sm font-light text-[var(--si-muted)]">
-            {itemCount} {itemCount === 1 ? "item" : "items"} · Pakistani rupees
+    <div className="bg-[#FFF8F2] font-ui text-[#3a2416]">
+      <div className="mx-auto w-full max-w-[1680px] px-3 py-6 min-[400px]:px-4 sm:px-6 sm:py-8 lg:py-10 xl:px-10">
+        <Crumb />
+        <header className="mb-6 flex flex-col gap-2 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-1 text-[12.5px] font-bold uppercase tracking-[0.16em] text-[#E45700]">
+              Super Ideal
+            </p>
+            <h1 className="font-display text-[2rem] font-semibold leading-none tracking-[-0.03em] sm:text-[2.5rem] lg:text-[2.85rem]">
+              Your cart
+            </h1>
+          </div>
+          <p className="text-[14px] text-[#8a6754]">
+            {itemCount} {itemCount === 1 ? "item" : "items"} · Sweets & bakery
           </p>
         </header>
 
-        <ul className="max-w-3xl">
-          {items.map((product, index) => (
-            <li
-              key={product.variantId || product.productId}
-              className={`grid gap-6 py-8 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-8 lg:grid-cols-[13rem_minmax(0,1fr)] ${
-                index === 0 ? "pt-0" : "border-t border-[var(--si-mist)]"
-              }`}
-            >
-              <Link
-                href={WEBSITE_PRODUCT_DETAILS(product.url)}
-                className="relative aspect-[3/4] overflow-hidden bg-[var(--si-mist)]"
-              >
-                <Image
-                  src={product.media || imgPlaceholder.src}
-                  fill
-                  sizes="(min-width: 1280px) 240px, (min-width: 640px) 208px, 100vw"
-                  alt={product.name || "Clothing"}
-                  className="object-cover object-center"
-                />
-              </Link>
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_22.5rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_26rem]">
+          <ul className="space-y-3 sm:space-y-4">
+            {items.map((product) => {
+              const lineTotal = (product.sellingPrice || 0) * (product.qty || 0);
+              const lineMrp = (product.mrp || 0) * (product.qty || 0);
+              const onSale = product.mrp > product.sellingPrice;
 
-              <div className="flex min-w-0 flex-col justify-between gap-8">
-                <div>
-                  <Link
-                    href={WEBSITE_PRODUCT_DETAILS(product.url)}
-                    className="nn-display text-2xl font-light leading-snug hover:text-[var(--si-burnt-orange)] sm:text-[1.75rem]"
-                  >
-                    {product.name}
-                  </Link>
-                  {product.size && (
-                    <p className="mt-2 text-xs tracking-[0.16em] uppercase text-[var(--si-muted)]">
-                      Size {product.size}
-                    </p>
-                  )}
-                  <div className="mt-4 flex items-baseline gap-3">
-                    <p className="text-base font-light">
-                      {formatPrice(product.sellingPrice * product.qty)}
-                    </p>
-                    {product.mrp > product.sellingPrice && (
-                      <p className="text-xs font-light text-[var(--si-muted)] line-through">
-                        {formatPrice(product.mrp * product.qty)}
+              return (
+                <li
+                  key={product.variantId || product.productId}
+                  className="rounded-[20px] border border-[#f1e3d4] bg-white p-2.5 shadow-[0_6px_18px_rgba(75,46,30,0.05)] min-[400px]:p-3 sm:p-4"
+                >
+                  <div className="grid grid-cols-[4.25rem_minmax(0,1fr)] gap-x-2.5 gap-y-3 min-[400px]:grid-cols-[4.75rem_minmax(0,1fr)] min-[400px]:gap-x-3 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-x-5 lg:grid-cols-[9.5rem_minmax(0,1fr)]">
+                    <Link
+                      href={WEBSITE_PRODUCT_DETAILS(product.url)}
+                      className="relative aspect-square overflow-hidden rounded-xl bg-[#f7efe6] sm:rounded-2xl"
+                    >
+                      <Image
+                        src={product.media || imgPlaceholder.src}
+                        fill
+                        sizes="(min-width: 1024px) 152px, (min-width: 640px) 136px, 76px"
+                        alt={product.name || "Sweet or bakery item"}
+                        className="object-cover"
+                      />
+                    </Link>
+
+                    <div className="min-w-0 self-center">
+                      {product.categoryName ? (
+                        <p className="text-[11px] font-semibold text-[#9a8170] sm:text-[11.5px]">
+                          {product.categoryName}
+                        </p>
+                      ) : null}
+                      <Link
+                        href={WEBSITE_PRODUCT_DETAILS(product.url)}
+                        className="mt-0.5 block font-display text-[1.02rem] font-semibold leading-snug tracking-[-0.02em] text-[#3a2416] hover:text-[#E45700] min-[400px]:text-[1.15rem] sm:text-[1.35rem]"
+                      >
+                        {product.name}
+                      </Link>
+                      {product.size ? (
+                        <p className="mt-1 text-[12px] text-[#8a6754] sm:text-[12.5px]">
+                          Pack {product.size}
+                        </p>
+                      ) : null}
+                      <div className="mt-1.5 flex flex-wrap items-baseline gap-x-2">
+                        <p className="text-[14px] font-extrabold text-[#E45700] min-[400px]:text-[15px]">
+                          {formatPrice(lineTotal)}
+                        </p>
+                        {onSale ? (
+                          <p className="text-[12px] text-[#b7a498] line-through min-[400px]:text-[12.5px]">
+                            {formatPrice(lineMrp)}
+                          </p>
+                        ) : null}
+                      </div>
+                      <p className="mt-0.5 text-[11.5px] text-[#9a8170] sm:text-[12px]">
+                        {formatPrice(product.sellingPrice)} each
                       </p>
-                    )}
+                    </div>
+
+                    <div className="col-span-2 flex items-center justify-between gap-2 border-t border-[#f6efe8] pt-2.5 sm:col-span-1 sm:col-start-2 sm:pt-1">
+                      <QtyControl product={product} dispatch={dispatch} />
+                      <div className="flex shrink-0 items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            dispatch(
+                              removeFromCart({
+                                productId: product.productId,
+                                variantId: product.variantId,
+                                size: product.size,
+                              })
+                            )
+                          }
+                          className="text-[12.5px] font-bold text-[#9a8170] transition-colors hover:text-[#E45700] sm:text-[13px]"
+                        >
+                          Remove
+                        </button>
+                        <Link
+                          href={WEBSITE_PRODUCT_DETAILS(product.url)}
+                          className="text-[12.5px] font-bold text-[#9a8170] transition-colors hover:text-[#E45700] sm:text-[13px]"
+                        >
+                          View product
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </li>
+              );
+            })}
+          </ul>
 
-                <div className="flex flex-wrap items-center gap-5">
-                  <QtyControl product={product} dispatch={dispatch} />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      dispatch(
-                        removeFromCart({
-                          productId: product.productId,
-                          variantId: product.variantId,
-                          size: product.size,
-                        })
-                      )
-                    }
-                    className="text-[0.62rem] tracking-[0.16em] uppercase text-[var(--si-muted)] hover:text-[var(--si-burnt-orange)]"
-                  >
-                    Remove
-                  </button>
-                  <Link
-                    href={WEBSITE_PRODUCT_DETAILS(product.url)}
-                    className="text-[0.62rem] tracking-[0.16em] uppercase text-[var(--si-muted)] hover:text-[var(--si-burnt-orange)]"
-                  >
-                    View piece
-                  </Link>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <aside className="hidden bg-[var(--si-deep-brown)] text-[var(--si-cream)] lg:sticky lg:top-0 lg:flex lg:h-[calc(100vh-5.5rem)] lg:flex-col lg:justify-between lg:self-start lg:px-10 lg:py-12 xl:px-12">
-        <div>
-          <nav className="mb-10 flex items-center gap-2 text-[0.58rem] tracking-[0.22em] uppercase text-white/40">
-            <Link href={WEBSITE_HOME} className="hover:text-white">
-              Home
+          <aside className="rounded-[24px] border border-[#f1e3d4] bg-white p-4 shadow-[0_10px_28px_rgba(75,46,30,0.06)] min-[400px]:p-5 sm:p-6 lg:sticky lg:top-[calc(76px+env(safe-area-inset-top,0px)+1.25rem)]">
+            <h2 className="font-display text-[1.45rem] font-semibold tracking-[-0.02em] text-[#3a2416]">
+              Order summary
+            </h2>
+            <p className="mt-1 mb-5 text-[13px] leading-relaxed text-[#8a6754]">
+              Packed sweets, bakery, and gift boxes for your order.
+            </p>
+            <SummaryBlock
+              itemCount={itemCount}
+              subtotal={subtotal}
+              discount={discount}
+              formatPrice={formatPrice}
+            />
+            <Link
+              href={WEBSITE_CHECKOUT}
+              className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#E45700] px-6 text-[14.5px] font-bold text-white shadow-[0_8px_16px_rgba(228,87,0,0.28)] transition-colors hover:bg-[#cf4c00]"
+            >
+              Checkout
             </Link>
-            <span className="text-[var(--si-cream)]/50">/</span>
-            <span className="text-white">Bag</span>
-          </nav>
-          <p className="nn-label mb-3 text-[var(--si-cream)]">Velora</p>
-          <h1 className="nn-display text-4xl font-light leading-[0.95] xl:text-5xl">
-            Your bag
-          </h1>
-        </div>
-
-        <div>
-          <SummaryBlock
-            itemCount={itemCount}
-            subtotal={subtotal}
-            discount={discount}
-            formatPrice={formatPrice}
-            tone="dark"
-          />
-          <Link
-            href={WEBSITE_CHECKOUT}
-            className="mt-8 inline-flex w-full items-center justify-center bg-[var(--si-cream)] px-8 py-[1.05rem] text-[0.63rem] font-medium uppercase tracking-[0.26em] text-[var(--si-deep-brown)] transition-colors hover:bg-white"
-          >
-            Checkout
-          </Link>
-          <p className="mt-5 text-center">
             <Link
               href={WEBSITE_SHOP}
-              className="text-[0.62rem] tracking-[0.16em] uppercase text-white/45 hover:text-[var(--si-cream)]"
+              className="mt-3 inline-flex h-12 w-full items-center justify-center rounded-full border-2 border-[#E45700] bg-white text-[14.5px] font-bold text-[#E45700] transition-colors hover:bg-[#fff4ec]"
             >
               Continue shopping
             </Link>
-          </p>
+            <ul className="mt-5 space-y-2 border-t border-[#f1e3d4] pt-4 text-[12.5px] text-[#8a6754]">
+              <li>Freshly packed for delivery</li>
+              <li>Premium ingredients, made with care</li>
+              <li>Trusted bakery since 1985</li>
+            </ul>
+          </aside>
         </div>
-      </aside>
-
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--si-mist)] bg-[var(--si-deep-brown)] px-6 py-4 text-[var(--si-cream)] lg:hidden">
-        <div className="mb-3 flex items-end justify-between gap-4">
-          <div>
-            <p className="nn-label text-[0.52rem] text-[var(--si-cream)]">
-              Total
-            </p>
-            <p className="nn-display text-2xl">{formatPrice(subtotal)}</p>
-          </div>
-          <Link
-            href={WEBSITE_CHECKOUT}
-            className="inline-flex items-center justify-center bg-[var(--si-cream)] px-8 py-3 text-[0.63rem] font-medium uppercase tracking-[0.26em] text-[var(--si-deep-brown)]"
-          >
-            Checkout
-          </Link>
-        </div>
-        <p className="text-center">
-          <Link
-            href={WEBSITE_SHOP}
-            className="text-[0.58rem] tracking-[0.16em] uppercase text-white/45"
-          >
-            Continue shopping
-          </Link>
-        </p>
       </div>
     </div>
   );

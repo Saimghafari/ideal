@@ -63,19 +63,18 @@ const CraftStory = () => {
           <div className="nn-hairline w-20 mb-8" />
           <p className="nn-label text-[var(--si-deep-brown)] mb-6">The House</p>
           <h2 className="nn-display text-4xl sm:text-5xl lg:text-[3.25rem] font-light text-[var(--si-deep-brown)] leading-[1.05]">
-            Cloth with intention,
+            Baked with care,
             <br />
             <span className="nn-display-italic text-[var(--si-burnt-orange)]">
-              worn with ease
+              shared with ease
             </span>
           </h2>
           <p className="mt-8 text-sm font-light leading-[1.95] text-[var(--si-muted)]">
-            Every Velora piece is cut from silk, wool, cashmere, or leather —
-            quiet cloth, a clear size, and a price in rupees. The collection
-            stays small on purpose.
+            Every Super Ideal box starts in the Faisalabad kitchen — mithai,
+            biscuits, and bakery, priced in rupees.
           </p>
           <p className="mt-5 text-sm font-light leading-[1.95] text-[var(--si-muted)]">
-            No noise. Just good fabric and clothes you will actually wear.
+            Fresh from the oven, packed for the people you are taking it to.
           </p>
           <Link href="/about-us" className="nn-link-quiet mt-10 inline-block">
             Discover our story

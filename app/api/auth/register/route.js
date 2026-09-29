@@ -55,7 +55,7 @@ export async function POST(request) {
       .sign(secret);
 
     await sendMail(
-      "Email Verification request from Velora",
+      "Email Verification request from Super Ideal",
       email,
       emailVerificationLink(
         `${process.env.NEXT_PUBLIC_BASE_URL}/auth/verify-email/${token}`

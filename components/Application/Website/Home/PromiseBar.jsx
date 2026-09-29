@@ -3,10 +3,10 @@ import { Leaf, RotateCcw, ShieldCheck, Timer } from "lucide-react";
 import { promises } from "./homeData";
 
 const PROMISE_ICONS = {
-  "Free returns": RotateCcw,
-  "Thoughtful fabrics": Leaf,
-  "Secure delivery": ShieldCheck,
-  "Made to last": Timer,
+  "Baked fresh": Timer,
+  "Packed with care": Leaf,
+  "Faisalabad delivery": ShieldCheck,
+  "Made for sharing": RotateCcw,
 };
 
 const PromiseBar = () => {

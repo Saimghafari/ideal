@@ -1,10 +1,12 @@
+import { SITE_URL } from "@/lib/siteMeta";
+
 export const metadata = {
-  title: "Checkout | Velora",
-  description: "Complete your Velora clothing order. Prices in Pakistani rupees.",
+  title: "Checkout",
+  description: "Complete your Super Ideal sweets and bakery order. Prices in Pakistani rupees.",
   robots: { index: false, follow: true },
-  alternates: { canonical: "https://www.dectorre.com/checkout" },
+  alternates: { canonical: `${SITE_URL}/checkout` },
 };
 
 export default function CheckoutLayout({ children }) {
   return children;
-}
+};
