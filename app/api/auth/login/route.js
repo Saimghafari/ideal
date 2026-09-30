@@ -7,7 +7,15 @@ import { zSchema } from "@/lib/zodSchema";
 import OTPModel from "@/models/Otp.model";
 import UserModel from "@/models/User.model";
 import { SignJWT } from "jose";
+import { cookies } from "next/headers";
 import { z } from "zod";
+import {
+  applySessionCookie,
+  applyTrustedDeviceCookie,
+  readTrustedDevice,
+  signSessionToken,
+  TRUSTED_DEVICE_COOKIE,
+} from "@/lib/authSession";
 
 export async function POST(request) {
   try {
@@ -74,6 +82,40 @@ export async function POST(request) {
 
     if (!isPasswordVerified) {
       return response(false, 400, "Invalid login credentials.");
+    }
+
+    const loggedInUserData = {
+      _id: getUser._id.toString(),
+      role: getUser.role,
+      name: getUser.name,
+      avatar: getUser.avatar,
+    };
+
+    const cookieStore = await cookies();
+    const trusted = await readTrustedDevice(
+      cookieStore.get(TRUSTED_DEVICE_COOKIE)?.value,
+    );
+
+    if (
+      trusted &&
+      String(trusted.email).toLowerCase() === email.toLowerCase() &&
+      trusted._id === loggedInUserData._id
+    ) {
+      const token = await signSessionToken(loggedInUserData);
+      applySessionCookie(cookieStore, token);
+      await applyTrustedDeviceCookie(cookieStore, {
+        _id: loggedInUserData._id,
+        email: getUser.email,
+      });
+      return response(true, 200, "Login successful.", loggedInUserData);
+    }
+
+    const pendingOtp = await OTPModel.findOne({
+      email,
+      expiresAt: { $gt: new Date() },
+    });
+    if (pendingOtp) {
+      return response(true, 200, "Please verify your device.");
     }
 
     // otp generation

@@ -61,6 +61,13 @@ const LoginPage = () => {
     },
   });
 
+  const redirectAfterLogin = (role) => {
+    if (searchParams.has("callback")) {
+      return searchParams.get("callback");
+    }
+    return role === "admin" ? ADMIN_DASHBOARD : USER_DASHBOARD;
+  };
+
   const handleLoginSubmit = async (values) => {
     try {
       setLoading(true);
@@ -72,9 +79,16 @@ const LoginPage = () => {
         throw new Error(logPKResponse.message);
       }
 
-      setOtpEmail(values.email);
       form.reset();
       showToast("success", logPKResponse.message);
+
+      if (logPKResponse.data?._id) {
+        dispatch(login(logPKResponse.data));
+        window.location.href = redirectAfterLogin(logPKResponse.data.role);
+        return;
+      }
+
+      setOtpEmail(values.email);
     } catch (error) {
       showToast("error", getErrorMessage(error));
     } finally {
@@ -94,21 +108,8 @@ const LoginPage = () => {
       }
       setOtpEmail("");
       showToast("success", otpResponse.message);
-
       dispatch(login(otpResponse.data));
-
-      setTimeout(() => {
-        if (searchParams.has("callback")) {
-          const callbackUrl = searchParams.get("callback");
-          window.location.href = callbackUrl;
-        } else {
-          const redirectUrl =
-            otpResponse.data.role === "admin"
-              ? ADMIN_DASHBOARD
-              : USER_DASHBOARD;
-          window.location.href = redirectUrl;
-        }
-      }, 100);
+      window.location.href = redirectAfterLogin(otpResponse.data.role);
     } catch (error) {
       showToast("error", getErrorMessage(error));
     } finally {

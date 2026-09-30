@@ -1,11 +1,7 @@
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { catchError, response } from "@/lib/helperFunction";
-import {
-  applySessionCookie,
-  shouldRefreshSession,
-  signSessionToken,
-} from "@/lib/authSession";
+import { slideSessionCookies, TRUSTED_DEVICE_COOKIE } from "@/lib/authSession";
 
 export async function GET() {
   try {
@@ -20,15 +16,11 @@ export async function GET() {
       new TextEncoder().encode(process.env.NEXT_PUBLIC_SECRET_KEY)
     );
 
-    if (shouldRefreshSession(payload)) {
-      const token = await signSessionToken({
-        _id: payload._id,
-        role: payload.role,
-        name: payload.name,
-        avatar: payload.avatar,
-      });
-      applySessionCookie(cookieStore, token);
-    }
+    await slideSessionCookies(
+      cookieStore,
+      payload,
+      cookieStore.get(TRUSTED_DEVICE_COOKIE)?.value,
+    );
 
     return response(true, 200, "Authenticated.");
   } catch (error) {

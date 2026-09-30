@@ -4,7 +4,11 @@ import { zSchema } from "@/lib/zodSchema";
 import OTPModel from "@/models/Otp.model";
 import UserModel from "@/models/User.model";
 import { cookies } from "next/headers";
-import { applySessionCookie, signSessionToken } from "@/lib/authSession";
+import {
+  applySessionCookie,
+  applyTrustedDeviceCookie,
+  signSessionToken,
+} from "@/lib/authSession";
 
 export async function POST(request) {
   try {
@@ -47,6 +51,10 @@ export async function POST(request) {
     const token = await signSessionToken(loggedInUserData);
     const cookieStore = await cookies();
     applySessionCookie(cookieStore, token);
+    await applyTrustedDeviceCookie(cookieStore, {
+      _id: loggedInUserData._id,
+      email: getUser.email,
+    });
 
     // remove otp after validation
     await getOtpData.deleteOne();

@@ -4,9 +4,8 @@ import { jwtVerify } from "jose";
 import { ADMIN_DASHBOARD } from "./routes/AdminPanelRoute";
 import {
   accessTokenCookieOptions,
-  applySessionCookie,
-  shouldRefreshSession,
-  signSessionToken,
+  slideSessionCookies,
+  TRUSTED_DEVICE_COOKIE,
 } from "./lib/authSession";
 import { CURRENCY_COOKIE, CURRENCY_PKR } from "./lib/currency";
 
@@ -29,18 +28,12 @@ function applyCurrencyCookie(response) {
   return response;
 }
 
-async function withSessionRefresh(response, payload) {
-  if (!shouldRefreshSession(payload)) {
-    return response;
-  }
-
-  const token = await signSessionToken({
-    _id: payload._id,
-    role: payload.role,
-    name: payload.name,
-    avatar: payload.avatar,
-  });
-  applySessionCookie(response.cookies, token);
+async function withSessionRefresh(response, payload, request) {
+  await slideSessionCookies(
+    response.cookies,
+    payload,
+    request.cookies.get(TRUSTED_DEVICE_COOKIE)?.value,
+  );
   return response;
 }
 
@@ -92,7 +85,8 @@ async function handleAuth(request) {
         role === "admin" ? ADMIN_DASHBOARD : USER_DASHBOARD;
       return withSessionRefresh(
         NextResponse.redirect(new URL(destination, request.nextUrl)),
-        payload
+        payload,
+        request
       );
     }
 
@@ -101,7 +95,8 @@ async function handleAuth(request) {
     if (pathname.startsWith("/admin") && role !== "admin") {
       return withSessionRefresh(
         NextResponse.redirect(new URL(USER_DASHBOARD, request.nextUrl)),
-        payload
+        payload,
+        request
       );
     }
 
@@ -114,11 +109,12 @@ async function handleAuth(request) {
     ) {
       return withSessionRefresh(
         NextResponse.redirect(new URL(ADMIN_DASHBOARD, request.nextUrl)),
-        payload
+        payload,
+        request
       );
     }
 
-    return withSessionRefresh(NextResponse.next(), payload);
+    return withSessionRefresh(NextResponse.next(), payload, request);
   } catch (error) {
     // Invalid/expired token: clear it so we never redirect-loop on /auth/*
     console.log("Auth middleware token error:", error?.message || error);
