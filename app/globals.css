@@ -93,37 +93,113 @@
 }
 
 .dark {
-  --background: var(--si-deep-brown);
-  --foreground: var(--si-cream);
-  --card: var(--si-deep-brown);
-  --card-foreground: var(--si-cream);
-  --popover: var(--si-deep-brown);
-  --popover-foreground: var(--si-cream);
-  --primary: var(--si-burnt-orange);
-  --primary-foreground: var(--si-cream);
-  --secondary: var(--si-saffron);
-  --secondary-foreground: var(--si-cream);
-  --muted: color-mix(in srgb, var(--si-cream) 12%, var(--si-deep-brown));
-  --muted-foreground: var(--si-golden);
-  --accent: var(--si-golden);
-  --accent-foreground: var(--si-deep-brown);
-  --destructive: var(--si-saffron);
-  --border: color-mix(in srgb, var(--si-cream) 18%, transparent);
-  --input: color-mix(in srgb, var(--si-cream) 18%, transparent);
-  --ring: var(--si-golden);
-  --chart-1: var(--si-burnt-orange);
-  --chart-2: var(--si-saffron);
-  --chart-3: var(--si-golden);
-  --chart-4: var(--si-cream);
-  --chart-5: var(--si-deep-brown);
-  --sidebar: var(--si-deep-brown);
-  --sidebar-foreground: var(--si-cream);
-  --sidebar-primary: var(--si-burnt-orange);
-  --sidebar-primary-foreground: var(--si-cream);
-  --sidebar-accent: color-mix(in srgb, var(--si-burnt-orange) 22%, var(--si-deep-brown));
-  --sidebar-accent-foreground: var(--si-cream);
-  --sidebar-border: color-mix(in srgb, var(--si-cream) 18%, transparent);
-  --sidebar-ring: var(--si-golden);
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #09090b;
+  --card-foreground: #fafafa;
+  --popover: #09090b;
+  --popover-foreground: #fafafa;
+  --primary: #e11d48;
+  --primary-foreground: #fff1f2;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --destructive: #7f1d1d;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #e11d48;
+  --chart-1: #e11d48;
+  --chart-2: #22c55e;
+  --chart-3: #eab308;
+  --chart-4: #06b6d4;
+  --chart-5: #3b82f6;
+  --sidebar: #09090b;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #e11d48;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #e11d48;
+}
+
+/* Admin keeps the original neutral portal. The shop stays on the bakery plate. */
+.admin-portal {
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #e11d48;
+  --primary-foreground: #fff1f2;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #e11d48;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #e11d48;
+  --sidebar: #fafafa;
+  --sidebar-foreground: #3f3f46;
+  --sidebar-primary: #e11d48;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #e11d48;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.dark .admin-portal {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #09090b;
+  --card-foreground: #fafafa;
+  --popover: #09090b;
+  --popover-foreground: #fafafa;
+  --primary: #e11d48;
+  --primary-foreground: #fff1f2;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --destructive: #7f1d1d;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #e11d48;
+  --chart-1: #e11d48;
+  --chart-2: #22c55e;
+  --chart-3: #eab308;
+  --chart-4: #06b6d4;
+  --chart-5: #3b82f6;
+  --sidebar: #09090b;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #e11d48;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #e11d48;
+}
+
+body:has(.admin-portal) {
+  background: #ffffff;
+  color: #09090b;
+}
+
+html.dark body:has(.admin-portal) {
+  background: #09090b;
+  color: #fafafa;
 }
 
 @layer base {

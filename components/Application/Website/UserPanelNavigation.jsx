@@ -15,9 +15,22 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 const navItems = [
-  { href: USER_DASHBOARD, label: "Dashboard", match: (path) => path === USER_DASHBOARD || path.startsWith(`${USER_DASHBOARD}/`) },
-  { href: USER_PROFILE, label: "Profile", match: (path) => path.startsWith(USER_PROFILE) },
-  { href: USER_ORDERS, label: "Orders", match: (path) => path.startsWith(USER_ORDERS) },
+  {
+    href: USER_DASHBOARD,
+    label: "Dashboard",
+    match: (path) =>
+      path === USER_DASHBOARD || path.startsWith(`${USER_DASHBOARD}/`),
+  },
+  {
+    href: USER_PROFILE,
+    label: "Profile",
+    match: (path) => path.startsWith(USER_PROFILE),
+  },
+  {
+    href: USER_ORDERS,
+    label: "Orders",
+    match: (path) => path.startsWith(USER_ORDERS),
+  },
 ];
 
 const UserPanelNavigation = () => {
@@ -41,42 +54,39 @@ const UserPanelNavigation = () => {
   };
 
   return (
-    <nav className="nn-animate-fade-up-delay-1">
-      <p className="nn-label text-[0.48rem] text-[var(--si-muted)] mb-5">
+    <nav className="rounded-[22px] border border-[#f1e3d4] bg-white p-3 shadow-[0_8px_22px_rgba(75,46,30,0.05)] sm:p-4">
+      <p className="px-3 pb-2 pt-1 text-[11.5px] font-bold uppercase tracking-[0.16em] text-[#E45700]">
         Account
       </p>
 
-      <ul className="flex flex-row lg:flex-col gap-x-6 gap-y-1 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0">
+      <ul className="flex gap-1 overflow-x-auto lg:flex-col">
         {navItems.map((item) => {
           const active = item.match(pathname);
           return (
-            <li key={item.href} className="shrink-0">
+            <li key={item.href} className="shrink-0 lg:shrink">
               <Link
                 href={item.href}
-                className={`relative block py-2.5 lg:py-3 nn-label text-[0.58rem] tracking-[0.22em] transition-colors duration-300 ${
+                className={`block rounded-full px-4 py-2.5 text-[13.5px] font-bold transition-colors ${
                   active
-                    ? "text-[var(--si-deep-brown)]"
-                    : "text-[var(--si-fog)] hover:text-[var(--si-deep-brown)]"
+                    ? "bg-[#fff4ec] text-[#E45700]"
+                    : "text-[#6b5142] hover:bg-[#FFF8F2] hover:text-[#3a2416]"
                 }`}
               >
                 {item.label}
-                {active && (
-                  <span className="absolute left-0 right-0 bottom-1.5 lg:bottom-2 h-px bg-[var(--si-burnt-orange)]" />
-                )}
               </Link>
             </li>
           );
         })}
       </ul>
 
-      <div className="nn-hairline my-6 hidden lg:block w-full max-w-[8rem]" />
+      <div className="mx-3 my-3 hidden h-px bg-[#f1e3d4] lg:block" />
 
       <button
         type="button"
         onClick={handleLogout}
-        className="nn-label mt-2 lg:mt-0 text-[0.52rem] tracking-[0.22em] text-[var(--si-muted)] hover:text-[var(--si-deep-brown)] transition-colors cursor-pointer"
+        className="mt-1 w-full cursor-pointer rounded-full px-4 py-2.5 text-left text-[13.5px] font-bold text-[#8a6754] transition-colors hover:bg-[#FFF8F2] hover:text-[#3a2416] lg:mt-0"
       >
-        Sign Out
+        Sign out
       </button>
     </nav>
   );

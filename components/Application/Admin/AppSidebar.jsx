@@ -27,8 +27,8 @@ const AppSidebar = () => {
   const { toggleSidebar } = useSidebar();
   return (
     <Sidebar className="z-50">
-      <SidebarHeader className="border-b h-14 p-0">
-        <div className="flex justify-between items-center px-4">
+      <SidebarHeader className="h-auto border-b p-0">
+        <div className="flex items-center justify-between px-4 pb-4 pt-7">
           <BrandLogo size="header" className="text-[1.15rem] sm:text-[1.25rem]" />
           <Button
             onClick={toggleSidebar}

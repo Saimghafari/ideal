@@ -2,7 +2,6 @@
 
 import ButtonLoading from "@/components/Application/ButtonLoading";
 import UserPanelLayout from "@/components/Application/Website/UserPanelLayout";
-import WebsiteBreadcrumb from "@/components/Application/Website/WebsiteBreadcrumb";
 import {
   Form,
   FormControl,
@@ -26,19 +25,14 @@ import { showToast } from "@/lib/showToast";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/reducer/authReducer";
-
-const breadCrumbData = {
-  title: "My Profile",
-  eyebrow: "Super Ideal",
-  subtitle: "Update your name, contact details, and delivery address.",
-  links: [{ label: "Profile" }],
-};
+import Link from "next/link";
+import { USER_DASHBOARD, WEBSITE_HOME } from "@/routes/WebsiteRoute";
 
 const inputClass =
-  "h-11 rounded-none border border-[var(--si-mist)] bg-[var(--si-cream)] px-4 text-sm font-light text-[var(--si-deep-brown)] shadow-none placeholder:text-[var(--si-fog)] focus-visible:ring-0 focus-visible:border-[var(--si-burnt-orange)] transition-colors duration-300";
+  "h-12 rounded-2xl border-[#f1e3d4] bg-[#FFF8F2] px-4 text-[14.5px] font-medium text-[#3a2416] shadow-none placeholder:text-[#b7a498] focus-visible:border-[#E45700] focus-visible:ring-0";
 
 const labelClass =
-  "nn-label text-[0.52rem] tracking-[0.2em] text-[var(--si-muted)] mb-2.5 block";
+  "text-[12px] font-bold uppercase tracking-[0.12em] text-[#8a6754]";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -110,47 +104,61 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      <WebsiteBreadcrumb props={breadCrumbData} />
-      <UserPanelLayout>
-        <div>
-          <div className="mb-10 sm:mb-12">
-            <p className="nn-label text-[0.48rem] text-[var(--si-muted)] mb-3">
-              Details
-            </p>
-            <h2 className="nn-display text-2xl sm:text-3xl font-light text-[var(--si-deep-brown)] leading-tight">
-              Edit your{" "}
-              <span className="nn-display-italic text-[var(--si-burnt-orange)]">
-                profile
-              </span>
-            </h2>
-          </div>
+    <UserPanelLayout>
+      <div className="min-w-0 font-ui text-[#3a2416]">
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] text-[#8a6754]"
+        >
+          <Link href={WEBSITE_HOME} className="hover:text-[#E45700]">
+            Home
+          </Link>
+          <span aria-hidden="true">›</span>
+          <Link href={USER_DASHBOARD} className="hover:text-[#E45700]">
+            Account
+          </Link>
+          <span aria-hidden="true">›</span>
+          <span className="font-medium text-[#3a2416]">Profile</span>
+        </nav>
 
-          <Form {...form}>
-            <form
-              className="grid md:grid-cols-2 grid-cols-1 gap-6 max-w-2xl"
-              onSubmit={form.handleSubmit(updateProfile)}
-            >
-              <div className="md:col-span-2 flex justify-start">
+        <header className="max-w-xl">
+          <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.16em] text-[#E45700] sm:text-[12.5px]">
+            Super Ideal
+          </p>
+          <h1 className="font-display text-[1.85rem] font-semibold leading-[1.08] tracking-[-0.03em] text-[#3a2416] min-[400px]:text-[2.15rem] sm:text-[2.55rem]">
+            Edit your profile
+          </h1>
+          <p className="mt-3 max-w-md text-[14.5px] leading-relaxed text-[#6b5142] sm:text-[15.5px]">
+            Update your name, phone, and the address we use for delivery.
+          </p>
+        </header>
+
+        <Form {...form}>
+          <form
+            className="mt-6 max-w-2xl rounded-[24px] border border-[#f1e3d4] bg-white p-4 shadow-[0_8px_22px_rgba(75,46,30,0.05)] sm:mt-8 sm:p-6"
+            onSubmit={form.handleSubmit(updateProfile)}
+          >
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <div className="md:col-span-2">
                 <Dropzone
                   onDrop={(acceptedFiles) => handleFileSelection(acceptedFiles)}
                 >
                   {({ getRootProps, getInputProps }) => (
-                    <div {...getRootProps()} className="cursor-pointer group">
+                    <div {...getRootProps()} className="group cursor-pointer">
                       <input {...getInputProps()} />
-                      <div className="relative">
-                        <Avatar className="w-24 h-24 rounded-none border border-[var(--si-mist)]">
+                      <div className="relative w-fit">
+                        <Avatar className="h-24 w-24 rounded-full border border-[#f1e3d4] bg-[#FFF8F2]">
                           <AvatarImage
                             src={preview ? preview : userIcon.src}
                             className="object-cover"
                           />
                         </Avatar>
-                        <div className="absolute inset-0 flex items-center justify-center bg-[var(--si-deep-brown)]/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <FaCamera className="text-[var(--si-cream)]" size={16} />
+                        <div className="absolute inset-0 flex items-center justify-center rounded-full bg-[#3a2416]/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          <FaCamera className="text-white" size={16} />
                         </div>
                       </div>
-                      <p className="nn-label mt-3 text-[0.48rem] text-[var(--si-muted)] group-hover:text-[var(--si-deep-brown)] transition-colors">
-                        Change Portrait
+                      <p className="mt-3 text-[12px] font-bold uppercase tracking-[0.12em] text-[#8a6754] group-hover:text-[#E45700]">
+                        Change photo
                       </p>
                     </div>
                   )}
@@ -205,7 +213,7 @@ const Profile = () => {
                       <FormControl>
                         <Textarea
                           placeholder="Delivery address"
-                          className={`${inputClass} min-h-[7rem] py-3 resize-y`}
+                          className={`${inputClass} min-h-[7rem] resize-y rounded-2xl py-3`}
                           {...field}
                         />
                       </FormControl>
@@ -215,19 +223,19 @@ const Profile = () => {
                 />
               </div>
 
-              <div className="md:col-span-2 pt-2">
+              <div className="pt-1 md:col-span-2">
                 <ButtonLoading
                   loading={loading}
                   type="submit"
-                  text="Save Changes"
-                  className="nn-btn-primary !rounded-none cursor-pointer !py-3 px-8"
+                  text="Save changes"
+                  className="h-12 cursor-pointer rounded-full bg-[#E45700] px-7 text-[14.5px] font-bold text-white shadow-[0_8px_16px_rgba(228,87,0,0.28)] hover:bg-[#cf4c00]"
                 />
               </div>
-            </form>
-          </Form>
-        </div>
-      </UserPanelLayout>
-    </div>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </UserPanelLayout>
   );
 };
 

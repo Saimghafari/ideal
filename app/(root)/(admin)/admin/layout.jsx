@@ -8,14 +8,14 @@ const layout = ({ children }) => {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
+      defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
     >
-      <SidebarProvider>
+      <SidebarProvider className="admin-portal">
         <AppSidebar />
-        <main className="md:w-[calc(100vw-16rem)] w-full overflow-x-hidden">
-          <div className="pt-[70px] md:px-8 px-5 min-h-[calc(100vh-40px)] pb-10">
+        <main className="min-h-screen w-full bg-background text-foreground md:w-[calc(100vw-16rem)] overflow-x-hidden">
+          <div className="min-h-[calc(100vh-40px)] bg-background px-5 pb-10 pt-20 md:px-8">
             <Topbar />
             {children}
           </div>

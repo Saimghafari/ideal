@@ -7,7 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import adminLogo from '@/public/assets/images/admin-logo.png'
+import idealLogo from '@/public/assets/images/logo-icon.png'
 import { useSelector } from "react-redux"
 
 import { IoShirtOutline } from "react-icons/io5";
@@ -21,10 +21,19 @@ const UserDropdown = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Avatar>
-                    <AvatarImage src={adminLogo.src} />
-                </Avatar>
-
+                <button
+                    type="button"
+                    className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-label="Account menu"
+                >
+                    <Avatar className="size-9 bg-white">
+                        <AvatarImage
+                            src={idealLogo.src}
+                            alt="Super Ideal"
+                            className="object-contain p-0.5"
+                        />
+                    </Avatar>
+                </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="me-5 w-44">
                 <DropdownMenuLabel>

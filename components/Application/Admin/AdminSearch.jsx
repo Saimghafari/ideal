@@ -6,7 +6,7 @@ import SearchModel from './SearchModel';
 const AdminSearch = () => {
     const [open, setOpen] = useState(false)
     return (
-        <div className='md:w-[350px]'>
+        <div className="w-full max-w-[420px]">
             <div className='flex justify-between items-center relative'>
                 <Input
                     readOnly

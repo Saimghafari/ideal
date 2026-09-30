@@ -60,16 +60,15 @@ export default function OrderStatusTag({ status, size = "sm" }) {
 
   return (
     <span
-      className={`inline-flex items-center border capitalize font-medium tracking-wide ${
+      className={`inline-flex items-center rounded-full border font-bold capitalize tracking-wide ${
         size === "md"
-          ? "px-3 py-1 text-[0.7rem]"
-          : "px-2.5 py-0.5 text-[0.62rem]"
+          ? "px-3 py-1 text-[12px]"
+          : "px-2.5 py-0.5 text-[11.5px]"
       }`}
       style={{
         backgroundColor: palette.background,
         color: palette.color,
         borderColor: palette.border,
-        borderRadius: 0,
       }}
     >
       {label}
