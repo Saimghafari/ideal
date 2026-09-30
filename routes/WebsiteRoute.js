@@ -26,7 +26,7 @@ export const WEBSITE_RETURNS = "/returns-refunds"
 export const WEBSITE_PRIVACY = "/privacy-policy"
 export const WEBSITE_TERMS = "/terms-and-conditions"
 
-// User routes 
+// User route 
 export const USER_DASHBOARD = "/my-account"
 export const USER_PROFILE = "/profile"
 export const USER_ORDERS = "/orders"
