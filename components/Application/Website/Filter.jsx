@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { useRouter, useSearchParams } from "next/navigation";
 import { WEBSITE_SHOP } from "@/routes/WebsiteRoute";
+import { updateShopQuery } from "@/lib/updateShopQuery";
 import Link from "next/link";
 import { useCurrency } from "@/components/Application/Website/CurrencyProvider";
 import {
@@ -51,8 +52,7 @@ const Filter = ({ tone = "sidebar", categories = [] }) => {
   const pushParams = (mutate) => {
     const next = new URLSearchParams(searchParams.toString());
     mutate(next);
-    const query = next.toString();
-    router.push(query ? `${WEBSITE_SHOP}?${query}` : WEBSITE_SHOP);
+    updateShopQuery(router, next.toString());
   };
 
   const handleCategoryFilter = (categorySlug) => {
@@ -97,7 +97,7 @@ const Filter = ({ tone = "sidebar", categories = [] }) => {
       <div className="mb-4 flex items-center justify-between gap-3">
         <h2 className="font-display text-[1.35rem] font-semibold text-[#3a2416]">Filters</h2>
         {hasFilters ? (
-          <Link href={WEBSITE_SHOP} className="text-[12.5px] font-bold text-[#E45700] hover:text-[#c2410c]">
+          <Link href={WEBSITE_SHOP} scroll={false} className="text-[12.5px] font-bold text-[#E45700] hover:text-[#c2410c]">
             Clear all
           </Link>
         ) : null}

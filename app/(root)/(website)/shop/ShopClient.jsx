@@ -2,6 +2,7 @@
 import Filter from "@/components/Application/Website/Filter";
 import Sorting from "@/components/Application/Website/Sorting";
 import { WEBSITE_HOME, WEBSITE_SHOP } from "@/routes/WebsiteRoute";
+import { updateShopQuery } from "@/lib/updateShopQuery";
 import React, { useMemo, useState } from "react";
 import {
   Sheet,
@@ -83,8 +84,7 @@ const ShopClient = () => {
     const onlyThis = slug && selectedCategories.length === 1 && selectedCategories[0] === slug;
     if (!slug || onlyThis) next.delete("category");
     else next.set("category", slug);
-    const query = next.toString();
-    router.push(query ? `${WEBSITE_SHOP}?${query}` : WEBSITE_SHOP);
+    updateShopQuery(router, next.toString());
   };
 
   const onlineProducts = products.filter((item) => item.deliverable !== false && !item.todayOnly);
