@@ -10,6 +10,10 @@ export const ADMIN_CATEGORY_ADD = '/admin/category/add'
 export const ADMIN_CATEGORY_SHOW = '/admin/category'
 export const ADMIN_CATEGORY_EDIT = (id) => id ? `/admin/category/edit/${id}` : ''
 
+export const ADMIN_BRANCH_ADD = '/admin/branch/add'
+export const ADMIN_BRANCH_SHOW = '/admin/branch'
+export const ADMIN_BRANCH_EDIT = (id) => id ? `/admin/branch/edit/${id}` : ''
+
 // Product routes 
 
 export const ADMIN_PRODUCT_ADD = '/admin/product/add'

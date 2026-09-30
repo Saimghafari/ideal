@@ -3,7 +3,7 @@ import BreadCrumb from "@/components/Application/Admin/BreadCrumb"
 import DatatableWrapper from "@/components/Application/Admin/DatatableWrapper"
 import DeleteAction from "@/components/Application/Admin/DeleteAction"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { DT_CATEGORY_COLUMN, DT_COUPON_COLUMN, DT_CUSTOMERS_COLUMN, DT_ORDER_COLUMN, DT_PRODUCT_COLUMN, DT_PRODUCT_VARIANT_COLUMN, DT_REVIEW_COLUMN } from "@/lib/column"
+import { DT_BRANCH_COLUMN, DT_CATEGORY_COLUMN, DT_COUPON_COLUMN, DT_CUSTOMERS_COLUMN, DT_ORDER_COLUMN, DT_PRODUCT_COLUMN, DT_PRODUCT_VARIANT_COLUMN, DT_REVIEW_COLUMN } from "@/lib/column"
 import { columnConfig } from "@/lib/helperFunction"
 import { ADMIN_DASHBOARD, ADMIN_TRASH } from "@/routes/AdminPanelRoute"
 
@@ -16,6 +16,13 @@ const breadcrumbData = [
 ]
 
 const TRASH_CONFIG = {
+    branch: {
+        title: 'Branch Trash',
+        columns: DT_BRANCH_COLUMN,
+        fetchUrl: '/api/branch',
+        exportUrl: '/api/branch/export',
+        deleteUrl: '/api/branch/delete'
+    },
     category: {
         title: 'Category Trash',
         columns: DT_CATEGORY_COLUMN,

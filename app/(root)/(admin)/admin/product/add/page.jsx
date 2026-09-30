@@ -4,6 +4,7 @@ import { ADMIN_CATEGORY_SHOW, ADMIN_DASHBOARD, ADMIN_PRODUCT_SHOW } from '@/rout
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import ButtonLoading from '@/components/Application/ButtonLoading'
 import { zSchema } from '@/lib/zodSchema'
 import { useForm } from 'react-hook-form'
@@ -16,6 +17,7 @@ import useFetch from '@/hooks/useFetch'
 import Select from '@/components/Application/Select'
 import Editor from '@/components/Application/Admin/Editor'
 import MediaModal from '@/components/Application/Admin/MediaModal'
+import NutritionRows from '@/components/Application/Admin/NutritionRows'
 import Image from 'next/image'
 const breadcrumbData = [
   { href: ADMIN_DASHBOARD, label: 'Home' },
@@ -26,11 +28,14 @@ const breadcrumbData = [
 const AddProduct = () => {
   const [loading, setLoading] = useState(false)
   const [categoryOption, setCategoryOption] = useState([])
+  const [branchOption, setBranchOption] = useState([])
   const { data: getCategory } = useFetch('/api/category?deleteType=SD&&size=10000')
+  const { data: getBranches } = useFetch('/api/branch?deleteType=SD&size=10000')
 
   // media modal states  
   const [open, setOpen] = useState(false)
   const [selectedMedia, setSelectedMedia] = useState([])
+  const [nutritionRows, setNutritionRows] = useState([])
 
   useEffect(() => {
     if (getCategory && getCategory.success) {
@@ -44,6 +49,17 @@ const AddProduct = () => {
     }
   }, [getCategory])
 
+  useEffect(() => {
+    if (getBranches && getBranches.success) {
+      setBranchOption(
+        (getBranches.data || []).map((branch) => ({
+          label: branch.shortName || branch.name,
+          value: branch._id,
+        }))
+      )
+    }
+  }, [getBranches])
+
   const formSchema = zSchema.pick({
     name: true,
     slug: true,
@@ -55,8 +71,12 @@ const AddProduct = () => {
     discountPercentage: true,
     discountPercentagePkr: true,
     description: true,
+    ingredientsNote: true,
+    ingredientsText: true,
     deliverable: true,
     todayOnly: true,
+    featured: true,
+    branches: true,
   })
 
   const form = useForm({
@@ -72,8 +92,12 @@ const AddProduct = () => {
       discountPercentage: 0,
       discountPercentagePkr: 0,
       description: "",
+      ingredientsNote: "",
+      ingredientsText: "",
       deliverable: true,
       todayOnly: false,
+      featured: false,
+      branches: [],
     },
   })
 
@@ -84,29 +108,17 @@ const AddProduct = () => {
     }
   }, [form.watch('name')])
 
-  // discount percentage calculation (USD + PKR)
   useEffect(() => {
-    const mrp = form.getValues('mrp') || 0
-    const sellingPrice = form.getValues('sellingPrice') || 0
+    const mrpPkr = Number(form.getValues('mrpPkr') || 0)
+    const sellingPricePkr = Number(form.getValues('sellingPricePkr') || 0)
+    const discount = mrpPkr > 0 && sellingPricePkr > 0
+      ? Math.round(((mrpPkr - sellingPricePkr) / mrpPkr) * 100)
+      : 0
 
-    if (mrp > 0 && sellingPrice > 0) {
-      const discountPercentage = ((mrp - sellingPrice) / mrp) * 100
-      form.setValue('discountPercentage', Math.round(discountPercentage))
-    }
-
-  }, [form.watch('mrp'), form.watch('sellingPrice')])
-
-  useEffect(() => {
-    const mrpPkr = form.getValues('mrpPkr') || 0
-    const sellingPricePkr = form.getValues('sellingPricePkr') || 0
-
-    if (mrpPkr > 0 && sellingPricePkr > 0) {
-      const discountPercentagePkr = ((mrpPkr - sellingPricePkr) / mrpPkr) * 100
-      form.setValue('discountPercentagePkr', Math.round(discountPercentagePkr))
-    } else {
-      form.setValue('discountPercentagePkr', 0)
-    }
-
+    form.setValue('discountPercentagePkr', discount)
+    form.setValue('mrp', mrpPkr)
+    form.setValue('sellingPrice', sellingPricePkr)
+    form.setValue('discountPercentage', discount)
   }, [form.watch('mrpPkr'), form.watch('sellingPricePkr')])
 
   const editor = (event, editor) => {
@@ -124,6 +136,7 @@ const AddProduct = () => {
       values.slug = normalizeSlug(values.slug || values.name)
       const mediaIds = selectedMedia.map(media => media._id)
       values.media = mediaIds
+      values.nutritionRows = nutritionRows
 
       const { data: response } = await axios.post('/api/product/create', values)
       if (!response.success) {
@@ -131,6 +144,7 @@ const AddProduct = () => {
       }
 
       form.reset()
+      setNutritionRows([])
       showToast('success', response.message)
     } catch (error) {
       showToast('error', error.message)
@@ -223,6 +237,28 @@ const AddProduct = () => {
                     )}
                   />
                 </div>
+                <div className="md:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="branches"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Branches</FormLabel>
+                        <FormControl>
+                          <Select
+                            options={branchOption}
+                            selected={field.value || []}
+                            setSelected={field.onChange}
+                            isMulti={true}
+                            placeholder="Select branches"
+                          />
+                        </FormControl>
+                        <p className="text-xs text-muted-foreground">Leave empty to sell this item at every branch.</p>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <div className="flex flex-col gap-3 sm:col-span-2">
                   <FormField
                     control={form.control}
@@ -235,6 +271,20 @@ const AddProduct = () => {
                           onChange={(event) => field.onChange(event.target.checked)}
                         />
                         Available for online delivery
+                      </label>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="featured"
+                    render={({ field }) => (
+                      <label className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(field.value)}
+                          onChange={(event) => field.onChange(event.target.checked)}
+                        />
+                        Featured product
                       </label>
                     )}
                   />
@@ -256,40 +306,10 @@ const AddProduct = () => {
                 <div className=''>
                   <FormField
                     control={form.control}
-                    name="mrp"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>MRP (Rs) <span className='text-red-500'>*</span></FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="Enter MRP in rupees" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className=''>
-                  <FormField
-                    control={form.control}
-                    name="sellingPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Selling Price (Rs) <span className='text-red-500'>*</span></FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="Enter selling price in rupees" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className=''>
-                  <FormField
-                    control={form.control}
                     name="mrpPkr"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>MRP (PKR)</FormLabel>
+                        <FormLabel>MRP (PKR) <span className='text-red-500'>*</span></FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="Enter MRP in PKR" {...field} />
                         </FormControl>
@@ -304,24 +324,9 @@ const AddProduct = () => {
                     name="sellingPricePkr"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Selling Price (PKR)</FormLabel>
+                        <FormLabel>Selling Price (PKR) <span className='text-red-500'>*</span></FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Enter Selling Price in PKR" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className=''>
-                  <FormField
-                    control={form.control}
-                    name="discountPercentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Discount % <span className='text-red-500'>*</span></FormLabel>
-                        <FormControl>
-                          <Input type="number" readOnly placeholder="Discount %" {...field} />
+                          <Input type="number" placeholder="Enter selling price in PKR" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -336,7 +341,7 @@ const AddProduct = () => {
                       <FormItem>
                         <FormLabel>Discount % (PKR)</FormLabel>
                         <FormControl>
-                          <Input type="number" readOnly placeholder="Discount % PKR" {...field} />
+                          <Input type="number" readOnly placeholder="Discount %" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -349,9 +354,41 @@ const AddProduct = () => {
                   <FormMessage></FormMessage>
                 </div>
 
+                <div className="md:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="ingredientsNote"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ingredients note</FormLabel>
+                        <FormControl>
+                          <Textarea rows={3} placeholder="Short ingredients description. Leave empty to hide the Ingredients tab." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="ingredientsText"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ingredients list</FormLabel>
+                        <FormControl>
+                          <Textarea rows={5} placeholder={"One ingredient per line\nRice flakes\nRoasted peanuts"} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <NutritionRows rows={nutritionRows} setRows={setNutritionRows} />
+
               </div>
 
-              <div className='md:col-span-2 border border-dashed rounded p-5 text-center'>
+              <div className='mt-8 border border-dashed rounded p-5 text-center'>
                 <MediaModal
                   open={open}
                   setOpen={setOpen}

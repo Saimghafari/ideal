@@ -9,6 +9,7 @@ import {
 import { formatWallSize } from "@/lib/wallDecorSizes";
 import { formatMoney } from "@/lib/formatCurrency";
 import { getOrderByOrderId } from "@/lib/getOrderByOrderId";
+import OrderLiveTracker from "@/components/Application/Website/OrderLiveTracker";
 import OrderStatusTag from "@/components/Application/Website/OrderStatusTag";
 import { HiOutlineEye } from "react-icons/hi2";
 
@@ -62,6 +63,18 @@ const OrderDetails = async ({ params }) => {
             </div>
           ) : (
             <div className="nn-animate-fade-up-delay-2 max-w-5xl">
+              <OrderLiveTracker
+                orderId={order.order_id}
+                initial={{
+                  fulfillmentStage: order.fulfillmentStage,
+                  prepMinutes: order.prepMinutes,
+                  serviceType: order.serviceType,
+                  branchName: order.branchName || order.branch?.shortName || order.branch?.name || "",
+                  stageUpdatedAt: order.stageUpdatedAt,
+                  createdAt: order.createdAt,
+                  status: order.status,
+                }}
+              />
               <div className="flex flex-wrap gap-x-10 gap-y-4 mb-12 border-b border-[var(--si-mist)] pb-8">
                 <div>
                   <p className="nn-label text-[0.48rem] text-[var(--si-muted)] mb-2">

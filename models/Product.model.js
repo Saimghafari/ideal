@@ -57,11 +57,31 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    ingredientsNote: {
+      type: String,
+      default: "",
+    },
+    ingredients: {
+      type: [String],
+      default: [],
+    },
+    nutrition: [
+      {
+        label: { type: String, default: "" },
+        value: { type: String, default: "" },
+      },
+    ],
     featured: {
       type: Boolean,
       default: false,
       index: true,
     },
+    branches: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Branch",
+      },
+    ],
     deliverable: {
       type: Boolean,
       default: true,
@@ -97,7 +117,11 @@ productSchema.index(
 if (
   mongoose.models.Product &&
   (!mongoose.models.Product.schema.path("mrpPkr") ||
-    !mongoose.models.Product.schema.path("deliverable"))
+    !mongoose.models.Product.schema.path("deliverable") ||
+    !mongoose.models.Product.schema.path("branches") ||
+    !mongoose.models.Product.schema.path("featured") ||
+    !mongoose.models.Product.schema.path("ingredients") ||
+    mongoose.models.Product.schema.path("nutrition")?.instance !== "Array")
 ) {
   delete mongoose.models.Product;
   delete mongoose.connection.models.Product;

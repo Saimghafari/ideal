@@ -4,6 +4,8 @@ import { catchError, response } from "@/lib/helperFunction"
 import { zSchema } from "@/lib/zodSchema"
 import ProductModel from "@/models/Product.model"
 import { encode } from "entities"
+import { isValidObjectId } from "mongoose"
+import { cleanNutritionRows } from "@/lib/nutritionRows"
 
 async function freeTrashedSlug(slug) {
     const trashed = await ProductModel.find({
@@ -87,6 +89,16 @@ export async function POST(request) {
             media: productData.media,
             deliverable: payload.deliverable !== false,
             todayOnly: payload.todayOnly === true,
+            featured: payload.featured === true,
+            branches: Array.isArray(payload.branches)
+                ? payload.branches.filter((id) => isValidObjectId(id))
+                : [],
+            ingredientsNote: String(payload.ingredientsNote || "").trim(),
+            ingredients: String(payload.ingredientsText || "")
+                .split("\n")
+                .map((item) => item.trim())
+                .filter(Boolean),
+            nutrition: cleanNutritionRows(payload.nutritionRows),
         })
 
         await newProduct.save()

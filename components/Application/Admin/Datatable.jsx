@@ -30,6 +30,7 @@ const Datatable = ({
   deleteType,
   trashView,
   createAction,
+  refetchInterval,
 }) => {
   // filter , sorting and pagination states
   const [columnFilters, setColumnFilters] = useState([]);
@@ -184,6 +185,8 @@ const Datatable = ({
     },
 
     placeholderData: keepPreviousData,
+    refetchInterval: refetchInterval || false,
+    refetchIntervalInBackground: false,
   });
 
   // init table

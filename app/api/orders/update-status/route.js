@@ -1,9 +1,12 @@
-import { orderStatusEmail } from "@/email/orderNotification";
 import { isAuthenticated } from "@/lib/authentication";
 import { connectDB } from "@/lib/databaseConnection";
-import { enrichOrderProductsForEmail } from "@/lib/enrichOrderProductsForEmail";
 import { catchError, response } from "@/lib/helperFunction";
-import { sendMail } from "@/lib/sendMail";
+import {
+  FULFILLMENT_STAGES,
+  PREP_MINUTE_OPTIONS,
+  stageFromStatus,
+  statusFromStage,
+} from "@/lib/orderTracking";
 import OrderModel from "@/models/Order.model";
 
 export async function PUT(request) {
@@ -14,62 +17,29 @@ export async function PUT(request) {
     }
 
     await connectDB();
-    const { _id, status } = await request.json();
+    const body = await request.json();
+    const { _id, status, fulfillmentStage, prepMinutes } = body;
 
-    if (!_id || !status) {
+    if (!_id || (!status && !fulfillmentStage)) {
       return response(false, 400, "Order id and status are required.");
     }
 
     const orderData = await OrderModel.findById(_id);
+    if (!orderData) return response(false, 404, "Order not found.");
 
-    if (!orderData) {
-      return response(false, 404, "Order not found.");
+    const nextStage = FULFILLMENT_STAGES.includes(fulfillmentStage)
+      ? fulfillmentStage
+      : stageFromStatus(status);
+
+    orderData.fulfillmentStage = nextStage;
+    orderData.status = status && !fulfillmentStage ? status : statusFromStage(nextStage);
+    if (PREP_MINUTE_OPTIONS.includes(Number(prepMinutes))) {
+      orderData.prepMinutes = Number(prepMinutes);
     }
-
-    const previousStatus = orderData.status;
-    orderData.status = status;
+    orderData.stageUpdatedAt = new Date();
     await orderData.save();
 
-    if (previousStatus !== status && orderData.email) {
-      try {
-        const products = await enrichOrderProductsForEmail(
-          orderData.products || []
-        );
-        const subjectByStatus = {
-          unpaid: `Your Super Ideal order ${orderData.order_id}`,
-          paid: `Payment received — order ${orderData.order_id}`,
-          processing: `Your order is being prepared — ${orderData.order_id}`,
-          shipped: `Your order has shipped — ${orderData.order_id}`,
-          delivered: `Your order was delivered — ${orderData.order_id}`,
-          cancelled: `Your order was cancelled — ${orderData.order_id}`,
-          pending: `Order update — ${orderData.order_id}`,
-          unverified: `Order update — ${orderData.order_id}`,
-        };
-
-        await sendMail(
-          subjectByStatus[status] ||
-            `Order update — ${orderData.order_id}`,
-          orderData.email,
-          orderStatusEmail({
-            customer_name: orderData.name,
-            order_id: orderData.order_id,
-            status,
-            products,
-            currency: orderData.currency || "PKR",
-          }),
-          { refId: orderData.order_id }
-        );
-      } catch (error) {
-        console.log("Status email error:", error);
-      }
-    }
-
-    return response(
-      true,
-      200,
-      "Order status updated successfully.",
-      orderData
-    );
+    return response(true, 200, "Order status updated successfully.", orderData);
   } catch (error) {
     return catchError(error);
   }

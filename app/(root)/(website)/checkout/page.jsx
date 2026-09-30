@@ -27,7 +27,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { IoCloseCircleSharp, IoMailOutline } from "react-icons/io5";
+import { IoCloseCircleSharp, IoTimeOutline } from "react-icons/io5";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
@@ -67,9 +67,15 @@ const Checkout = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponCode, setCouponCode] = useState("");
-
   const [placingOrder, setPlacingOrder] = useState(false);
   const [savingOrder, setSavingOrder] = useState(false);
+
+  const { data: branchResponse } = useFetch("/api/branch/public");
+  const branchList = branchResponse?.success ? branchResponse.data || [] : [];
+  const branchOptions = branchList.map((branch) => ({
+    label: branch.short || branch.name,
+    value: branch._id,
+  }));
   useEffect(() => {
     if (getVerifiedCartData && getVerifiedCartData.success) {
       const cartData = (getVerifiedCartData.data || []).filter(Boolean);
@@ -153,7 +159,6 @@ const Checkout = () => {
   const orderFormSchema = zSchema
     .pick({
       name: true,
-      email: true,
       phone: true,
       country: true,
       city: true,
@@ -162,19 +167,22 @@ const Checkout = () => {
     .extend({
       userId: z.string().optional(),
       landmark: z.string().optional(),
+      branchId: z.string().optional(),
+      serviceType: z.enum(["delivery", "pickup"]).optional(),
     });
 
   const orderForm = useForm({
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
       name: "",
-      email: "",
       phone: "",
-      country: "",
-      city: "",
+      country: "Pakistan",
+      city: "Faisalabad",
       landmark: "",
       ordernote: "",
       userId: authStore?.auth?._id,
+      branchId: "",
+      serviceType: "delivery",
     },
   });
 
@@ -184,7 +192,23 @@ const Checkout = () => {
     }
   }, [authStore]);
 
+  const serviceType = orderForm.watch("serviceType");
+  const needsPickup = (verifiedCartData || []).some((item) => item?.deliverable === false);
+
+  useEffect(() => {
+    if (needsPickup) orderForm.setValue("serviceType", "pickup");
+  }, [needsPickup]);
+
   const placeOrder = async (formData) => {
+    if (branchOptions.length && !formData.branchId) {
+      showToast("error", "Choose a branch.");
+      return;
+    }
+    if (needsPickup && formData.serviceType === "delivery") {
+      showToast("error", "Some items are in-store only. Choose pickup.");
+      return;
+    }
+
     setPlacingOrder(true);
     setSavingOrder(true);
     try {
@@ -202,6 +226,7 @@ const Checkout = () => {
         "/api/payment/save-cod-order",
         {
           ...formData,
+          serviceType: needsPickup ? "pickup" : formData.serviceType || "delivery",
           products: products,
           subtotal: subtotal,
           discount: discount,
@@ -213,12 +238,7 @@ const Checkout = () => {
       );
 
       if (paymentResponseData.success) {
-        showToast(
-          "success",
-          paymentResponseData.data?.emailSent === false
-            ? "Order placed. Contact us with your Order ID if you need payment details."
-            : "Order confirmed — check your email for bank transfer details."
-        );
+        showToast("success", "Order received. You can follow it on the next screen.");
         dispatch(clearCart());
         orderForm.reset();
         router.push(WEBSITE_ORDER_SUCCESS(paymentResponseData.data.order_id));
@@ -226,7 +246,7 @@ const Checkout = () => {
         showToast("error", paymentResponseData.message);
       }
     } catch (error) {
-      showToast("error", error.message);
+      showToast("error", error.response?.data?.message || error.message);
     } finally {
       setPlacingOrder(false);
       setSavingOrder(false);
@@ -380,17 +400,25 @@ const Checkout = () => {
                     />
                     <FormField
                       control={orderForm.control}
-                      name="email"
+                      name="branchId"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className={labelClass}>Email</FormLabel>
+                          <FormLabel className={labelClass}>Branch</FormLabel>
                           <FormControl>
-                            <Input
-                              type="email"
-                              placeholder="Email*"
+                            <select
                               className={inputClass}
-                              {...field}
-                            />
+                              value={field.value || ""}
+                              onChange={(event) => field.onChange(event.target.value)}
+                            >
+                              <option value="">
+                                {branchOptions.length ? "Choose a branch" : "Any branch"}
+                              </option>
+                              {branchOptions.map((branch) => (
+                                <option key={branch.value} value={branch.value}>
+                                  {branch.label}
+                                </option>
+                              ))}
+                            </select>
                           </FormControl>
                           <FormMessage className="text-xs text-[#E45700]" />
                         </FormItem>
@@ -489,21 +517,46 @@ const Checkout = () => {
 
                     <div className="sm:col-span-2 mt-1 border-t border-[#f1e3d4] pt-5">
                       <p className="text-[12.5px] font-bold uppercase tracking-[0.16em] text-[#E45700]">
-                        Payment
+                        How do you want it?
                       </p>
+                      <div className="mt-3 grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          disabled={needsPickup}
+                          onClick={() => orderForm.setValue("serviceType", "delivery")}
+                          className={`h-11 rounded-2xl border text-[13.5px] font-bold ${
+                            serviceType !== "pickup"
+                              ? "border-[#E45700] bg-[#fff4ec] text-[#3a2416]"
+                              : "border-[#f1e3d4] text-[#8a6754]"
+                          } disabled:cursor-not-allowed disabled:opacity-50`}
+                        >
+                          Delivery
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => orderForm.setValue("serviceType", "pickup")}
+                          className={`h-11 rounded-2xl border text-[13.5px] font-bold ${
+                            serviceType === "pickup"
+                              ? "border-[#E45700] bg-[#fff4ec] text-[#3a2416]"
+                              : "border-[#f1e3d4] text-[#8a6754]"
+                          }`}
+                        >
+                          Pickup
+                        </button>
+                      </div>
                       <div className="mt-3 flex items-start gap-3 rounded-2xl border border-[#f1e3d4] bg-[#FFF8F2] px-4 py-3.5 text-[13.5px] leading-relaxed text-[#6b5142] sm:text-[14.5px]">
-                        <IoMailOutline
+                        <IoTimeOutline
                           className="mt-0.5 shrink-0 text-[#E45700]"
                           size={18}
                           aria-hidden="true"
                         />
                         <p>
                           <span className="font-bold text-[#3a2416]">
-                            Bank transfer.
+                            {needsPickup ? "Counter only." : "Cash on delivery."}
                           </span>{" "}
-                          Invoice details in Pakistani rupees are emailed after
-                          you place the order. Packing starts once payment is
-                          confirmed.
+                          {needsPickup
+                            ? "One of these items stays in the shop, so this order is for pickup."
+                            : "The kitchen starts as soon as the order is placed. Pay when it arrives, or at the counter."}
                         </p>
                       </div>
 
@@ -532,7 +585,7 @@ const Checkout = () => {
                   {verifiedCartData &&
                     verifiedCartData.filter(Boolean).map((product) => {
                       const live = catalogById[product.productId];
-                      const categoryName = live?.category?.name || "";
+                      const categoryName = product.categoryName || live?.category?.name || "";
                       const lineTotal =
                         (product.sellingPrice || 0) * (product.qty || 0);
 

@@ -5,10 +5,15 @@ import axios from 'axios';
 import { CldUploadWidget } from 'next-cloudinary';
 import { FiPlus } from "react-icons/fi";
 
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || ""
+const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""
+const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || ""
+const cloudinaryReady = Boolean(cloudName && uploadPreset && apiKey)
+
 const UploadMedia = ({ isMultiple, queryClient }) => {
 
     const handleOnError = (error) => {
-        showToast('error', error.statusText)
+        showToast('error', error?.statusText || 'Upload failed.')
     }
     const handleOnQueueEnd = async (results) => {
         const files = results.info.files
@@ -36,16 +41,25 @@ const UploadMedia = ({ isMultiple, queryClient }) => {
         }
     }
 
+    if (!cloudinaryReady) {
+        return (
+            <Button type="button" onClick={() => showToast('error', 'Add the Cloudinary keys in .env before uploading photos.')}>
+                <FiPlus />
+                Upload Media
+            </Button>
+        )
+    }
+
     return (
         <CldUploadWidget
             signatureEndpoint="/api/cloudinary-signature"
-            uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+            uploadPreset={uploadPreset}
             onError={handleOnError}
             onQueuesEnd={handleOnQueueEnd}
             config={{
                 cloud: {
-                    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-                    apiKey: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+                    cloudName,
+                    apiKey,
                 }
             }}
 

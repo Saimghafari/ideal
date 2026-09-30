@@ -14,9 +14,10 @@ import Image from "next/image"
 import notFound from '@/public/assets/images/not-found.png'
 import { useEffect, useState } from "react"
 import { statusBadge } from "@/lib/helperFunction"
+import useVisiblePoll from "@/hooks/useVisiblePoll"
 const LatestOrder = () => {
     const [latestOrder, setLatestOrder] = useState()
-    const { data, loading } = useFetch('/api/dashboard/admin/latest-order')
+    const { data, loading, refetch } = useFetch('/api/dashboard/admin/latest-order')
 
     useEffect(() => {
         if (data && data.success) {
@@ -24,7 +25,9 @@ const LatestOrder = () => {
         }
     }, [data])
 
-    if (loading) return <div className="h-full w-full flex justify-center items-center">Loading...</div>
+    useVisiblePoll(refetch, 8000, false)
+
+    if (loading && !latestOrder) return <div className="h-full w-full flex justify-center items-center">Loading...</div>
 
     if (!latestOrder || latestOrder.length === 0) return <div className="h-full w-full flex justify-center items-center">
         <Image src={notFound.src} width={notFound.width} height={notFound.height} alt="not found" className="w-20" />
@@ -49,7 +52,7 @@ const LatestOrder = () => {
                         <TableCell >{order._id}</TableCell>
                         <TableCell >{order.payment_id}</TableCell>
                         <TableCell >{order.products.length}</TableCell>
-                        <TableCell >{statusBadge(order.status)}</TableCell>
+                        <TableCell >{statusBadge(order.fulfillmentStage || order.status)}</TableCell>
                         <TableCell>{order.totalAmount}</TableCell>
 
                     </TableRow>

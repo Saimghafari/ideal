@@ -70,29 +70,17 @@ const AddProduct = () => {
 
 
 
-  // discount percentage calculation (USD + PKR)
   useEffect(() => {
-    const mrp = form.getValues('mrp') || 0
-    const sellingPrice = form.getValues('sellingPrice') || 0
+    const mrpPkr = Number(form.getValues('mrpPkr') || 0)
+    const sellingPricePkr = Number(form.getValues('sellingPricePkr') || 0)
+    const discount = mrpPkr > 0 && sellingPricePkr > 0
+      ? Math.round(((mrpPkr - sellingPricePkr) / mrpPkr) * 100)
+      : 0
 
-    if (mrp > 0 && sellingPrice > 0) {
-      const discountPercentage = ((mrp - sellingPrice) / mrp) * 100
-      form.setValue('discountPercentage', Math.round(discountPercentage))
-    }
-
-  }, [form.watch('mrp'), form.watch('sellingPrice')])
-
-  useEffect(() => {
-    const mrpPkr = form.getValues('mrpPkr') || 0
-    const sellingPricePkr = form.getValues('sellingPricePkr') || 0
-
-    if (mrpPkr > 0 && sellingPricePkr > 0) {
-      const discountPercentagePkr = ((mrpPkr - sellingPricePkr) / mrpPkr) * 100
-      form.setValue('discountPercentagePkr', Math.round(discountPercentagePkr))
-    } else {
-      form.setValue('discountPercentagePkr', 0)
-    }
-
+    form.setValue('discountPercentagePkr', discount)
+    form.setValue('mrp', mrpPkr)
+    form.setValue('sellingPrice', sellingPricePkr)
+    form.setValue('discountPercentage', discount)
   }, [form.watch('mrpPkr'), form.watch('sellingPricePkr')])
 
 
@@ -197,40 +185,10 @@ const AddProduct = () => {
                 <div className=''>
                   <FormField
                     control={form.control}
-                    name="mrp"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>MRP (Rs) <span className='text-red-500'>*</span></FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="Enter MRP in rupees" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className=''>
-                  <FormField
-                    control={form.control}
-                    name="sellingPrice"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Selling Price (Rs) <span className='text-red-500'>*</span></FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="Enter selling price in rupees" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className=''>
-                  <FormField
-                    control={form.control}
                     name="mrpPkr"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>MRP (PKR)</FormLabel>
+                        <FormLabel>MRP (PKR) <span className='text-red-500'>*</span></FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="Enter MRP in PKR" {...field} />
                         </FormControl>
@@ -245,24 +203,9 @@ const AddProduct = () => {
                     name="sellingPricePkr"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Selling Price (PKR)</FormLabel>
+                        <FormLabel>Selling Price (PKR) <span className='text-red-500'>*</span></FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Enter Selling Price in PKR" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className='mb-3'>
-                  <FormField
-                    control={form.control}
-                    name="discountPercentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Discount % <span className='text-red-500'>*</span></FormLabel>
-                        <FormControl>
-                          <Input type="number" readOnly placeholder="Discount %" {...field} />
+                          <Input type="number" placeholder="Enter selling price in PKR" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -277,7 +220,7 @@ const AddProduct = () => {
                       <FormItem>
                         <FormLabel>Discount % (PKR)</FormLabel>
                         <FormControl>
-                          <Input type="number" readOnly placeholder="Discount % PKR" {...field} />
+                          <Input type="number" readOnly placeholder="Discount %" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

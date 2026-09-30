@@ -12,8 +12,8 @@ import {
 import { formatWallSize } from "@/lib/wallDecorSizes";
 import { formatMoney } from "@/lib/formatCurrency";
 import { getOrderByOrderId } from "@/lib/getOrderByOrderId";
+import OrderLiveTracker from "@/components/Application/Website/OrderLiveTracker";
 import OrderStatusTag from "@/components/Application/Website/OrderStatusTag";
-import { IoMailOutline } from "react-icons/io5";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -75,19 +75,19 @@ const OrderSuccess = async ({ params }) => {
                   </span>
                 </h1>
 
-                <div className="mt-6 mx-auto sm:mx-0 flex max-w-lg items-center gap-2.5 border-l-2 border-[var(--si-burnt-orange)] bg-[var(--si-burnt-orange)]/5 px-3 py-2.5 text-left text-sm text-[var(--si-muted)]">
-                  <IoMailOutline
-                    className="shrink-0 text-[var(--si-deep-brown)]"
-                    size={17}
-                    aria-hidden="true"
-                  />
-                  <p className="font-light leading-relaxed">
-                    <span className="font-medium text-[var(--si-deep-brown)]">
-                      Payment note:
-                    </span>{" "}
-                    Bank transfer details have been sent to your email.
-                  </p>
-                </div>
+                <OrderLiveTracker
+                  orderId={order.order_id}
+                  initial={{
+                    fulfillmentStage: order.fulfillmentStage,
+                    prepMinutes: order.prepMinutes,
+                    serviceType: order.serviceType,
+                    branchName: order.branchName || order.branch?.shortName || order.branch?.name || "",
+                    stageUpdatedAt: order.stageUpdatedAt,
+                    createdAt: order.createdAt,
+                    status: order.status,
+                  }}
+                />
+
                 <div className="mt-8 flex flex-wrap gap-4 justify-center sm:justify-start">
                   <Link
                     href={WEBSITE_ORDER_DETAILS(order.order_id)}

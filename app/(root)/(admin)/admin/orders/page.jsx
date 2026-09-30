@@ -1,4 +1,5 @@
 'use client'
+import LiveKitchen from "@/components/Application/Admin/LiveKitchen"
 import BreadCrumb from "@/components/Application/Admin/BreadCrumb"
 import DatatableWrapper from "@/components/Application/Admin/DatatableWrapper"
 import DeleteAction from "@/components/Application/Admin/DeleteAction"
@@ -33,6 +34,7 @@ const ShowOrder = () => {
     return (
         <div>
             <BreadCrumb breadcrumbData={breadcrumbData} />
+            <LiveKitchen />
 
             <Card className="py-0 rounded shadow-sm gap-0">
                 <CardHeader className="pt-3 px-3 border-b [.border-b]:pb-2">
@@ -52,6 +54,7 @@ const ShowOrder = () => {
                         deleteType="SD"
                         trashView={`${ADMIN_TRASH}?trashof=orders`}
                         createAction={action}
+                        refetchInterval={8000}
                     />
                 </CardContent>
             </Card>

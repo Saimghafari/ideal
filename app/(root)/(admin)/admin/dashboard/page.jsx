@@ -1,4 +1,5 @@
 import React from 'react'
+import LiveKitchen from '@/components/Application/Admin/LiveKitchen'
 import CountOverview from './CountOverview'
 import QuickAdd from './QuickAdd'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -13,6 +14,7 @@ import { ADMIN_ORDER_SHOW, ADMIN_REVIEW_SHOW } from '@/routes/AdminPanelRoute'
 const AdminDashboard = () => {
     return (
         <div className='pt-5'>
+            <LiveKitchen />
             <CountOverview />
             <QuickAdd />
 

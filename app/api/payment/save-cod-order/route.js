@@ -1,25 +1,19 @@
-import {
-  orderAdminNotification,
-  orderNotification,
-} from "@/email/orderNotification";
 import { connectDB } from "@/lib/databaseConnection";
-import { enrichOrderProductsForEmail } from "@/lib/enrichOrderProductsForEmail";
-import { buildBankPaymentQrAttachments } from "@/lib/emailAttachments";
-import { getPaymentDetails } from "@/lib/paymentDetails";
 import { catchError, response } from "@/lib/helperFunction";
-import { sendMail } from "@/lib/sendMail";
-import { CONTACT_EMAIL } from "@/lib/siteMeta";
 import { zSchema } from "@/lib/zodSchema";
+import BranchModel from "@/models/Branch.model";
 import OrderModel from "@/models/Order.model";
+import ProductModel from "@/models/Product.model";
+import { isValidObjectId } from "mongoose";
 import { z } from "zod";
 
 const objectIdOrEmpty = z
   .string()
   .optional()
   .nullable()
-  .transform((v) => {
-    if (!v || v === "null" || v === "undefined") return null;
-    return /^[a-f\d]{24}$/i.test(v) ? v : null;
+  .transform((value) => {
+    if (!value || value === "null" || value === "undefined") return null;
+    return isValidObjectId(value) ? value : null;
   });
 
 export async function POST(request) {
@@ -28,7 +22,7 @@ export async function POST(request) {
     const payload = await request.json();
 
     const productSchema = z.object({
-      productId: z.string().length(24, "Invalid product id format"),
+      productId: z.string().min(1),
       variantId: objectIdOrEmpty,
       name: z.string().min(1),
       size: z.string().optional().nullable(),
@@ -40,15 +34,17 @@ export async function POST(request) {
     const orderSchema = zSchema
       .pick({
         name: true,
-        email: true,
         phone: true,
         country: true,
         city: true,
         ordernote: true,
       })
       .extend({
+        email: z.string().optional().default(""),
         userId: z.string().optional(),
         landmark: z.string().optional(),
+        branchId: z.string().optional().nullable(),
+        serviceType: z.enum(["delivery", "pickup"]).optional().default("delivery"),
         subtotal: z.number().nonnegative(),
         discount: z.number().nonnegative(),
         couponDiscountAmount: z.number().nonnegative(),
@@ -63,25 +59,62 @@ export async function POST(request) {
     }
 
     const validatedData = validate.data;
+    const productIds = validatedData.products
+      .map((item) => item.productId)
+      .filter((id) => isValidObjectId(id));
 
-    const orderId = `OI-${Date.now()}-${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
+    const catalogProducts = productIds.length
+      ? await ProductModel.find({ _id: { $in: productIds }, deletedAt: null })
+          .select("deliverable branches")
+          .lean()
+      : [];
 
-    const productsForDb = validatedData.products.map((p) => ({
-      productId: p.productId,
-      ...(p.variantId ? { variantId: p.variantId } : {}),
-      name: p.name,
-      size: p.size || null,
-      qty: p.qty,
-      mrp: p.mrp,
-      sellingPrice: p.sellingPrice,
+    const needsPickup = catalogProducts.some((item) => item.deliverable === false);
+    const serviceType = needsPickup ? "pickup" : validatedData.serviceType || "delivery";
+
+    if (needsPickup && validatedData.serviceType === "delivery") {
+      return response(false, 400, "Some items are in-store only. Choose counter pickup.");
+    }
+
+    let branch = null;
+    const activeBranches = await BranchModel.countDocuments({ deletedAt: null, isActive: { $ne: false } });
+    if (activeBranches > 0) {
+      if (!validatedData.branchId || !isValidObjectId(validatedData.branchId)) {
+        return response(false, 400, "Choose a branch for this order.");
+      }
+      branch = await BranchModel.findOne({
+        _id: validatedData.branchId,
+        deletedAt: null,
+        isActive: { $ne: false },
+      }).lean();
+      if (!branch) return response(false, 400, "That branch is not available.");
+
+      const wrongBranch = catalogProducts.some((item) => {
+        const assigned = (item.branches || []).map(String);
+        return assigned.length > 0 && !assigned.includes(String(branch._id));
+      });
+      if (wrongBranch) {
+        return response(false, 400, "One of these items is not available at the selected branch.");
+      }
+    }
+
+    const orderId = `OI-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+    const now = new Date();
+
+    const productsForDb = validatedData.products.map((item) => ({
+      ...(isValidObjectId(item.productId) ? { productId: item.productId } : {}),
+      ...(item.variantId ? { variantId: item.variantId } : {}),
+      name: item.name,
+      size: item.size || null,
+      qty: item.qty,
+      mrp: item.mrp,
+      sellingPrice: item.sellingPrice,
     }));
 
     await OrderModel.create({
       user: validatedData.userId || undefined,
       name: validatedData.name,
-      email: validatedData.email,
+      email: validatedData.email || "",
       phone: validatedData.phone,
       country: validatedData.country,
       city: validatedData.city,
@@ -93,114 +126,19 @@ export async function POST(request) {
       totalAmount: validatedData.totalAmount,
       subtotal: validatedData.subtotal,
       currency: validatedData.currency || "PKR",
-      payment_method: "Invoice",
+      payment_method: "COD",
       order_id: orderId,
-      status: "unpaid",
+      status: "processing",
+      branch: branch?._id || null,
+      branchName: branch ? branch.shortName || branch.name : "",
+      serviceType,
+      fulfillmentStage: "received",
+      prepMinutes: branch?.prepMinutes === 10 ? 10 : 20,
+      stageUpdatedAt: now,
     });
-
-    const emailProducts = await enrichOrderProductsForEmail(productsForDb);
-    const currency = validatedData.currency || "PKR";
-    const { formatMoney } = await import("@/lib/formatCurrency");
-    const totalLabel = formatMoney(validatedData.totalAmount, currency);
-
-    const mailData = {
-      order_id: orderId,
-      customer_name: validatedData.name,
-      subtotal: validatedData.subtotal,
-      discount: validatedData.discount,
-      couponDiscountAmount: validatedData.couponDiscountAmount,
-      totalAmount: validatedData.totalAmount,
-      currency,
-      products: emailProducts,
-      address: [validatedData.landmark, validatedData.city, validatedData.country]
-        .filter((part) => part && part.trim())
-        .join(", "),
-      phone: validatedData.phone,
-      email: validatedData.email,
-      order_date: new Date().toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      payment_method: "Bank Transfer",
-    };
-
-    let customerEmailSent = false;
-
-    try {
-      const payment = getPaymentDetails();
-      const attachments = await buildBankPaymentQrAttachments();
-      const plainText = [
-        `Hello ${validatedData.name},`,
-        ``,
-        `Thank you for your Super Ideal order ${orderId}.`,
-        `Total: ${totalLabel}`,
-        `Please complete payment by bank transfer. Include Order ID ${orderId} as the payment reference.`,
-        ``,
-        ...(payment.bankAccounts || []).flatMap((a) => [
-          `${a.bankName}`,
-          a.iban
-            ? `  ${a.accountName} · IBAN: ${a.iban}`
-            : `  ${a.accountName} · ${a.accountNumber} · Sort ${a.sortCode}`,
-          a.qrImagePath ? `  QR: available (scan Ahtisham payment QR in email)` : "",
-          ``,
-        ]),
-        `— Super Ideal`,
-      ]
-        .filter((line) => line !== "")
-        .join("\n");
-
-      const result = await sendMail(
-        `Your Super Ideal order ${orderId}`,
-        validatedData.email,
-        orderNotification(mailData),
-        {
-          ...(attachments.length ? { attachments } : {}),
-          text: plainText,
-          refId: orderId,
-          // Replies go to studio Gmail (not no-reply@)
-          replyTo:
-            process.env.ADMIN_NOTIFICATION_EMAIL ||
-            CONTACT_EMAIL,
-        }
-      );
-
-      customerEmailSent = Boolean(result?.success);
-
-      if (!customerEmailSent) {
-        console.error(
-          `Customer order email NOT sent for ${orderId} (${validatedData.email}):`,
-          result?.message
-        );
-      }
-    } catch (error) {
-      console.error("Customer order email error:", error);
-    }
-
-    try {
-      const studioEmail =
-        process.env.ADMIN_NOTIFICATION_EMAIL ||
-        CONTACT_EMAIL;
-      const result = await sendMail(
-        `New Super Ideal order ${orderId}`,
-        studioEmail,
-        orderAdminNotification(mailData),
-        { replyTo: validatedData.email, refId: orderId }
-      );
-
-      if (!result?.success) {
-        console.error(
-          `Admin order email NOT sent for ${orderId}:`,
-          result?.message
-        );
-      }
-    } catch (error) {
-      console.error("Admin order email error:", error);
-    }
 
     return response(true, 200, "Order placed successfully.", {
       order_id: orderId,
-      emailSent: customerEmailSent,
     });
   } catch (error) {
     return catchError(error);

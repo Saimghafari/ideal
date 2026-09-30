@@ -5,6 +5,7 @@ import Link from "next/link";
 import { WEBSITE_PRODUCT_DETAILS } from "@/routes/WebsiteRoute";
 import useFetch from "@/hooks/useFetch";
 import { use, useEffect, useState } from "react";
+import useVisiblePoll from "@/hooks/useVisiblePoll";
 import { ADMIN_DASHBOARD, ADMIN_ORDER_SHOW } from "@/routes/AdminPanelRoute";
 import BreadCrumb from "@/components/Application/Admin/BreadCrumb";
 import Select from "@/components/Application/Select";
@@ -27,7 +28,7 @@ const OrderDetails = ({ params }) => {
   const [orderData, setOrderData] = useState();
   const [orderStatus, setOrderStatus] = useState();
   const [updatingStatus, setUpdatingStatus] = useState(false);
-  const { data, loading } = useFetch(`/api/orders/get/${order_id}`);
+  const { data, loading, refetch } = useFetch(`/api/orders/get/${order_id}`);
   const orderCurrency = "PKR";
 
   useEffect(() => {
@@ -36,6 +37,8 @@ const OrderDetails = ({ params }) => {
       setOrderStatus(data?.data?.status);
     }
   }, [data]);
+
+  useVisiblePoll(refetch, 5000, false);
 
   const handleOrderStatus = async () => {
     setUpdatingStatus(true);
@@ -86,7 +89,15 @@ const OrderDetails = ({ params }) => {
                       : orderData?.payment_method || "Bank Transfer"}
                 </p>
                 <p className="capitalize">
-                  <b>Status:</b> {orderData?.status}
+                  <b>Kitchen:</b>{" "}
+                  {String(orderData?.fulfillmentStage || orderData?.status || "").replaceAll("_", " ")}
+                  {orderData?.prepMinutes ? ` · ${orderData.prepMinutes} min` : ""}
+                </p>
+                <p>
+                  <b>Branch:</b> {orderData?.branchName || "—"}
+                </p>
+                <p className="capitalize">
+                  <b>Service:</b> {orderData?.serviceType === "pickup" ? "Pickup" : "Delivery"}
                 </p>
               </div>
               <table className="w-full border">

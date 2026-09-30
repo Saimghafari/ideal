@@ -7,9 +7,9 @@ import {
   SHOP_EMAIL,
   SHOP_PHONE_DISPLAY,
   SHOP_PHONE_TEL,
-  branches,
   directionsUrl,
 } from "@/lib/locations";
+import { getPublicBranches } from "@/lib/getBranches";
 import { absoluteUrl } from "@/lib/siteMeta";
 import {
   WEBSITE_CAKES,
@@ -64,7 +64,8 @@ function ClockIcon() {
   );
 }
 
-export default function LocationsPage() {
+export default async function LocationsPage() {
+  const branches = await getPublicBranches();
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", url: "/" },
     { name: "Locations", url: WEBSITE_LOCATIONS },
@@ -121,7 +122,7 @@ export default function LocationsPage() {
               Our Locations
             </h1>
             <p className="mt-2 max-w-[520px] text-[13.5px] leading-relaxed text-white/85 sm:text-[15.5px]">
-              Three Super Ideal branches in Faisalabad. Same sweets, bakery, and cakes — different hours and streets.
+              {branches.length} Super Ideal {branches.length === 1 ? "branch" : "branches"} in Faisalabad. Same sweets, bakery, and cakes — different hours and streets.
             </p>
           </div>
         </div>
@@ -228,10 +229,10 @@ export default function LocationsPage() {
                       Get Directions
                     </a>
                     <a
-                      href={`tel:${SHOP_PHONE_TEL}`}
+                      href={`tel:${branch.phoneTel || SHOP_PHONE_TEL}`}
                       className="inline-flex h-11 items-center justify-center rounded-full border border-[#ead9c6] bg-[#FFF8F2] px-5 text-[13.5px] font-bold text-[#3a2416] hover:border-[#E45700]"
                     >
-                      Call {SHOP_PHONE_DISPLAY}
+                      Call {branch.phone || SHOP_PHONE_DISPLAY}
                     </a>
                   </div>
                 </div>
@@ -261,7 +262,7 @@ export default function LocationsPage() {
                 One shop line for every branch
               </h2>
               <p className="mt-3 max-w-xl text-[14px] leading-relaxed text-[#f6e7d6]/80 sm:text-[15px]">
-                Use the same number and email for Saddar Road, D Ground, and Clock Tower. Tell us which branch you are visiting.
+                Use the same shop line for {branches.map((branch) => branch.short).join(", ")}. Tell us which branch you are visiting.
               </p>
               <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
                 <Link

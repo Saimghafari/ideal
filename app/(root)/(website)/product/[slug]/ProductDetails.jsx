@@ -19,6 +19,7 @@ import imgPlaceholder from "@/public/assets/images/img-placeholder.webp";
 import { productImageAlt } from "@/lib/productImageAlt";
 import { normalizeSlug } from "@/lib/normalizeSlug";
 import { getStaticProducts } from "@/lib/staticCatalog";
+import { nutritionRowsFromProduct } from "@/lib/nutritionRows";
 import { IoStar, IoStarHalf, IoStarOutline } from "react-icons/io5";
 
 const RECENT_KEY = "si-recent-products";
@@ -387,11 +388,17 @@ const ProductDetails = ({
     }
   }, [product?.description]);
 
-  const storyCopy = useMemo(() => {
-    const fromProduct = toPlainText(descriptionHtml);
-    if (fromProduct) return fromProduct;
-    return `Super Ideal's ${product?.name || "Mix Nimko"} is a crunchy, flavorful and irresistible snack made with high-quality ingredients. Perfect for tea time, family gatherings, travel snacks or everyday munching. Enjoy the perfect balance of taste, crispiness and freshness in every bite.`;
-  }, [descriptionHtml, product?.name]);
+  const descriptionText = useMemo(() => toPlainText(descriptionHtml).trim(), [descriptionHtml]);
+
+  const ingredientItems = useMemo(
+    () => (Array.isArray(product?.ingredients) ? product.ingredients : []).map((item) => String(item).trim()).filter(Boolean),
+    [product?.ingredients]
+  );
+  const ingredientsNote = String(product?.ingredientsNote || "").trim();
+  const nutritionRows = useMemo(
+    () => nutritionRowsFromProduct(product?.nutrition).map((row) => [row.label, row.value]),
+    [product?.nutrition]
+  );
 
   useEffect(() => {
     if (!product?._id || !activeVariant?._id) return;
@@ -502,12 +509,18 @@ const ProductDetails = ({
   const reviewLabel = reviewCount > 0 ? reviewCount : 124;
 
   const tabs = [
-    { id: "description", label: "Description" },
-    { id: "ingredients", label: "Ingredients" },
-    { id: "nutrition", label: "Nutritional Information" },
+    descriptionText ? { id: "description", label: "Description" } : null,
+    ingredientsNote || ingredientItems.length ? { id: "ingredients", label: "Ingredients" } : null,
+    nutritionRows.length ? { id: "nutrition", label: "Nutritional Information" } : null,
     { id: "reviews", label: `Reviews (${reviewLabel})` },
     { id: "delivery", label: "Delivery & Returns" },
-  ];
+  ].filter(Boolean);
+
+  useEffect(() => {
+    if (tabs.length && !tabs.some((item) => item.id === tab)) {
+      setTab(tabs[0].id);
+    }
+  }, [tab, tabs]);
 
   if (!product) {
     return (
@@ -748,7 +761,7 @@ const ProductDetails = ({
             <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.72fr)] lg:gap-16">
               <div>
                 <h2 className="text-[22px] font-bold text-[#4B2E1E] sm:text-[26px]">Product Description</h2>
-                <p className="mt-3 max-w-[40rem] text-[15px] leading-[1.75] text-[#7c5b49]">{storyCopy}</p>
+                <p className="mt-3 max-w-[40rem] text-[15px] leading-[1.75] text-[#7c5b49]">{descriptionText}</p>
               </div>
               <div>
                 <h2 className="text-[22px] font-bold text-[#4B2E1E] sm:text-[26px]">Why You&apos;ll Love It</h2>
@@ -769,17 +782,19 @@ const ProductDetails = ({
           {tab === "ingredients" && (
             <div className="max-w-3xl">
               <h2 className="text-[22px] font-bold text-[#4B2E1E] sm:text-[26px]">Ingredients</h2>
-              <p className="mt-3 text-[15px] leading-[1.75] text-[#7c5b49]">
-                {product.name} is prepared with rice flakes, roasted peanuts, gram flour sev, curry leaves, and a house blend of traditional spices. Every batch uses premium ingredients, packed fresh for crunch and aroma.
-              </p>
-              <ul className="mt-5 grid gap-2 sm:grid-cols-2">
-                {["Rice flakes", "Roasted peanuts", "Gram flour sev", "Curry leaves", "Traditional spices", "Edible oil & salt"].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-[15px] text-[#6d4e3c]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#E45700]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {ingredientsNote ? (
+                <p className="mt-3 text-[15px] leading-[1.75] text-[#7c5b49]">{ingredientsNote}</p>
+              ) : null}
+              {ingredientItems.length > 0 && (
+                <ul className="mt-5 grid gap-2 sm:grid-cols-2">
+                  {ingredientItems.map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-[15px] text-[#6d4e3c]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#E45700]" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
 
@@ -788,14 +803,7 @@ const ProductDetails = ({
               <h2 className="text-[22px] font-bold text-[#4B2E1E] sm:text-[26px]">Nutritional Information</h2>
               <p className="mt-2 text-[13px] text-[#a18472]">Typical values per 100g</p>
               <dl className="mt-4 overflow-hidden rounded-2xl border border-[#f0e2d4] bg-white">
-                {[
-                  ["Energy", "486 kcal"],
-                  ["Protein", "12 g"],
-                  ["Carbohydrates", "54 g"],
-                  ["of which sugars", "4 g"],
-                  ["Fat", "24 g"],
-                  ["Salt", "1.1 g"],
-                ].map(([label, value]) => (
+                {nutritionRows.map(([label, value]) => (
                   <div key={label} className="flex items-center justify-between border-b border-[#f6ebdf] px-4 py-3 text-[14px] last:border-0">
                     <dt className="text-[#7c5b49]">{label}</dt>
                     <dd className="font-semibold text-[#4B2E1E]">{value}</dd>

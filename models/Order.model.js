@@ -13,7 +13,8 @@ const orderSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
     },
     phone: {
       type: String,
@@ -50,7 +51,7 @@ const orderSchema = new mongoose.Schema(
         productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
-          required: true,
+          required: false,
         },
         variantId: {
           type: mongoose.Schema.Types.ObjectId,
@@ -84,12 +85,41 @@ const orderSchema = new mongoose.Schema(
     currency: {
       type: String,
       enum: ["USD", "PKR"],
-      default: "USD",
+      default: "PKR",
     },
     status: {
       type: String,
       enum: orderStatus,
       default: "unpaid",
+    },
+    branch: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: false,
+      default: null,
+    },
+    branchName: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    serviceType: {
+      type: String,
+      enum: ["delivery", "pickup"],
+      default: "delivery",
+    },
+    fulfillmentStage: {
+      type: String,
+      enum: ["received", "preparing", "on_the_way", "delivered", "cancelled"],
+      default: "received",
+    },
+    prepMinutes: {
+      type: Number,
+      default: 20,
+    },
+    stageUpdatedAt: {
+      type: Date,
+      default: Date.now,
     },
     payment_method: {
       type: String,
@@ -113,6 +143,14 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+if (
+  mongoose.models.Order &&
+  !mongoose.models.Order.schema.path("fulfillmentStage")
+) {
+  delete mongoose.models.Order;
+  delete mongoose.connection.models.Order;
+}
 
 const OrderModel =
   mongoose.models.Order || mongoose.model("Order", orderSchema, "orders");
