@@ -46,7 +46,7 @@ const offers = [
   { title: "Celebration Cakes", text: "Custom cakes finished in store for birthdays and mehndi.", price: "Made to order", image: "/assets/home/si-fruit-cake.png" },
 ];
 
-const trust = ["Freshly baked daily", "Premium ingredients", "Made with care", "Trusted since 1985"];
+const trust = ["Freshly baked daily", "Premium ingredients", "Made with care", "Trusted since 1969"];
 
 function SectionHead({ title, href = WEBSITE_SHOP, action = "View All" }) {
   return (
@@ -292,7 +292,7 @@ export default function BakeryHome() {
             <p className="text-[12px] font-extrabold uppercase tracking-[0.18em] text-[#E45700]">The house</p>
             <h2 className="mt-2 font-display text-[2rem] font-semibold sm:text-[2.45rem]">Our Story</h2>
             <p className="mt-4 text-[15px] leading-7 text-[#6b5142]">
-              Since 1985, Super Ideal Sweets & Bakers has been part of Faisalabad family celebrations. We still bake, fry, and pack the way the first shop did — with ghee, dry fruit, and patience — and we now send selected boxes to your door.
+              Since 1969, Super Ideal Sweets & Bakers has been part of Faisalabad family celebrations. We still bake, fry, and pack the way the first shop did — with ghee, dry fruit, and patience — and we now send selected boxes to your door.
             </p>
             <dl className="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {[

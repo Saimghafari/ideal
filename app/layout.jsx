@@ -198,7 +198,7 @@ function buildJsonLd() {
         image: OG_IMAGE,
         description: DEFAULT_DESCRIPTION,
         slogan: BRAND_TAGLINE,
-        foundingDate: "1985",
+        foundingDate: "1969",
         contactPoint: [
           {
             "@type": "ContactPoint",

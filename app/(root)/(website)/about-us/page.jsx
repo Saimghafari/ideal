@@ -7,13 +7,13 @@ import { WEBSITE_ABOUT, WEBSITE_HOME, WEBSITE_SHOP } from "@/routes/WebsiteRoute
 
 const TITLE = "Our Story | Super Ideal Sweets & Bakers";
 const DESCRIPTION =
-  "Super Ideal Sweets & Bakers has prepared mithai, bakery, and celebration orders in Faisalabad since 1985.";
+  "Super Ideal Sweets & Bakers has prepared mithai, bakery, and celebration orders in Faisalabad since 1969.";
 
 export const metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   keywords:
-    "Super Ideal story, Super Ideal Sweets and Bakers, Faisalabad bakery since 1985, mithai",
+    "Super Ideal story, Super Ideal Sweets and Bakers, Faisalabad bakery since 1969, mithai",
   alternates: { canonical: absoluteUrl(WEBSITE_ABOUT) },
   openGraph: {
     title: TITLE,
@@ -24,7 +24,7 @@ export const metadata = {
 
 const chapters = [
   {
-    year: "1985",
+    year: "1969",
     title: "The counter opens",
     text: "A shop in Faisalabad begins packing mithai and bakery for families who want the same taste each time they return.",
   },
@@ -41,7 +41,7 @@ const chapters = [
   {
     year: "Today",
     title: "The same return",
-    text: "Eid boxes, wedding trays, birthdays, and an ordinary evening. The taste people come back for is the one set in 1985.",
+    text: "Eid boxes, wedding trays, birthdays, and an ordinary evening. The taste people come back for is the one set in 1969.",
   },
 ];
 
@@ -75,7 +75,7 @@ export default function OurStoryPage() {
     mainEntity: {
       "@type": "Bakery",
       name: "Super Ideal Sweets & Bakers",
-      foundingDate: "1985",
+      foundingDate: "1969",
       url: absoluteUrl("/"),
       image: absoluteUrl("/assets/home/si-storefront.png"),
       address: {
@@ -112,7 +112,7 @@ export default function OurStoryPage() {
               <span aria-hidden="true">/</span>
               <span className="font-semibold text-[#3a2416]">Our Story</span>
             </nav>
-            <p className="font-script text-[2.15rem] leading-none text-[#E45700] sm:text-[2.6rem]">Since 1985</p>
+            <p className="font-script text-[2.15rem] leading-none text-[#E45700] sm:text-[2.6rem]">Since 1969</p>
             <h1 className="mt-1 font-display text-[3.1rem] font-semibold leading-[0.95] tracking-[-0.035em] text-[#2b1810] sm:text-[4.2rem] lg:text-[4.6rem]">
               Our Story
             </h1>
@@ -131,7 +131,7 @@ export default function OurStoryPage() {
             </p>
             <div className="max-w-[46rem] space-y-4 text-[15px] leading-[1.8] text-[#5c4336] sm:text-[16px]">
               <p>
-                Super Ideal Sweets &amp; Bakers opened in 1985 so families in Faisalabad could order sweets and bakery and find that taste again. The early years were spent at the bench: desi ghee in the pan, dry fruit prepared by hand, and trays ready before the shop opened.
+                Super Ideal Sweets &amp; Bakers opened in 1969 so families in Faisalabad could order sweets and bakery and find that taste again. The early years were spent at the bench: desi ghee in the pan, dry fruit prepared by hand, and trays ready before the shop opened.
               </p>
               <p>
                 The recipes stayed with the people who learned them here. As the city kept asking for Super Ideal, the kitchen kept the same morning — preparation first, a full counter, and packing done with care.
@@ -234,7 +234,7 @@ export default function OurStoryPage() {
                 it&apos;s a feeling
               </p>
               <p className="mt-4 max-w-md text-[14.5px] leading-relaxed text-white/75">
-                Super Ideal Sweets &amp; Bakers, Faisalabad. The same counter standard since 1985.
+                Super Ideal Sweets &amp; Bakers, Faisalabad. The same counter standard since 1969.
               </p>
             </div>
             <Link

@@ -745,7 +745,7 @@ const Checkout = () => {
                 <ul className="mt-5 space-y-2 border-t border-[#f1e3d4] pt-4 text-[12.5px] text-[#8a6754]">
                   <li>Freshly packed for delivery</li>
                   <li>Premium ingredients, made with care</li>
-                  <li>Trusted bakery since 1985</li>
+                  <li>Trusted bakery since 1969</li>
                 </ul>
               </div>
             </aside>

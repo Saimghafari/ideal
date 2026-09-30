@@ -15,7 +15,7 @@ export const metadata = {
 const notes = [
   "Fresh trays each morning",
   "Gift boxes and celebration cakes",
-  "Trusted in Faisalabad since 1985",
+  "Trusted in Faisalabad since 1969",
 ];
 
 export default function AuthLayout({ children }) {
@@ -70,7 +70,7 @@ export default function AuthLayout({ children }) {
           </main>
 
           <p className="px-4 pb-5 text-center text-[12px] font-semibold tracking-[0.04em] text-[#9a8170] sm:pb-6">
-            Super Ideal Sweets &amp; Bakers · Faisalabad · Since 1985
+            Super Ideal Sweets &amp; Bakers · Faisalabad · Since 1969
           </p>
         </section>
       </div>
