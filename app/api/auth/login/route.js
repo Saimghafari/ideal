@@ -12,6 +12,7 @@ import { z } from "zod";
 import {
   applySessionCookie,
   applyTrustedDeviceCookie,
+  cookieScopeFromHeaders,
   readTrustedDevice,
   signSessionToken,
   TRUSTED_DEVICE_COOKIE,
@@ -102,11 +103,12 @@ export async function POST(request) {
       trusted._id === loggedInUserData._id
     ) {
       const token = await signSessionToken(loggedInUserData);
-      applySessionCookie(cookieStore, token);
+      const scope = await cookieScopeFromHeaders();
+      applySessionCookie(cookieStore, token, scope);
       await applyTrustedDeviceCookie(cookieStore, {
         _id: loggedInUserData._id,
         email: getUser.email,
-      });
+      }, scope);
       return response(true, 200, "Login successful.", loggedInUserData);
     }
 

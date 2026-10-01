@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import {
   applySessionCookie,
   applyTrustedDeviceCookie,
+  cookieScopeFromHeaders,
   signSessionToken,
 } from "@/lib/authSession";
 
@@ -50,11 +51,12 @@ export async function POST(request) {
 
     const token = await signSessionToken(loggedInUserData);
     const cookieStore = await cookies();
-    applySessionCookie(cookieStore, token);
+    const scope = await cookieScopeFromHeaders();
+    applySessionCookie(cookieStore, token, scope);
     await applyTrustedDeviceCookie(cookieStore, {
       _id: loggedInUserData._id,
       email: getUser.email,
-    });
+    }, scope);
 
     // remove otp after validation
     await getOtpData.deleteOne();

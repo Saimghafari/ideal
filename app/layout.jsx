@@ -329,7 +329,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <GoogleTagManager gtmId="" />
+      {/* <GoogleTagManager gtmId="" /> */}
       <body className={`${dmSans.className} antialiased`}>
         <GlobalProvider>
           <ToastProvider />

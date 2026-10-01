@@ -9,9 +9,16 @@ import {
 } from "./lib/authSession";
 import { CURRENCY_COOKIE, CURRENCY_PKR } from "./lib/currency";
 
-function clearAccessToken(response) {
+function scopeFromRequest(request) {
+  return {
+    hostname: request.nextUrl.hostname,
+    protocol: request.nextUrl.protocol.replace(":", ""),
+  };
+}
+
+function clearAccessToken(response, request) {
   response.cookies.set({
-    ...accessTokenCookieOptions({ maxAge: 0 }),
+    ...accessTokenCookieOptions({ maxAge: 0, ...scopeFromRequest(request) }),
     value: "",
   });
   return response;
@@ -33,6 +40,7 @@ async function withSessionRefresh(response, payload, request) {
     response.cookies,
     payload,
     request.cookies.get(TRUSTED_DEVICE_COOKIE)?.value,
+    scopeFromRequest(request),
   );
   return response;
 }
@@ -72,10 +80,11 @@ async function handleAuth(request) {
     // Unknown/missing role — treat as unauthenticated
     if (role !== "admin" && role !== "user") {
       if (pathname.startsWith("/auth")) {
-        return clearAccessToken(NextResponse.next());
+        return clearAccessToken(NextResponse.next(), request);
       }
       return clearAccessToken(
-        NextResponse.redirect(new URL(WEBSITE_LOGIN, request.nextUrl))
+        NextResponse.redirect(new URL(WEBSITE_LOGIN, request.nextUrl)),
+        request
       );
     }
 
@@ -120,11 +129,12 @@ async function handleAuth(request) {
     console.log("Auth middleware token error:", error?.message || error);
 
     if (pathname.startsWith("/auth")) {
-      return clearAccessToken(NextResponse.next());
+      return clearAccessToken(NextResponse.next(), request);
     }
 
     return clearAccessToken(
-      NextResponse.redirect(new URL(WEBSITE_LOGIN, request.nextUrl))
+      NextResponse.redirect(new URL(WEBSITE_LOGIN, request.nextUrl)),
+      request
     );
   }
 }
